@@ -13,9 +13,9 @@ assignees: ''
 - Detail: fix actions from client redux
 
 ### TODO
- - [] Job1
- - [] Job2
- - [] Job3
+ 1. [] Job1
+ 2. [] Job2
+ 3. [] Job3
 
 ### Estimated time
 Pick one
@@ -28,7 +28,7 @@ Pick one
 3h
 
 ### Labels
-- Estimated time: E: 1h
-- Group : client, server
-- Sprint: Sprint__NUMBER__
-- Urgency: High, Middle, Low
+-Estimated time: E: 1h
+-Group : client, server
+-Sprint: Sprint__NUMBER__
+-Urgency: High, Middle, Low
