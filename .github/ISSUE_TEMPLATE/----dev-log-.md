@@ -1,7 +1,7 @@
 ---
 name: "[✍️ Dev Log]"
 about: Dev Log
-title: ''
+title: "[✍️ Dev Log][이름] / [년월일]"
 labels: ''
 assignees: ''
 
