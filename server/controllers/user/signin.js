@@ -18,7 +18,7 @@ module.exports = async (req, res) => {
           delete userInfo.dataValues.password;
           delete userInfo.dataValues.profile;
           const access_token = generateAccessToken(userInfo.dataValues);
-          const refresh_token = generateAccessToken(userInfo.dataValues);
+          const refresh_token = generateRefreshToken(userInfo.dataValues);
 
           res.cookie('RefreshToken', refresh_token, {httpOnly: true, sameSite: 'none', secure: true});
           res.json({
