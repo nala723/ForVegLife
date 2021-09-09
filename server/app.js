@@ -26,7 +26,7 @@ const mypageRouter = require("./routes/mypage")
 
 app.use("/user", userRouter)
 app.use("/google", googleRouter)
-app.use("/place", placeRouter)
+app.use("/restaurant", placeRouter)
 app.use("/mypage", mypageRouter)
 
 app.get('/',(req,res)=>{
