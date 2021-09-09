@@ -24,7 +24,8 @@ module.exports = async (req, res) => {
                  nickname : nickname,
                  password : hash,
                  email : email,
-                 profile : profile
+                 profile : profile,
+                 social : 0
               })
               .then((result) => {
                 res.status(200).json({message : 'ok'})
