@@ -34,4 +34,57 @@ Object.keys(db).forEach(modelName => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
+const { user, menuprice, place, review, users_places_like, vegCategory } = sequelize.models;
+
+user.hasMany(review, {
+  foreignKey: 'user_id'
+});
+
+review.belongsTo(user, {
+  foreignKey : 'user_id'
+});
+
+place.hasMany(review, {
+  foreignKey : 'place_id'
+});
+
+review.belongsTo(place, {
+  foreignKey: 'place_id'
+});
+
+place.hasMany(vegCategory, {
+  foreignKey : 'place_id'
+});
+
+vegCategory.belongsTo(place, {
+  foreignKey : 'place_id'
+});
+
+place.hasMany(menuprice, {
+  foreignKey : 'place_id'
+});
+
+menuprice.belongsTo(place, {
+  foreignKey: 'place_id'
+});
+
+user.hasMany(users_places_like, {
+  foreignKey: 'user_id'
+});
+
+users_places_like.belongsTo(user, {
+  foreignKey: 'user_id'
+});
+
+place.hasMany(users_places_like, {
+  foreignKey: 'place_id'
+});
+
+users_places_like.belongsTo(place, {
+  foreignKey: 'place_id'
+});
+
+place.belongsTomany(user, {through: 'users_places_like', foreignKey: 'place_id'});
+user.belongsTomany(place, {through: 'users_places_like', foreignKey: 'user_id'});
+
 module.exports = db;
