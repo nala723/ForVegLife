@@ -1,5 +1,5 @@
 const { review, place} = require('../../models');
-const { isAuthorized } = require('../tokenFunctions')
+const { isAuthorized, remakeToken } = require('../tokenFunctions')
 
 module.exports = async (req, res) => {
     const authorization = req.headers['authorization'];
@@ -33,15 +33,6 @@ module.exports = async (req, res) => {
             user_id : userId
           }
         });
-        // console.log(reviewList[0].dataValues.id);
-
-        // console.log(reviewList[0].dataValues.stars);
-
-        // console.log(reviewList[0].dataValues.review);
-
-        // console.log(reviewList[0].dataValues.createdAt);
-
-        // console.log(reviewList[0].dataValues.place.dataValues.title);
 
         for(let i=0; i<reviewList.length; i++){
             obj['title'] = reviewList[i].dataValues.place.dataValues.title;
@@ -56,7 +47,7 @@ module.exports = async (req, res) => {
         res.status(200).json({review_star : sendArr});
       }
     } catch (error) {
-      res.status(500).send(err);
+      res.status(500).send(error);
     }
 };
   
