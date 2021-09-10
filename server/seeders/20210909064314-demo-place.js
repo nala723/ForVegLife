@@ -3,9 +3,9 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert('places', [{
-      latitude : 37.501013065215844,
-      longitude : 127.10760621200153,
-      title : '장보고 마트',
+      latitude : 37.49383582630206,
+      longitude : 127.03325692349587,
+      title : '이마트 에브리데이',
       createdAt: new Date(),
       updatedAt: new Date()
     }])
