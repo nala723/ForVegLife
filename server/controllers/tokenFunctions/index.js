@@ -33,7 +33,7 @@ module.exports = {
             }
         });
         
-        const access_token = sign(data, process.env.ACCESS_SECRET);
+        const access_token = sign(data, process.env.ACCESS_SECRET, {expiresIn: 6000});
         return access_token;
     }
 }

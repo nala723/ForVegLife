@@ -84,7 +84,7 @@ users_places_like.belongsTo(place, {
   foreignKey: 'place_id'
 });
 
-place.belongsTomany(user, {through: 'users_places_like', foreignKey: 'place_id'});
-user.belongsTomany(place, {through: 'users_places_like', foreignKey: 'user_id'});
+place.belongsToMany(user, {through: 'users_places_like', foreignKey: 'place_id'});
+user.belongsToMany(place, {through: 'users_places_like', foreignKey: 'user_id'});
 
 module.exports = db;

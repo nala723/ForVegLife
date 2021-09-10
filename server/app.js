@@ -4,6 +4,8 @@ const cookieParser = require('cookie-parser');
 const app = express();
 const port = 80;
 
+global.__basedir = __dirname;
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
