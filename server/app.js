@@ -19,12 +19,12 @@ app.use(
 
 app.use(cookieParser());
 
-const userRouter = require("./routes/user")
+const signRouter = require("./routes/sign")
 const googleRouter = require("./routes/google")
 const restaurantRouter = require("./routes/restaurant")
 const mypageRouter = require("./routes/mypage");
 
-app.use("/user", userRouter)
+app.use("/sign", signRouter)
 app.use("/google", googleRouter)
 app.use("/restaurant", restaurantRouter)
 app.use("/mypage", mypageRouter)
