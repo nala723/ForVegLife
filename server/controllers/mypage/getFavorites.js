@@ -24,15 +24,22 @@ module.exports = async (req, res) => {
           include : [{
             model : place,
             required : true,
-            attributes : ['id', 'title']
+            attributes : ['id', 'title', 'picture_url']
           }],
           where : {
             user_id : userId
           }
         });
 
-        console.log(likeList.dataValues)
-        res.status(200).send("전송")
+        for(let i=0; i<likeList.length; i++){
+          obj['title'] = likeList[i].dataValues.place.dataValues.title;
+          obj['place_id'] = likeList[i].dataValues.place.dataValues.id;
+          obj['picture_url'] = likeList[i].dataValues.place.dataValues.picture_url;
+          sendArr.push(obj);
+          obj = {};
+        }
+
+        res.status(200).json({place : sendArr});
     }
   } catch (error) {
     res.status(500).send(error);

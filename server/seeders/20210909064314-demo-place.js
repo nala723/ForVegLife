@@ -6,6 +6,24 @@ module.exports = {
       latitude : 37.49383582630206,
       longitude : 127.03325692349587,
       title : '이마트 에브리데이',
+      address : '서울 강남구 자곡로 106 101호',
+      picture_url: '이미지 주소1',
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },{
+      latitude : 37.51171765832007,
+      longitude : 127.09641264929758,
+      title : '잠실롯데하이마트',
+      address : '서울특별시 송파구 올림픽로 240',
+      picture_url : '이미지 주소 2',
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }, {
+      latitude : 37.50116601680616,
+      longitude : 127.10784675057008 ,
+      title : '장보고마트',
+      address : '서울특별시 송파구 가락로 102 석촌꽃마을빌딩',
+      picture_url : '이미지 주소 3',
       createdAt: new Date(),
       updatedAt: new Date()
     }])
