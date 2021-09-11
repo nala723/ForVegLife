@@ -6,6 +6,10 @@ const { kakao } = window;
 
 export default function SearchPlace() {
   const mapCenter = useSelector((state) => state.MapCenter);
+  const [latlng, setLatlng] = useState({
+    x: 0,
+    y: 0,
+  });
   const [inputText, setInputText] = useState("");
   const [place, setPlace] = useState("");
   const ps = new kakao.maps.services.Places();
@@ -27,13 +31,19 @@ export default function SearchPlace() {
       y: mapCenter.y,
       radius: 1000,
     });
-    console.log(data);
   }, [mapCenter, inputText]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setPlace(inputText);
     setInputText("");
+  };
+  const onClick = (x, y) => {
+    setLatlng({
+      ...latlng,
+      x,
+      y,
+    });
   };
 
   return (
@@ -47,17 +57,21 @@ export default function SearchPlace() {
           />
           <button type="submit">검색</button>
         </SearchForm>
-        <MapIndex searchPlace={place} />
+        <MapIndex latlng={latlng} />
       </Map>
       {data.map((x) => {
-        return <PlaceData>{x.place_name}</PlaceData>;
+        return (
+          <PlaceData onClick={() => onClick(x.x, x.y)}>
+            {x.place_name}
+          </PlaceData>
+        );
       })}
     </>
   );
 }
 const Map = styled.div``;
-const PlaceData = styled.div`
-  background-color: red;
+const PlaceData = styled.span`
+  background-color: none;
   top: 3em;
 `;
 const SearchForm = styled.form`
