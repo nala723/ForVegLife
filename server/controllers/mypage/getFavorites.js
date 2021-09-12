@@ -1,4 +1,3 @@
-const { like } = require('sequelize/types/lib/operators');
 const { place, users_places_like} = require('../../models');
 const { isAuthorized, remakeToken } = require('../tokenFunctions')
 
