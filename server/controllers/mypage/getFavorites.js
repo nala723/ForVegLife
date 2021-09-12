@@ -1,3 +1,4 @@
+const { like } = require('sequelize/types/lib/operators');
 const { place, users_places_like} = require('../../models');
 const { isAuthorized, remakeToken } = require('../tokenFunctions')
 
@@ -24,7 +25,7 @@ module.exports = async (req, res) => {
           include : [{
             model : place,
             required : true,
-            attributes : ['id', 'title', 'picture_url']
+            attributes : ['id', 'title', 'address', 'picture_url']
           }],
           where : {
             user_id : userId
@@ -35,6 +36,7 @@ module.exports = async (req, res) => {
           obj['title'] = likeList[i].dataValues.place.dataValues.title;
           obj['place_id'] = likeList[i].dataValues.place.dataValues.id;
           obj['picture_url'] = likeList[i].dataValues.place.dataValues.picture_url;
+          obj['address'] = likeList[i].dataValues.place.dataValues.address;
           sendArr.push(obj);
           obj = {};
         }
