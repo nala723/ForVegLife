@@ -3,12 +3,14 @@ import reset from "styled-reset"; // style-reset 패키지
 
 const GlobalStyles = createGlobalStyle` 
     ${reset}
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&family=Orienta&family=Roboto&display=swap');
     a{
         text-decoration: none;
         color: inherit;
     }
-    *{
+    *, :after, :before{
         box-sizing: border-box;
+        -webkit-box-sizing: border-box;
     }
     body {
         padding: 0;

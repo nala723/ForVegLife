@@ -24,11 +24,24 @@ export default function UserSideBar() {
                     <Title>
                         My Place
                         <Content>
-                            
+                          나의 즐겨찾기
+                        </Content>
+                        <Content>
+                           내가 준 별점
                         </Content>
                     </Title>
                 </BottomBox>
-                <BottomBox> </BottomBox>
+                <BottomBox> 
+                <Title>
+                        My Info
+                        <Content>
+                           나의 정보 수정
+                        </Content>
+                        <Content>
+                            탈퇴하기
+                        </Content>
+                    </Title>
+                </BottomBox>
             </Bottom>
         </Container>
      </Sidebar>
@@ -54,7 +67,6 @@ const Container =styled.div`
  width: 11rem;
  padding-top: 1rem;
  height: 30.938rem;
- border: 1px solid red;
  display: flex;
  flex-direction: column;
 `;
@@ -121,16 +133,25 @@ const BottomBox = styled.div`
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-     border: 1px solid yellowgreen;
 `;
 
 const Title = styled.ul`
      width: 100%;
-     border: 1px solid yellow;
+     height: 100%;
+     font-size: var(--font-size-lg);
+     font-weight: var(--font-weight-bold);
+     display: flex;
+     flex-direction: column;
+     justify-content: space-around;
+     color: #5B220A;
+     letter-spacing: 1px;
 `;
 const Content = styled.li`
      width: 100%;
-  
+     font-size: var(--font-size-base);
+     font-weight: var(--font-weight-normal);
+     color: var(--color-brown);
+     letter-spacing: 0;
 `;

@@ -10,6 +10,7 @@ const calcRem = (size) => `${size / 16}rem`;
       sm: calcRem(10),
       base: calcRem(15),
       lg: calcRem(18),
+      llg: calcRem(25),
       xl: calcRem(30),
       title: calcRem(6),
     },
@@ -88,3 +89,15 @@ const calcRem = (size) => `${size / 16}rem`;
     ...defalutTheme,
     colors: lightThemeColors,
   };*/
+  const theme = {
+    fonts,
+    colors,
+    size,
+    device,
+    lightThemeColors,
+    defalutTheme
+
+  }
+
+
+  export default theme;
