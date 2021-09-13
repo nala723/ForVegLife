@@ -14,7 +14,7 @@ export default function SearchPlace() {
   });
   const [inputText, setInputText] = useState("");
   const [place, setPlace] = useState("");
-  const ps = new kakao.maps.services.Places();
+  // const ps = new kakao.maps.services.Places();
   const [data, setData] = useState([]);
   const onChange = (e) => {
     setInputText(e.target.value);
