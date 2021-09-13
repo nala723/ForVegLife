@@ -28,15 +28,21 @@ module.exports = async (req, res) => {
             place_id:placeData.id,
             category:category[i]
           })
+        }
+        for(let i=0; i<menu.length; i++){
           models.menuprice.create({
             menu: menu[i],
             price: price[i],
             place_id:placeData.id
           })
         }
+        res.send({
+          placeId:placeData.id,
+          message:"successfully registered"
+          })
+        }
       }
     }
-    res.send('장소 등록하기')}
     catch (error) {
       res.status(500).send(error);
    }
