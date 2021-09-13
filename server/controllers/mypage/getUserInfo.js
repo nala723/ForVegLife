@@ -15,13 +15,14 @@ module.exports = async (req, res) => {
 
       const userData = isAuthorized(accessToken);
 
-      const userInfo = await user.findOne({attributes : ['nickname', 'profile', 'vegtype'], where : { email : userData.email}});
+      const userInfo = await user.findOne({attributes : ['nickname', 'profile', 'vegtype', 'email'], where : { email : userData.email}});
 
       res.status(200).json({
         message : 'ok',
         nickname : userInfo.dataValues.nickname,
         vegType : userInfo.dataValues.vegtype,
-        profileblob : userInfo.dataValues.profile
+        profileblob : userInfo.dataValues.profile,
+        email : userInfo.dataValues.email
       })
     }
 

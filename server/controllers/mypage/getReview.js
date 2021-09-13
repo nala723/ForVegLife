@@ -23,7 +23,7 @@ module.exports = async (req, res) => {
         //const reviewList = await review.findAll({attributes : ['id', 'stars', 'review', 'createdAt'], where : { user_id : userId}});
 
         const reviewList = await review.findAll({
-          attributes : ['id', 'stars', 'review', 'createdAt'],
+          attributes : ['id', 'stars', 'review', 'place_id', 'createdAt'],
           include : [{
             model : place,
             required: true,
@@ -40,6 +40,7 @@ module.exports = async (req, res) => {
             obj['star'] = reviewList[i].dataValues.stars;
             obj['createdAt'] = reviewList[i].dataValues.createdAt;
             obj['reviewId'] = reviewList[i].dataValues.id;
+            obj['placeId'] = reviewList[i].dataValues.place_id;
             sendArr.push(obj);
             obj = {};
         }
