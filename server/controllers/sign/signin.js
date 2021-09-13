@@ -25,7 +25,8 @@ module.exports = async (req, res) => {
             message : 'ok',
             accessToken : access_token,
             profileblob : userProfile,
-            nickname : userInfo.dataValues.nickname
+            nickname : userInfo.dataValues.nickname,
+            email : userInfo.dataValues.email
           })
       }
     })
