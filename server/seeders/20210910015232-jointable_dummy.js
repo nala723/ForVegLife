@@ -3,17 +3,12 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert('users_places_likes', [{
-      place_id : 1,
+      place_id : 11,
       user_id : 5,
       createdAt: new Date(),
       updatedAt: new Date()
     },{
-      place_id : 3,
-      user_id : 5,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    },{
-      place_id : 4,
+      place_id : 13,
       user_id : 5,
       createdAt: new Date(),
       updatedAt: new Date()
