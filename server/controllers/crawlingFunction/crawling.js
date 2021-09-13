@@ -6,8 +6,8 @@ exports.crawling = async(placeUrl,placeData)=>{
     const service = new chrome.ServiceBuilder('./controllers/crawlingFunction/chrome').build();
     chrome.setDefaultService(service);
 
-    const driver = await new webdriver.Builder().forBrowser('chrome').build();
-    // const driver = new webdriver.Builder().forBrowser('chrome').setChromeOptions(new chrome.Options().addArguments('--headless')).build();
+    // const driver = await new webdriver.Builder().forBrowser('chrome').build();
+    const driver = new webdriver.Builder().forBrowser('chrome').setChromeOptions(new chrome.Options().addArguments('--headless')).build();
     await driver.manage().setTimeouts({
         implicit: 30000,
         pageLoad: 30000,
