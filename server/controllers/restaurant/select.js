@@ -30,18 +30,18 @@ module.exports = async (req, res) => {
       where:{place_id:placeId},raw:true
     })
     let like = {} , likeLen = likeData.length
-    for(let i = 0; i< likeData.lenght ; i++){
-      if(likeData[i].vegType in like ){
-        like.likeData[i].vegType = like.likeDat[i].vegType+1
+    for(let i = 0; i< likeLen ; i++){
+      if(likeData[i]['user.vegType'] in like ){
+        like[likeData[i]['user.vegType']] = like[likeData[i]['user.vegType']]+1
       }
       else{
-        like.likeData[i].vegType = 1
+        like[likeData[i]['user.vegType']] = 1
       }
     }
     // like = {lacto : 3 , vegan : 4, vegetarian : 5}
     
     for(let key in like) {
-      like[key] = like[key]%likeLen
+      like[key] = like[key]/likeLen
     }
     const allReview = await models.review.findAll({
       include: [
