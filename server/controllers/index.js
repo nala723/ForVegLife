@@ -6,7 +6,6 @@ module.exports = {
     emailCode: require("./sign/emailCode"),
     emailVerification: require("./sign/emailVerification"),
     googleSignin: require("./google/signin"),
-    googleSignout: require("./google/signout"),
     googleWithdrawal: require("./google/withdrawal"),
     registration: require("./restaurant/registration"),
     category: require("./restaurant/category"),
