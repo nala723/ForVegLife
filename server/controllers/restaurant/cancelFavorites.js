@@ -1,4 +1,5 @@
 const models = require("../../models")
+const { isAuthorized } = require("../tokenFunctions");
 
 module.exports = async (req, res) => {
     // res.send('즐겨찾기 해제')
@@ -16,12 +17,10 @@ module.exports = async (req, res) => {
           res.status(401).json('invalid user')
       }
       else{
-        userId = await models.user.findOne({where:{email:userId}})
-
         models.users_places_like.destroy({
-        where:{user_id:userId}},{where:{place_id:placeId}
-        })
-    res.send(`${req.params.placeId}이 id인 장소를 해제`)
+        where:{user_id:userId,place_id:placeId}}
+        )
+    res.send({ message : `dislike ${req.params.placeId} restaurant` })
 }
     }}
     catch (error) {
