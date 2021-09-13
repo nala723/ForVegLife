@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import MapIndex from "./index";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
+import { selectPlace } from "../../actions";
 const { kakao } = window;
 
 export default function SearchPlace() {
   const mapCenter = useSelector((state) => state.MapCenter);
+  const dispatch = useDispatch()
   const [latlng, setLatlng] = useState({
     x: 0,
     y: 0,
@@ -19,17 +21,17 @@ export default function SearchPlace() {
   };
   useEffect(() => {
     var places = new kakao.maps.services.Places();
-
     var callback = function (result, status) {
       if (status === kakao.maps.services.Status.OK) {
         setData(result);
+        console.log(result);
         return result;
       }
     };
     places.keywordSearch(inputText, callback, {
       x: mapCenter.x,
       y: mapCenter.y,
-      radius: 1000,
+      radius: 500,
     });
   }, [mapCenter, inputText]);
 
@@ -44,39 +46,82 @@ export default function SearchPlace() {
       x,
       y,
     });
+    dispatch(selectPlace({x,y}))
   };
 
   return (
     <>
       <Map>
         <SearchForm className="inputForm" onSubmit={handleSubmit}>
-          <input
-            placeholder="Search Place..."
-            onChange={onChange}
-            value={inputText}
-          />
-          <button type="submit">검색</button>
+          <div>
+            {" "}
+            <PlaceInput
+              placeholder="Search Place..."
+              onChange={onChange}
+              value={inputText}
+            />
+            <SearchButton type="submit">검색</SearchButton>
+          </div>
+          <Keyword>
+            {data.map((x) => {
+              return (
+                <PlaceData onClick={() => onClick(x.x, x.y)}>
+                  <PlaceName>{x.place_name}</PlaceName>
+                  <PlaceAddress>{x.address_name}</PlaceAddress>
+                </PlaceData>
+              );
+            })}
+          </Keyword>
         </SearchForm>
         <MapIndex latlng={latlng} />
       </Map>
-      {data.map((x) => {
-        return (
-          <PlaceData onClick={() => onClick(x.x, x.y)}>
-            {x.place_name}
-          </PlaceData>
-        );
-      })}
     </>
   );
 }
 const Map = styled.div``;
-const PlaceData = styled.span`
-  background-color: none;
-  top: 3em;
-`;
+
 const SearchForm = styled.form`
   position: absolute;
-  top: 3em;
-  right: 4em;
-  background-color: red;
+  display: flex;
+  flex-direction: column;
+  top: 3rem;
+  right: 10%;
+`;
+const SearchButton = styled.button`
+  background-color: rgba(0, 0, 0, 0);
+  
+`;
+const PlaceInput = styled.input`
+  background-color: rgba(0, 0, 0, 0);
+  width: 10rem;
+  height: 2rem;
+  border-radius: 2rem;
+`;
+const PlaceData = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 0.5rem;
+  height: 3rem;
+  color: black;
+  font-size: 0.4rem;
+  margin: 0.4rem;
+`;
+const PlaceName = styled.div`
+  font-size: 0.2rem;
+`;
+const PlaceAddress = styled.div`
+  font-size: 0.2rem;
+`;
+const Keyword = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 7rem;
+  background-color: rgba(0, 0, 0, 0);
+  overflow: auto;
+  -ms-overflow-style: none;
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;

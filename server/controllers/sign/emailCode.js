@@ -9,7 +9,6 @@ const fromEmail = 'veg_veri@naver.com';
 
 module.exports = async (req, res) => {
     const email = req.body.email;
-
     const generateRandom = function (min, max) {
       let ranNum = Math.floor(Math.random()*(max-min+1)) + min;
       return ranNum;
@@ -40,6 +39,7 @@ module.exports = async (req, res) => {
       if (error) {
           //에러
           //console.log(error);
+      
           res.status(500).send(error);
       }
       //전송 완료

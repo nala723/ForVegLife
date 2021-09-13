@@ -1,6 +1,6 @@
 export const ISLOGIN = "ISLOGIN";
 export const MAPCENTER = "MAPCENTER";
-export const DECREASE = "DECREASE";
+export const SELECTPLACE = "SELECTPLACE";
 
 // my page
 export const USER_INFO = "USER_INFO";
@@ -17,8 +17,8 @@ export const isLogin = (data) => {
 export const mapCenter = (data) => {
   return { type: MAPCENTER, payload: { data } };
 };
-export const decrease = () => {
-  return { type: DECREASE };
+export const selectPlace = (data) => {
+  return { type: SELECTPLACE, payload: {data} };
 };
 
 // my page

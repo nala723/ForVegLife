@@ -3,8 +3,11 @@ import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { isLogin } from "../../actions/index";
 import { GoogleLogin } from "react-google-login";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
 
-export default function Login() {
+export default function Login(props) {
   let userdata = useSelector((state) => state);
 
   const dispatch = useDispatch();
@@ -21,9 +24,11 @@ export default function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
     // axios 요청으로 닉네임 알아오기
+    axios.post("http://localhost/sign/signin", {email: user.email, password: user.password})
+    .then(res=>{
     dispatch(
-      isLogin({ isLogin: true, email: user.email, nickName: user.nickName })
-    );
+      isLogin({ isLogin: true, email: user.email, nickName: res.data.nickname })
+    );})
   };
   const responseGoogle = (res) => {
     const email = res.profileObj.email;
@@ -33,6 +38,8 @@ export default function Login() {
     dispatch(isLogin({ isLogin: true, email, nickName }));
   };
   return (
+    <Temp>
+      <Exit onClick={props.exit}><FontAwesomeIcon color={"white"} icon={faTimes}/></Exit>
     <LoginForm onSubmit={handleSubmit}>
       <Logo>LoGo</Logo>
       <LoginInput
@@ -55,8 +62,21 @@ export default function Login() {
         onSuccess={responseGoogle}
       />
     </LoginForm>
+    </Temp>
   );
 }
+
+const Temp = styled.div`
+ width:100vw;
+ height: 95vh;
+ background-color: rgba(0,0,0,0.4)
+`;
+const Exit = styled.div`
+position: absolute;
+top:1rem;
+right:1rem;
+font-size: 2rem;
+`
 const LoginForm = styled.form`
   position: absolute;
   display: flex;
@@ -65,8 +85,10 @@ const LoginForm = styled.form`
   justify-content: center;
   top: 50vh;
   left: 50vw;
-  width: 18rem;
-  height: 21rem;
+  min-width: 18rem;
+  width: 21vw;
+  min-height: 21rem;
+  height: 24vw;
   background-color: white;
   border-radius: 1rem;
   transform: translate(-50%, -50%);
@@ -100,5 +122,6 @@ const Message = styled.div`
   display: flex;
   justify-content: center;
   width: 80%;
+  font-size: 0.6rem;
   margin-bottom: 2rem;
 `;

@@ -2,11 +2,17 @@ import react, { useState } from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { isLogin } from "../../actions/index";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
+
 
 export default function SignUp(props) {
   let userdata = useSelector((state) => state);
 
   const dispatch = useDispatch();
+  const [verifyCode, setVerifyCode] = useState(null)
+  const [message,setMessage] = useState("")
   const [user, setUser] = useState({
     email: "",
     verifyEmail: "",
@@ -20,21 +26,42 @@ export default function SignUp(props) {
   const send = (email) => {
     console.log(email);
     // axios로 email보내고  코드 값 가져오기
+    axios.post("http://localhost/sign/email-code",{
+      email: email
+    }).then(res =>
+      {
+        console.log(res.data)
+        setVerifyCode(res.data.data.emailcode)
+      }
+    )
+
     // 오류는 중복되거나 또는 서버 오류
-    const codeData = "123";
     setIsSend(true);
-    setCode(codeData);
   };
-  const verify = (verifyCode) => {
-    if (verifyCode === code) {
-      setIsVerify(true);
-    }
+  const verify = (code) => {
+    console.log(verifyCode)
+    axios.post(`http://localhost/sign/email-verification?code=${verifyCode}`,{
+     emailCode : code
+    })
+    .then(res =>
+      {
+      console.log(res)
+      setIsVerify(true)
+      }
+    )
   };
   const onCreate = (data) => {
     // axios 요청 성공 시2
-    console.log(data);
-    const { email, nickName } = data;
+    axios.post('http://localhost/sign/signup',{
+      nickName: data.nickName,
+      email: data.email,
+      password: data.password
+    }).then(
+      res=> {
+        const { email, nickName } = data;
     dispatch(isLogin({ isLogin: true, email, nickName }));
+      }
+    )
   };
   const handleChange = (e) => {
     setUser({
@@ -44,18 +71,44 @@ export default function SignUp(props) {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    onCreate(user);
+    if(chkPW(user.password)==="통과" && isVerify=== true && user.nickName!==undefined){
+    onCreate(user)
     setUser({
       email: "",
       verifyEmail: "",
-      nickName: "",
       password: "",
       rePassword: "",
+      nickName: "",
     });
     setIsVerify(false);
+    }else{
+      setMessage("비번이나 이메일 인증을 확인해주세요")
+    }
   };
+  function chkPW(pw){
+
+    let num = pw.search(/[0-9]/g);
+    let eng = pw.search(/[a-z]/ig);
+    let spe = pw.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
+   
+    if(pw.length < 8 || pw.length > 20){
+   
+     return ("8자리 ~ 20자리 이내로 입력해주세요.");
+    }else if(pw.search(/\s/) != -1){
+     return("비밀번호는 공백 없이 입력해주세요.");
+   
+    }else if(num < 0 || eng < 0 || spe < 0 ){
+     return("영문,숫자, 특수문자를 혼합하여 입력해주세요.");
+    
+    }else {
+     return("통과"); 
+      
+    }
+   
+   }
   return (
+    <Temp>
+      <Exit onClick={props.exit}><FontAwesomeIcon color={"white"} icon={faTimes}/></Exit>
     <SignUpForm onSubmit={handleSubmit}>
       <Logo>LoGo</Logo>
       <EmailIcon>
@@ -89,19 +142,29 @@ export default function SignUp(props) {
           {isVerify ? "인증 되었습니다" : isSend ? "인증 되지 않았습니다" : ""}
         </Message>
       </EmailIcon>
-
-      <LoginInput
+      <Repassword>
+      <RepasswordInput
         name="password"
         value={user.password}
         placeholder="password"
         onChange={handleChange}
       />
-      <LoginInput
+      <Message>{chkPW(user.password)}</Message>
+      </Repassword>
+       <Repassword>
+      <RepasswordInput
         name="rePassword"
         value={user.repassword}
         placeholder="password confirm"
         onChange={handleChange}
       />
+      <Message>
+          { user.repassword !== "" ? user.password === user.rePassword ? "비밀번호가 일치합니다" :  "비밀번호가 일치 하지 않습니다": "" }
+        </Message>
+      </Repassword>
+      <Message>
+      {message}
+      </Message>
       <LoginInput
         name="nickName"
         value={user.nickName}
@@ -110,9 +173,20 @@ export default function SignUp(props) {
       />
       <SignupButton type="submit">회원가입</SignupButton>
     </SignUpForm>
+    </Temp>
   );
 }
-
+const Temp = styled.div`
+ width:100vw;
+ height: 95vh;
+ background-color: rgba(0,0,0,0.4)
+`;
+const Exit = styled.div`
+position: absolute;
+top:1rem;
+right:1rem;
+font-size: 2rem;
+`
 const Logo = styled.div`
   display: flex;
   justify-content: center;
@@ -128,14 +202,29 @@ const SignUpForm = styled.form`
   justify-content: center;
   top: 50vh;
   left: 50vw;
-  width: 18rem;
-  height: 27rem;
-  min-height: 9rem;
+  min-width: 18rem;
+  width: 21vw;
+  min-height: 24rem;
+  height: 27vw;
   background-color: white;
   border-radius: 0.2rem;
   transform: translate(-50%, -50%);
 `;
-
+const Repassword = styled.div`
+width:100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+`
+const RepasswordInput = styled.input`
+  width: 80%;
+  height: 2.5rem;
+  border-radius: 0.5rem;
+  border: 0.5px solid #bbbbbb;
+  text-align: left;
+  text-indent: 2rem;
+`;
 const EmailIcon = styled.div`
   display: flex;
   flex-direction: column;
@@ -148,6 +237,7 @@ const Align = styled.div`
   display: flex;
   justify-content: space-between;
 `;
+
 const EmailInput = styled.input`
   width: 75%;
   height: 2.5rem;

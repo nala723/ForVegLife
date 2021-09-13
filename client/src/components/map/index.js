@@ -7,7 +7,8 @@ const { kakao } = window;
 const API_KEY = "8ae459a51f5b018322fee10f7aa86f24";
 
 export default function MapIndex({ latlng }) {
-  console.log(latlng);
+  const selectPlace = useSelector(state=> state.selectPlace)
+  const MapCenter = useSelector(state => state.MapCenter)
   let lng = latlng.x !== 0 ? latlng.x : 127.10676860117488;
   let lat = latlng.y !== 0 ? latlng.y : 37.365264512305174;
   const dispatch = useDispatch();
@@ -20,14 +21,14 @@ export default function MapIndex({ latlng }) {
     };
     const map = new kakao.maps.Map(container, options);
     const geocoder = new kakao.maps.services.Geocoder();
-
+    map.setDraggable(true);
     kakao.maps.event.addListener(map, "tilesloaded", function () {
       if (map.getCenter() > 4) {
         return;
       }
 
       searchAddrFromCoords(map.getCenter(), displayCenterInfo);
-      let markerPosition = new kakao.maps.LatLng(latlng.y, latlng.x);
+      let markerPosition = new kakao.maps.LatLng(selectPlace.y, selectPlace.x);
       let marker = new kakao.maps.Marker({
         position: markerPosition,
       });
@@ -43,16 +44,15 @@ export default function MapIndex({ latlng }) {
       if (status === kakao.maps.services.Status.OK) {
         for (let i = 0; i < result.length; i++) {
           // 행정동의 region_type 값은 'H' 이므로
-          if (result[i].region_type === "H") {
-            console.log(result[i]);
+          if (result[i].region_type === "B") {
             dispatch(mapCenter({ x: result[i].x, y: result[i].y }));
             address = result[i].address_name;
+            console.log(address);
           }
         }
       }
     }
-  }, [latlng.x, latlng.y]);
-
+  }, [selectPlace.x, selectPlace.y]);
   return (
     <>
       <Map id="map"></Map>
