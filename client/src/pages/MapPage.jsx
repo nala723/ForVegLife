@@ -5,12 +5,15 @@ import styled from "styled-components";
 import Login from "../components/user/login";
 import Logout from "../components/user/logout";
 import SignUp from "../components/user/sign-up";
+import { useSelector, useDispatch } from "react-redux";
 
 export default function MapPage() {
+  const Center = useSelector((state) => state.MapCenter);
+
   return (
     <Temp>
       <SearchPlace />
-      <Center></Center>
+      <SideBar select={Center}> </SideBar>
     </Temp>
   );
 }

@@ -8,8 +8,8 @@ const API_KEY = "8ae459a51f5b018322fee10f7aa86f24";
 
 export default function MapIndex({ latlng }) {
   console.log(latlng);
-  let lng = latlng.x !== 0 ? latlng.x : 37.365264512305174;
-  let lat = latlng.y !== 0 ? latlng.y : 127.10676860117488;
+  let lng = latlng.x !== 0 ? latlng.x : 127.10676860117488;
+  let lat = latlng.y !== 0 ? latlng.y : 37.365264512305174;
   const dispatch = useDispatch();
   useEffect(() => {
     let address = "";
@@ -20,7 +20,7 @@ export default function MapIndex({ latlng }) {
     };
     const map = new kakao.maps.Map(container, options);
     const geocoder = new kakao.maps.services.Geocoder();
-
+    map.setDraggable(true);
     kakao.maps.event.addListener(map, "tilesloaded", function () {
       if (map.getCenter() > 4) {
         return;
@@ -43,16 +43,15 @@ export default function MapIndex({ latlng }) {
       if (status === kakao.maps.services.Status.OK) {
         for (let i = 0; i < result.length; i++) {
           // 행정동의 region_type 값은 'H' 이므로
-          if (result[i].region_type === "H") {
-            console.log(result[i]);
+          if (result[i].region_type === "B") {
             dispatch(mapCenter({ x: result[i].x, y: result[i].y }));
             address = result[i].address_name;
+            console.log(address);
           }
         }
       }
     }
   }, [latlng.x, latlng.y]);
-
   return (
     <>
       <Map id="map"></Map>
