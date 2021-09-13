@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-const cheerio = require("cheerio");
+// const cheerio = require("cheerio");
 const axios = require("axios");
 
 export default function MenuInfo() {
