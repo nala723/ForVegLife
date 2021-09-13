@@ -3,7 +3,6 @@ const bcrypt = require('bcrypt')
 module.exports = async (req, res) => {
 
   try {
-
     const { code } = req.query; //해시된 상태로
     const { emailCode } = req.body; //해시 안된 상태로 
 

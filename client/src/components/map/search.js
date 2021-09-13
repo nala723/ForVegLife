@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import MapIndex from "./index";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
+import { selectPlace } from "../../actions";
 const { kakao } = window;
 
 export default function SearchPlace() {
   const mapCenter = useSelector((state) => state.MapCenter);
+  const dispatch = useDispatch()
   const [latlng, setLatlng] = useState({
     x: 0,
     y: 0,
@@ -44,6 +46,7 @@ export default function SearchPlace() {
       x,
       y,
     });
+    dispatch(selectPlace({x,y}))
   };
 
   return (
@@ -86,11 +89,10 @@ const SearchForm = styled.form`
 `;
 const SearchButton = styled.button`
   background-color: rgba(0, 0, 0, 0);
-  border: none;
+  
 `;
 const PlaceInput = styled.input`
   background-color: rgba(0, 0, 0, 0);
-  border: none;
   width: 10rem;
   height: 2rem;
   border-radius: 2rem;

@@ -3,11 +3,16 @@ import styled from "styled-components";
 import MenuInfo from "./menuInfo";
 import PlaceInfo from "./placeinfo";
 import Review from "./review";
+import { useSelector, useDispatch } from "react-redux";
+import { selectPlace } from "../../../actions";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 export default function SideBar({ select }) {
+
+  const dispatch =useDispatch()
   // axios 요청으로 받아오기
   // 일단은 더미데이터
-  const time = Date.now();
   const data = {
     like: {
       Lacto: "30%",
@@ -41,6 +46,7 @@ export default function SideBar({ select }) {
 
   return (
     <Side>
+      <Exit onClick={()=>dispatch(selectPlace({x:0, y:0}))}><FontAwesomeIcon  icon={faTimes}/></Exit>
       <MenuInfo place={data.title} menu={data.menu} price={data.price} />
       <PlaceInfo user={data.like} />
       <Review review={data.review_star} />
@@ -48,6 +54,12 @@ export default function SideBar({ select }) {
   );
 }
 
+const Exit = styled.div`
+position: absolute;
+top:0.2rem;
+right:0.2rem;
+font-size: 2rem;
+`
 const Side = styled.div`
   display: flex;
   flex-direction: column;
