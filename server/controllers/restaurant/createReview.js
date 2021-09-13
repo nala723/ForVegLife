@@ -18,16 +18,13 @@ module.exports = async (req, res) => {
       res.status(401).json('invalid user')
       }
       else{
-      userId = await models.user.findOne({where:{email:userId}})
-
-      models.review.create({
+      const review = await models.review.create({
         review: content,
         stars: stars,
         place_id: placeId,
         user_id: userId
       })
-
-        res.send({message:"ok"})
+        res.send({message : "left a review" ,reviewId:review.id})
       }
   };}
   catch (error) {
