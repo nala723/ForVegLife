@@ -6,12 +6,10 @@ import theme from '../src/styles/theme'
 
 function App() {
   return (
-    <>
     <ThemeProvider theme={theme}>
-      <GlobalStyles />
+       <GlobalStyles />
       <Navbar />
-      </ThemeProvider>
-    </>
+    </ThemeProvider>
   );
 }
 

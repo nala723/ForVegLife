@@ -28,10 +28,11 @@ export default function SearchPlace() {
         return result;
       }
     };
+    console.log(mapCenter)
     places.keywordSearch(inputText, callback, {
       x: mapCenter.x,
       y: mapCenter.y,
-      radius: 500,
+      radius: 1000,
     });
   }, [mapCenter, inputText]);
 
