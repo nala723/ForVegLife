@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as fullHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as EmptyHeart } from "@fortawesome/free-regular-svg-icons";
+import theme from "../../../styles/theme";
 const axios = require("axios");
 export default function MenuInfo({ place, menu, price }) {
   const [favirote, setFavirote] = useState(false);
@@ -46,12 +47,14 @@ const Temp = styled.div`
   flex-direction: column;
   width: 80%;
   margin: 1rem;
-  border-bottom: 0.2rem solid blue;
+  border-bottom: 0.1rem solid rgba(187, 187, 187, 0.5);;
 `;
 const Placename = styled.div`
   display: flex;
   width: 100%;
   margin: 1rem 1rem 1rem 0;
+  font-weight: 700;
+  font-size: 1.2rem;
   justify-content: space-between;
 `;
 
@@ -61,6 +64,7 @@ const Picture = styled.img`
 `;
 const Name = styled.div`
   justify-content: flex-start;
+  color: ${theme.colors.brown}
 `;
 
 const Menubar = styled.div`
@@ -73,6 +77,8 @@ const MenuPrice = styled.div`
   display: flex;
   justify-content: space-between;
   margin: 0.2rem;
+  font-weight: 100;
+  color: ${theme.colors.mapgrey}
 `;
 const Menu = styled.div``;
 const Price = styled.div``;

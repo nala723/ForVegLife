@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Bar } from "react-chartjs-2/dist/index";
+import theme from "../../../styles/theme";
 
 export default function PlaceInfo({ user }) {
   const likeType = Object.entries(user);
@@ -52,19 +53,20 @@ export default function PlaceInfo({ user }) {
 
   return (
     <Temp>
-      <Title> 타입별 인기 현황 </Title>
-      <Bar data={data} width="100%" height="100%" options={options} />
+      <Title> 타입별 인기도 </Title>
+      <Bar data={data} style={{marginBottom: "1rem"}} width="100%" height="100%" options={options} />
     </Temp>
   );
 }
 
 const Title = styled.div`
   margin: 0 1rem 1rem 0;
+  color: ${theme.colors.mapgrey}
 `;
 const Temp = styled.div`
   display: flex;
   flex-direction: column;
   width: 80%;
   margin: 1rem;
-  border-bottom: 0.2rem solid blue;
+  border-bottom: 0.1rem solid rgba(187, 187, 187, 0.5);;
 `;

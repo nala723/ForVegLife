@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as fullStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as EmptyStar } from "@fortawesome/free-regular-svg-icons";
+import theme from "../../../styles/theme";
 
 export default function Review({ review }) {
   const avearge = review.reduce((acc, cur, idx, arr) => {
@@ -74,20 +75,23 @@ const Temp = styled.div`
 
 const Title = styled.div`
   margin: 0 1rem 1rem 0;
-  font-size: 1.4rem;
+  font-size: 1rem;
+  color: ${theme.colors.mapgrey}
 `;
 const GoReview = styled.div`
   align-self: flex-end;
   margin: 0 0 1rem 0;
+  color:${theme.colors.logoText}
 `;
 const Avearge = styled.div`
   display: flex;
   margin: 1rem 0 0 0;
-  border-bottom: 0.1rem solid blue;
-  font-size: 1.4rem;
+  border-bottom: 0.1rem solid rgba(187, 187, 187, 0.5);;
+  font-size: 1rem;
 `;
 const Score = styled.div`
   margin: 0 1rem 1rem 0;
+  font-size: 1.2rem;
 `;
 const ReviewForm = styled.div`
   display: flex;
@@ -95,7 +99,7 @@ const ReviewForm = styled.div`
 `;
 const ReviewData = styled.div`
   margin: 1rem 0 0 0;
-  border-bottom: 0.1rem solid blue;
+  border-bottom: 0.1rem solid rgba(187, 187, 187, 0.5);;
 `;
 const Review_1 = styled.div`
   display: flex;
@@ -106,21 +110,27 @@ const Review_2 = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  height: 5rem;
+  margin-bottom: 1rem;
+  height: 3.2rem;
 `;
 const ReviewStar = styled.div`
   font-size: 0.7rem;
+  color: ${theme.colors.mapgrey}
 `;
 const ReviewAt = styled.div``;
 const ReviewNickname = styled.div`
   width: 30%;
   font-size: 0.8rem;
+  color: ${theme.colors.darkgrey};
 `;
 const ReviewContent = styled.div`
   width: 10rem;
   font-size: 0.6rem;
+  color: ${theme.colors.mapgrey}
 `;
 const More = styled.div`
   text-align: right;
-  margin: 1rem 0 1rem 1rem;
+  font-size: 0.4rem;
+  color: ${theme.colors.grey};
+  margin: 1rem  1rem 1rem;
 `;
