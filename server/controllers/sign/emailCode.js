@@ -1,6 +1,7 @@
 require('dotenv').config();
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
+const smtpTransport = require('nodemailer-smtp-transport');
 
 const smtpServerURL = "smtp.gmail.com";
 const authUser = process.env.EMAIL_ID;
@@ -16,16 +17,25 @@ module.exports = async (req, res) => {
 
     const number = generateRandom(1111,9999);
 
-    let transporter = nodemailer.createTransport({
-      service: 'gmail',
-      host : smtpServerURL,
-      port: 587,
-      secure: false,
-      auth:{
-        user: authUser,
-        pass: authPass
-      }
-  });
+  //   let transporter = nodemailer.createTransport({
+  //     service: 'gmail',
+  //     host : smtpServerURL,
+  //     port: 587,
+  //     secure: false,
+  //     auth:{
+  //       user: authUser,
+  //       pass: authPass
+  //     }
+  // });
+
+      let transporter = nodemailer.createTransport(smtpTransport({
+        service: 'gmail',
+        host : smtpServerURL,
+        auth:{
+          user: authUser,
+          pass: authPass
+        }
+      }));
 
   let mailOptions = {
     from: fromEmail,       
