@@ -2,7 +2,30 @@ import React from "react";
 import styled from "styled-components";
 
 export default function UpdateInfo() {
-  
+   
+    const veggieIcon = [
+      {   
+            img :  '/image/abocado.svg',
+            name : '비건'
+       },
+       {   
+        img :  '/image/cheese.svg',
+        name : '오보'
+       },
+       {   
+        img :   '/image/egg.svg',
+        name : '락토'
+       },
+       {   
+        img :   '/image/eggcheese.svg',
+        name : '락토오보' 
+       },
+       {   
+        img :   '/image/fish.svg',
+        name : '페스코'
+       },
+    ]
+
     return (
         <Container>
         <Title>
@@ -12,16 +35,64 @@ export default function UpdateInfo() {
            <UserContainer>
                <UserTop>  
                    <UserPhotoBox >
-                         
                        <UserPhoto>
                           <Camera src="/image/camera.svg"/>
                            <UserPic />
                        </UserPhoto>
                    </UserPhotoBox >
                    <UserNmBox>
+                       <UserNm > 
+                            <UserIcon src="/image/userIcon.svg"/>
+                            <UserContent>
+                                <p>username</p>  
+                              <h1> {`Kimusername`} </h1>
+                           </UserContent>
+                        </UserNm >
+                       <UserNm >
+                           <UserIcon src="/image/email.svg"/>
+                           <UserContent>
+                               <p>e-mail</p>
+                             <h1> {`hahihuheho@gmail.com`}</h1> 
+                           </UserContent>
+                       </UserNm >
                    </UserNmBox >
                 </UserTop>
                  <UserBottom>
+                 <UserNmBox primary >
+                    <UserNm primary> 
+                            <UserIcon src="/image/lock.svg" primary/>
+                            <UserContent >
+                                <p>new PW</p> 
+                              <PwContainer placeholder="새 비밀번호를 입력해주세요"/>
+                           </UserContent>
+                        </UserNm >
+                       <UserNm >
+                           <UserIcon src="/image/lock.svg" primary/>
+                           <UserContent>
+                               <p>new PW</p>
+                             <PwContainer placeholder="새 비밀번호를 재입력해주세요"/>
+                           </UserContent>
+                       </UserNm >
+                    </UserNmBox>
+                    <VegAnswer>
+                       <p> 당신의 채식 타입을 선택해 주세요.</p>
+                       <VegIconBox>
+                           <VegImgBox>
+                       {veggieIcon.map(veg=>{
+                           return (
+                             <div>
+                                <VegImg src={veg.img} />
+                                <p classname="p">{veg.name}</p>
+                             </div>
+                             )
+                          })
+                         } 
+                        </VegImgBox>
+                    </VegIconBox>
+                    </VegAnswer>
+                    <ButtonBox>
+                        <button >수정</button>
+                    </ButtonBox>
                  </UserBottom>
            </UserContainer>
        </Bottom>
@@ -30,7 +101,7 @@ export default function UpdateInfo() {
 
 }    
 
-const Container = styled.div`
+ const Container = styled.div`
     width: calc(100%-7.313rem);
     height:100%;
     display: flex;
@@ -61,26 +132,26 @@ const UserContainer = styled.div`
    flex-direction: column;
     width:32.688rem;
     height: 45.313rem;
-    border: 1px solid yellowgreen;
+    /* border: 1px solid yellowgreen; */
     align-items: center;
     
 `; 
 const UserTop = styled(UserContainer)`
-
+    
     height: 18.438rem;
 `; 
 const UserPhotoBox = styled(UserTop)`
-    
     height: 7.375rem;
-    /* position:relative; 
-    z-index:-1px; */
+    position:relative; 
 `; 
-const Camera = styled.img`
+const Camera = styled.img` //처리
    width: 45px;
    height: 45px;
    position: absolute; 
    z-index:999px;
-   right:2px;
+   bottom: 5px;
+   right:195px;
+   cursor: pointer;
 `;
 const UserPhoto = styled(UserPhotoBox)`
    height: 7.375rem;
@@ -88,7 +159,7 @@ const UserPhoto = styled(UserPhotoBox)`
    border-radius: 100%;
    display: flex;
    overflow: hidden;
-   position:relative; 
+   position: static;
    z-index:-1px;
    
 `;
@@ -99,12 +170,41 @@ const UserPic = styled.img`
     background-color:  ${({theme})=>theme.colors.mypagecard}; 
 `;
 const UserNmBox = styled(UserTop)`
-    height:inherit;
-    width:inherit;
-    margin: 3.5rem;
-    
+    width: 100%;
+    height:11.5rem;
+    padding: ${props => props.primary ? '2.3rem 2rem' : '2.3rem 3rem'};
+    justify-content: center;
+    align-items:center;
 `; 
+const UserNm = styled.div`
+   width: 100%;
+   height:${props => props.primary ? '11.688rem' : '100%' };
+   display:flex;
+   flex-direction:row;
+   align-items: center;
 
+`; 
+const UserIcon = styled.img`
+   margin-right: 1rem;
+   margin-left:${props => props.primary ? '1rem' : '' };
+  
+`; 
+const UserContent = styled(UserNm)`
+    width: 100%;
+    justify-content: space-between;
+    >h1{
+       color: ${({theme})=>theme.colors.darkgrey}; 
+       font-size: ${({theme})=>theme.fonts.size.base};
+       font-weight: ${({theme})=>theme.fonts.weight.bold};
+    }
+   >p{  
+       font-size:14px;
+        color: ${({theme})=>theme.colors.mapgrey}; 
+        font-family: var(--font-button);
+        font-weight: 600;
+    }
+
+`;
 
 
 const UserBottom = styled(UserContainer)`
@@ -112,3 +212,99 @@ const UserBottom = styled(UserContainer)`
     background-color:  ${({theme})=>theme.colors.mypagecard}; 
     border-radius:1rem;
 `; 
+
+const PwContainer = styled.input.attrs(props=>({
+    type:'text',
+
+}))` // input으로 변경
+  width:13rem;
+  height:2.875rem;
+  background-color:white;
+  border-radius:0.6rem;
+  text-align:center;
+  display:flex;
+  justify-content: center;
+  border:none;
+  color: ${({theme})=>theme.colors.darkgrey}; 
+  font-size: ${({theme})=>theme.fonts.size.base};
+  ::placeholder{
+      color: ${({theme})=>theme.colors.mapgrey}; 
+      font-size:${({theme})=>theme.fonts.size.sm}; 
+  }
+  :focus {
+     /* outline:2px solid #d50000; input박스 클릭시 나오는 테두리 색 변경*/
+      outline:none;
+  }
+`;
+
+const VegAnswer = styled.div`
+  display:flex;
+  flex-direction: column;
+ 
+  width:100%;
+   >p{
+       color:  ${({theme})=>theme.colors.green};
+      margin-left:2.5rem;
+   }
+
+`;
+const VegIconBox = styled.div`
+  display:flex;
+  flex-direction: column;
+  width:100%;
+  height:8.125rem;
+  justify-content: flex-end;
+  align-items:center;
+  gap: 1rem;
+  padding: 0 2rem;
+
+       
+`;
+const VegImgBox = styled.div`
+  width:90%;
+  display:flex;
+  justify-content: space-between;
+  >div{
+      >p{  
+            color: ${({theme})=>theme.colors.mapgrey}; //고치기 색..
+        }
+  }
+   
+`;
+
+const VegImg = styled.img`
+  height:50px;
+  width:50px;
+  margin-bottom:0.6rem; 
+  :hover{
+       cursor:pointer;
+       
+       border-radius: 100%; //추후수정?
+       box-shadow:  8px 8px 16px rgba(0, 0, 0, 0.2);
+   }
+`;
+const ButtonBox = styled.div`
+  height:100%;
+  width:100%;
+  display: flex;
+  justify-content: center;
+  align-items:center;
+   >button{
+       width: 7.375rem;
+       height: 2.063rem;
+       border: none;
+       border-radius:0.6rem;
+       background-color:${({theme})=>theme.colors.green}; 
+       color: white;
+       font-size: ${({theme})=>theme.fonts.base};
+       font-family: var(--font-logo);
+       transition: all 0.3s ease-in-out;  
+       :hover{
+        transition: all 0.3s ease-in-out;   
+        background-color:white;
+        color: ${({theme})=>theme.colors.green}; 
+        border: 1px solid ${({theme})=>theme.colors.green}; 
+        cursor: pointer;
+       }
+   }
+`;
