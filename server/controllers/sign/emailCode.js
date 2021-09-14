@@ -2,10 +2,10 @@ require('dotenv').config();
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 
-const smtpServerURL = "smtp.naver.com";
+const smtpServerURL = "smtp.gmail.com";
 const authUser = process.env.EMAIL_ID;
 const authPass = process.env.EMAIL_PW;
-const fromEmail = 'veg_veri@naver.com';
+const fromEmail = process.env.EMAIL_ID
 
 module.exports = async (req, res) => {
     const email = req.body.email;
@@ -17,11 +17,13 @@ module.exports = async (req, res) => {
     const number = generateRandom(1111,9999);
 
     let transporter = nodemailer.createTransport({
-      host: smtpServerURL,    //SMTP 서버 주소
-      secure: true,           //보안 서버 사용 false로 적용시 port 옵션 추가 필요
-      auth: {
-          user: authUser,     //메일서버 계정
-          pass: authPass      //메일서버 비번
+      service: 'gmail',
+      host : smtpServerURL,
+      port: 587,
+      secure: false,
+      auth:{
+        user: authUser,
+        pass: authPass
       }
   });
 
