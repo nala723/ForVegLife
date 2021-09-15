@@ -26,7 +26,7 @@ export default function SignUp(props) {
   const send = (email) => {
     console.log(email);
     // axios로 email보내고  코드 값 가져오기
-    axios.post("http://localhost/sign/email-code",{
+    axios.post(`${process.env.REACT_APP_URL}/sign/email-code`,{
       email: email
     }).then(res =>
       {
@@ -40,7 +40,7 @@ export default function SignUp(props) {
   };
   const verify = (code) => {
     console.log(verifyCode)
-    axios.post(`http://localhost/sign/email-verification?code=${verifyCode}`,{
+    axios.post(`${process.env.REACT_APP_URL}/sign/email-verification?code=${verifyCode}`,{
      emailCode : code
     })
     .then(res =>

@@ -1,15 +1,243 @@
-import React, {useState} from "react";
+import React, {useState,useCallback,useRef,useEffect} from "react";
 import styled from "styled-components";
 import DefaultModal from "./defaultmodal";
 import theme from "../../styles/theme";
+import { useSelector, useDispatch } from "react-redux";
+import {useHistory} from 'react-router-dom';
+import { userInfo,userUpdateInfo,newAccessToken } from "../../actions";
+import { rootReducer} from '../../reducers';
+import axios from 'axios';
 
 export default function UpdateInfo() {
+    const userState = useSelector((rootReducer) => rootReducer.userInfoReducer)
+    const {
+        user: { accessToken, email, nickName, vegType, password, profileblob, isLogin } 
+    } = userState;
+    const dispatch = useDispatch();
+    /*const history = useHistory(); */
     const [isOpen,setIsOpen] = useState(false);
+    const [currentInput, setCurrentInput] = useState({
+        imgFile:'',
+        previewUrl: '',
+        inputPassword:'',
+        inputPasswordCheck:''
+    })
+    // const [inputPassword, setInputPassword] = useState("");
+    // const [imgFile,setImgFile] = useState('');
+    // const [ previewUrl, setPreviewUrl] = useState('');
+    // const [inputPasswordCheck, setInputPasswordCheck] = useState("");
+    const [imageSizeError, setImageSizeError] = useState(false); // 이미지에러 메세지상태도 추가?
+    const [inValidEditMSG,setInvalidEditMSG] = useState("");
+    const refPassword = useRef(null);
+    const refPasswordCheck = useRef(null);
+    const history = useHistory();
+    // 최초 렌더링시 유저정보 받아오기
+    useEffect(()=>{
+        getUserInfo(accessToken)
+    },[])
+
+   // 유저 정보 요청 함수
+    const getUserInfo = (accessToken) => {
+        axios
+          .get(`${process.env.REACT_APP_URL}/mypage/user-info`,{
+            headers: {
+                "Content-Type": "multipart/form-data",
+                authorization: `Bearer ${accessToken}`
+                },
+            withCredentials: true
+        })
+        .then((res)=> {
+            if(res.headers.accessToken){
+              dispatch(newAccessToken(res.headers.accessToken));
+              }
+             if(res.status === 200){
+                   dispatch(userInfo(res.data.nickname,res.data.vegType,res.data.profileblob,res.data.email))
+                 // 그다음은 얻은 상태정보들을 렌더링하는 로직 
+             }
+             else{
+                  history.push('/notfound');
+             }
+            //  setIsLoding(false) 
+         })
+         .catch(err => {
+                console.log(err)
+        })
+    }
+    
+    // 프로필 이미지 설정
+    let profileIMG
+    if(typeof(profileblob)==='string'){
+        profileIMG = profileblob;
+    }else{
+        profileIMG =  'data:image/png;base64, '+ Buffer(userInfo.profile,'binary').toString('base64');
+    } 
+   // 이미지 업로드
+    const imageFileHandler = (key) => (e) => {
+        e.preventDefault();
+        let reader = new FileReader();
+        let file = e.target.files[0];
+        if(file.size>4000000){
+            setImageSizeError(true)
+        }else{
+            setImageSizeError(false)
+            reader.onloadend = () => {
+                setCurrentInput({
+                    imageFile : file,
+                    previewUrl : reader.result
+                })
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+  //이미지삭제
+    const deleteImage = () => {
+        if(!!(currentInput.imageFile)){
+            setCurrentInput({
+                ...currentInput,
+                imageFile:'',
+                previewUrl:''
+            })
+        }
+        // else{
+        //     setCurrentInput({
+        //         ...currentInput,
+        //         imageFile: 'default_profile',
+        //         previewUrl: 'bros_blank.jpg'
+        //     })
+        // }
+    }
+    // 
 
     const handleClick = () => {
         setIsOpen(!isOpen)
     }
-   
+    const handleInputValue = useCallback((key) => (e) => {
+        setCurrentInput({ ...currentInput, [key]:e.target.value})
+    },[currentInput])
+
+
+   // 인풋창 포커스 핸들
+    const handleMoveTopPW = (e)=>{
+        if(e.key === 'Enter') {
+            refPassword.current?.focus();
+        }
+      }
+    const handleMoveTopPWCheck = (e)=>{
+        if(e.key === 'Enter') {
+            refPasswordCheck.current?.focus();
+        }
+    };
+    
+     // 유효성 검사
+    const checkValidPW = useCallback((pw)=>{
+
+     let num = pw.search(/[0-9]/g);
+     let eng = pw.search(/[a-z]/ig);
+     let spe = pw.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
+     
+     if(pw.length < 8 || pw.length > 20){
+    
+      setInvalidEditMSG("8자리 ~ 20자리 이내로 입력해주세요.");
+       return false;
+      }
+      else if(pw.search(/\s/) != -1){
+       setInvalidEditMSG("비밀번호는 공백 없이 입력해주세요.");
+       return false;
+      }
+      else if(num < 0 || eng < 0 || spe < 0 ){
+        setInvalidEditMSG("영문,숫자, 특수문자를 혼합하여 입력해주세요.");
+        return false;
+      }
+      else {
+        return true;
+      }
+     
+     },[currentInput.inputPassword,inValidEditMSG])
+
+    const handleCompleteInput = () => {
+        if(!checkValidPW(currentInput.inputPassword)){
+            refPassword.current?.focus();
+            return false;
+        } 
+        else if(currentInput.inputPasswordCheck !== currentInput.inputPassword){
+            refPasswordCheck.current?.focus();
+            setInvalidEditMSG("비밀번호를 다시 확인해주세요")
+        }
+        return true;
+    }
+
+    //회원정보 수정
+
+    // const handleUserEditInfo = () => {
+    //     // 비밀번호 조건 만족시 요청되는 함수 (추후 보충)
+    // }
+    // 수정 - 모달창에서 예를 눌렀을 때 실행
+    const onSubmitHandler = async (e) => {
+        const MAX_WIDTH = 320;
+        const MAX_HEIGHT = 180;
+        const MIME_TYPE = "image/jpeg";
+        const QUALITY = 0.7;
+
+        let imgforaxios;
+        
+        const file = currentInput.imageFile; // get the file
+        const blobURL = URL.createObjectURL(file);
+        const img = new Image();
+        img.src = blobURL;
+        img.onerror = function () {
+            URL.revokeObjectURL(this.src);
+            console.log("Cannot load image");
+        };
+        img.onload = await function () {
+            URL.revokeObjectURL(this.src);
+            const [newWidth, newHeight] = calculateSize(img, MAX_WIDTH, MAX_HEIGHT);
+            const canvas = document.createElement("canvas");
+            canvas.width = newWidth;
+            canvas.height = newHeight;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, newWidth, newHeight);
+            canvas.toBlob(
+            (blob) => {
+                imgforaxios=blob;
+                let tmpAccessToken = 'Bearer ' + accessToken;
+                const formData = new FormData();
+                formData.append("profileblob",imgforaxios);
+                formData.append("password",currentInput.username);
+
+                if(!!(currentInput.imageFile) || !!(currentInput.username)){
+                    axios
+                    .patch(`${process.env.REACT_APP_URL}/mypage/user-info`,{
+                           headers: {
+                                "Content-Type": "multipart/form-data",
+                                authorization: `Bearer ${accessToken}`
+                                },
+                           withCredentials: true
+                       },)
+                       .then((res)=> {
+                            if(res.headers.accessToken){
+                                dispatch(newAccessToken(res.headers.accessToken));
+                                }
+                            if(res.status === 200){
+                                     dispatch(userUpdateInfo(res.data.nickname,res.data.vegType,res.data.profileblob,res.data.email))
+                                   // 그다음은 얻은 상태정보들을 렌더링하는 로직 
+                             }
+                             else{
+                                 history.push('/notfound');
+                             }
+                            //  setIsLoding(false) 
+                        })
+                        .catch((error)=>{
+                            console.log('error')
+                        })
+                }
+            },
+            MIME_TYPE,
+            QUALITY
+            );
+        }; 
+
+
+
     const veggieIcon = [
       {   
             img :  '/image/abocado.svg',
@@ -217,8 +445,13 @@ const UserContent = styled(UserNm)`
 `;
 
 
-const UserBottom = styled(UserContainer)`
-    height: inherit;
+const UserBottom = styled.div`
+    display:flex;
+   flex-direction: column;
+   width:inherit;
+    height: 100%;
+    /* border: 1px solid yellowgreen; */
+    align-items: center;
     background-color:  ${({theme})=>theme.colors.mypagecard}; 
     border-radius:1rem;
 `; 

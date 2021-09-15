@@ -24,7 +24,7 @@ export default function Login(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
     // axios 요청으로 닉네임 알아오기
-    axios.post("http://localhost/sign/signin", {email: user.email, password: user.password})
+    axios.post(`${process.env.REACT_APP_URL}/sign/signin`, {email: user.email, password: user.password})
     .then(res=>{
     dispatch(
       isLogin({ isLogin: true, email: user.email, nickName: res.data.nickname })

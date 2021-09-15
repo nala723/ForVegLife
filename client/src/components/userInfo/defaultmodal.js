@@ -4,9 +4,9 @@ import theme from '../../styles/theme';
 
 
 export default function DefaultModal({isOpen,handleClick,header,children}) {
-    // if (!isOpen) {
-    //     return null;
-    //   }
+    if (!isOpen) {
+        return null;
+      }
   
  
     return (

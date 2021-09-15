@@ -1,12 +1,13 @@
 export const initialState = {
    // User
    user: {
-       accessToken:"",
+      accessToken:"",
        email:"",
        nickName: "",
        vegType: "vegetarian",
        password: null,
-       profileblob: ""
+       profileblob: "",
+       isLogin: false
    },
    
   // Review
@@ -25,6 +26,12 @@ export const initialState = {
     title: "",
     pictureUrl: "",
     address: ""
+  },
+
+  //map
+  map: {
+    x: 0,
+    y: 0,
   }
 
 };

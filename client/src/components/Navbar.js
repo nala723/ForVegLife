@@ -8,6 +8,7 @@ import { useState } from "react";
 import { isLogin } from "../actions/index"
 import Login from "./user/login";
 import SignUp from "./user/sign-up";
+import NotFound from "../pages/NotFoundPage";
 
 const Navbar = () => {
   const loginState = useSelector((state) => state.isLogin.isLogin);
@@ -56,7 +57,9 @@ const Navbar = () => {
             </MapPage>
           </Route>
           <Route path="/mypage" component={Mypage}/>
-        
+          <Route path="*">
+            <NotFound />
+          </Route>
         </Switch>
       </Router>
     </>

@@ -9,7 +9,7 @@ import SignOut from '../components/userInfo/sign-Out';
 import styled from "styled-components";
 
 export default function MyPage() {
-  //상태 값에 따라 다르게 렌더링?
+ 
   return (
     <>
       <Container >
