@@ -1,7 +1,14 @@
-import React from "react";
+import React, {useState} from "react";
 import styled from "styled-components";
+import DefaultModal from "./defaultmodal";
+import theme from '../../styles/theme';
 
 export default function SignOut() {
+   const [isOpen,setIsOpen] = useState(false);
+
+   const handleClick = () => {
+       setIsOpen(!isOpen)
+   }
 
   return(
     <Container>
@@ -38,15 +45,20 @@ export default function SignOut() {
                         </VegAnswer>
                     </UserAlertBox>
                     <ButtonBox>
-                        <button >탈퇴</button>
+                        <button onClick={handleClick}>탈퇴</button>
                     </ButtonBox>
+                     {isOpen ? <DefaultModal isOpen={isOpen} handleClick={handleClick} header="회원 탈퇴가 완료되었습니다.">그동안 forVegLife서비스를 이용해 주셔서 감사합니다.<br></br>
+                                더욱더 노력하고 발전하는 forVegLife가 되겠습니다.</DefaultModal> : null}
                  </UserBottom>
            </UserContainer>
-       </Bottom>
+       </Bottom>   
+     
+
   </Container>
 )
 
 }    
+
 
  const Container = styled.div`
     width: calc(100%-7.313rem);
@@ -173,7 +185,7 @@ const VegAnswer = styled.div`
 
 `;
 
-
+/* 버튼 */
 const ButtonBox = styled.div`
   height:100%;
   width:100%;
@@ -199,3 +211,76 @@ const ButtonBox = styled.div`
        }
    }
 `;
+
+/* 모달 */
+// const Background = styled.div`
+//   position: fixed;
+//   width: 100%;
+//   height: 100%;
+//   top: 0;
+//   right: 0;
+//   bottom: 0;
+//   left: 0;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   visibility: hidden;
+//   opacity: 0;
+//    &.active {
+//      background-color: rgba(0, 0, 0, 0.6);
+//      visibility: visible;
+//      opacity: 1;
+     
+//    }
+// `;
+
+// const ModalSection = styled.div`
+//   position: relative;
+//   background-color: white;
+//   width: 27.563rem;
+//   height: 18.5rem;
+//   border-radius: 0.3rem;
+//   box-shadow: 0 0 2.5rem rgba(0, 0, 0, 0.3);
+//   transform: translate(-50%, -50%);
+//   max-width: 500px;
+//   transform: scale(0.0);
+//   transition: all 0.3s ease-in-out;
+//   font-family: ${theme.fonts.family.mypage};
+//   &.active{
+//     transform: scale(1.0);
+//     transition: all 0.3s ease-in-out;
+ 
+//   }
+// `;
+// const ModalTitle = styled.div`
+//   display: flex;
+//   flex-direction:column;
+//   align-items: center;
+//   justify-content: flex-start;
+//   gap:0.3rem;
+//   padding-top:1.25rem;
+//   /* transform: translate(10%, 50%); */
+//   font-size: ${theme.fonts.size.llg};
+//   color: ${theme.colors.green};
+//   font-weight: ${theme.fonts.weight.bold};
+//   >div{
+//       width:18.5rem;
+//       border-bottom: 1px solid ${theme.colors.lightgrey};
+//       margin-bottom: 2.5rem;
+//   }
+// `;
+// const Content = styled.div`
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   padding-top:1.5rem;
+//   font-size: ${theme.fonts.size.base};
+//   color: ${theme.colors.mapgrey};
+//   line-height: 1.2rem;
+//   font-weight: 500;
+// `;
+// const OkBtn = styled(ButtonBox)`
+//   position: absolute;
+//   align-items: flex-end;
+//   bottom:10%;
+// `;

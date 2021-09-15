@@ -1,7 +1,14 @@
-import React from "react";
+import React, {useState} from "react";
 import styled from "styled-components";
+import DefaultModal from "./defaultmodal";
+import theme from "../../styles/theme";
 
 export default function UpdateInfo() {
+    const [isOpen,setIsOpen] = useState(false);
+
+    const handleClick = () => {
+        setIsOpen(!isOpen)
+    }
    
     const veggieIcon = [
       {   
@@ -93,6 +100,9 @@ export default function UpdateInfo() {
                     <ButtonBox>
                         <button >수정</button>
                     </ButtonBox>
+                         {isOpen ? <DefaultModal isOpen={isOpen} handleClick={handleClick} header="회원정보 수정이 완료되었습니다.">
+                     앞으로도 계속 forVegLife 안에서 건강한 life 누리세요</DefaultModal> : null}
+                    
                  </UserBottom>
            </UserContainer>
        </Bottom>
@@ -308,3 +318,4 @@ const ButtonBox = styled.div`
        }
    }
 `;
+
