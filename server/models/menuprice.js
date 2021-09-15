@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   };
   menuprice.init({
     menu: DataTypes.STRING,
-    price: DataTypes.STRING,
+    price: DataTypes.INTEGER,
     place_id: DataTypes.INTEGER
   }, {
     sequelize,
