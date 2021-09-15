@@ -8,6 +8,7 @@ import { useState } from "react";
 import { isLogin } from "../actions/index"
 import Login from "./user/login";
 import SignUp from "./user/sign-up";
+
 const Navbar = () => {
   const loginState = useSelector((state) => state.isLogin.isLogin);
   const dispatch = useDispatch()
@@ -54,9 +55,8 @@ const Navbar = () => {
               {loginState ? "": registerModal? <SignUp exit={RegisterExit}/>: ""}
             </MapPage>
           </Route>
-          <Route path="/mypage">
-            <Mypage />
-          </Route>
+          <Route path="/mypage" component={Mypage}/>
+        
         </Switch>
       </Router>
     </>

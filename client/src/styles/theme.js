@@ -3,6 +3,7 @@ const calcRem = (size) => `${size / 16}rem`;
     const fonts = {
     family: {
       base: `Roboto, 'Orienta', sans-serif`,
+      mypage:`'Orienta',sans-serif`,
       button: `'Montserrat', serif`,
       logo: `'Berkshire Swash'`
     },
@@ -78,7 +79,13 @@ const calcRem = (size) => `${size / 16}rem`;
     fonts,
     device,
   };
-  
+  const veggieIcon = {
+     vegan : '/image/abocado.svg',
+     ovo:'/image/cheese.svg',
+     lacto:'/image/egg.svg',
+     lactoOvo:'/image/eggcheese.svg',
+     flexi:'/image/fish.svg'
+  }
   // 각 테마는 공통 변수와 함께, 각기 다른 색상 값들을 갖습니다.
   /*export const darkTheme = {
     ...defalutTheme,
@@ -89,13 +96,14 @@ const calcRem = (size) => `${size / 16}rem`;
     ...defalutTheme,
     colors: lightThemeColors,
   };*/
+  
   const theme = {
     fonts,
     colors,
-    size,
     device,
     lightThemeColors,
-    defalutTheme
+    defalutTheme,
+    veggieIcon 
 
   }
 

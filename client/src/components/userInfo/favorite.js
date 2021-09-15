@@ -20,7 +20,7 @@ export default function Favorite() {
                                   <h4>{`어느 Vegan 카페`}</h4>
                                   <p>{`서울시 광장동 구의 사거리 가동 202호`}</p>
                                 </CardContent>
-                               <CardSns>카카오로 공유하기</CardSns>
+                               <CardSns><img src="/image/kakaotalk.svg" />카카오로 공유하기</CardSns>
                         </Card>
                         <Card>
                         </Card>
@@ -75,11 +75,25 @@ const SearchContainer = styled.div`
   margin-top: 2.5rem;
   width:32.063rem;
   height:2.563rem;
+  color: ${({theme})=>theme.colors.darkgrey}; 
   border: 1.5px solid var(--color-grey);
   border-radius: 0.5rem;
   background-image: url("/image/search.svg");
   background-repeat: no-repeat; 
   background-position: 96% 50%;
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+  :focus {
+      border:2px solid var(--color-lightgreen);
+      /* border-radius:25px; */
+      outline:none;
+      /* transition: all 0.3s ease-in-out; */
+  }
+  :hover{
+     border:2px solid var(--color-lightgreen);
+      /* border-radius:25px; */
+      outline:none;
+      /* transition: all 0.3s ease-in-out; */
+  }
  `;
 
 const CardBox = styled.div`
@@ -87,14 +101,16 @@ const CardBox = styled.div`
   width:100%;
   min-height:40rem;
   height: auto;
-  grid-template-columns: repeat(auto-fill,12.313rem); // 더 수정, 화면줄였을때 자연스럽게-코드스테이츠참고
-  grid-template-rows: repeat(auto-fill, 14.313rem);
-  gap: 29px;
+  grid-template-columns: repeat(auto-fill,minmax(12.313rem,1fr)); 
+  grid-template-rows: repeat(auto-fill,minmax(14.313rem,1fr)); 
+  grid-auto-columns: minmax(12.313rem,12.313rem);
+  grid-auto-rows: minmax(14.313rem,14.313rem);
+  gap: 30px 15px;
 
 `; 
 const Card = styled.div`
-   width:inherit;  
-   height: 100%;
+   width:12.313rem;  
+   height: 14.313rem;
    display:flex;
    background-color: var(--color-mypagecard);
    border-radius: 0.5rem;
@@ -132,6 +148,9 @@ const CardSns = styled(CardContent)`
    background-color: white;
    color: var(--color-brown);
    font-size: var(--font-size-sm);
+   flex-direction: row;
+   gap:0.5rem;
+   cursor: pointer;
 `;
 const GotoCard = styled(Card)`
    justify-content: center;
