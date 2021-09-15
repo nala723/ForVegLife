@@ -1,76 +1,69 @@
 require('dotenv').config();
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
-const smtpTransport = require('nodemailer-smtp-transport');
 
 const smtpServerURL = "smtp.gmail.com";
 const authUser = process.env.EMAIL_ID;
 const authPass = process.env.EMAIL_PW;
-const fromEmail = process.env.EMAIL_ID
+const fromEmail = process.env.EMAIL_ID;
 
-module.exports = async (req, res) => {
-    const email = req.body.email;
-    const generateRandom = function (min, max) {
-      let ranNum = Math.floor(Math.random()*(max-min+1)) + min;
-      return ranNum;
-    };
+module.exports = (req, res) => {
+  try {
+          const email = req.body.email;
+          const generateRandom = function (min, max) {
+            let ranNum = Math.floor(Math.random()*(max-min+1)) + min;
+            return ranNum;
+          };
 
-    const number = generateRandom(1111,9999);
+          const number = generateRandom(1111,9999);
 
-  //   let transporter = nodemailer.createTransport({
-  //     service: 'gmail',
-  //     host : smtpServerURL,
-  //     port: 587,
-  //     secure: false,
-  //     auth:{
-  //       user: authUser,
-  //       pass: authPass
-  //     }
-  // });
-
-      let transporter = nodemailer.createTransport(smtpTransport({
+      let transporter = nodemailer.createTransport({
         service: 'gmail',
+        secure : true,
         host : smtpServerURL,
         auth:{
           user: authUser,
           pass: authPass
         }
-      }));
+      });
 
-  let mailOptions = {
-    from: fromEmail,       
-    to: email ,           
-    subject: 'VegLife 본인인증 메일입니다',
-    text: `아래 번호를 입력해 주세요
-
+      let mailOptions = {
+        from: fromEmail,       
+        to: email ,           
+        subject: 'VegLife 본인인증 메일입니다',
+        text: `아래 번호를 입력해 주세요
 
             ${number}`      
-  };
+      };
 
-  transporter.sendMail(mailOptions, function(error, info){
-      if (error) {
-          //에러
-          //console.log(error);
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+                //에러
+                //console.log(error);
+            
+                res.status(401).send(error);
+            }
+            //전송 완료
+            //console.log("Finish sending email : " + info.response);        
+            transporter.close()
+        })
+
+        bcrypt.genSalt(10, (err, salt) => {
+          bcrypt.hash(String(number), salt, (err, hash) => {
+              if(err){
+                  throw err;
+              }else{
+                  res.status(200).json({
+                      data:{emailcode : hash},
+                      message: 'ok'
+                  })
+              }
+
+          })
+        })
       
-          res.status(500).send(error);
-      }
-      //전송 완료
-      //console.log("Finish sending email : " + info.response);        
-      transporter.close()
-  })
+  } catch (error) {
+    res.status(500).send(error);
+  }
 
-  bcrypt.genSalt(10, (err, salt) => {
-    bcrypt.hash(String(number), salt, (err, hash) => {
-        if(err){
-            throw err;
-        }else{
-            res.status(200).json({
-                data:{emailcode : hash},
-                message: 'ok'
-            })
-        }
-
-    })
-  })
-};
-  
+};   
