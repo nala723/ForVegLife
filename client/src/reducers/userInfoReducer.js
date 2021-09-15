@@ -18,16 +18,16 @@ const userInfoReducer = (state = initialState, action) => {
             email
         }
       });
-    case USER_UPDATE_INFO:
-     const {vegType,profileblob, password} = action.payload
-      return Object.assign({}, state, {
-        user: {
-            ...state.user,
-            vegType,
-            profileblob,
-            password
-        }
-      });
+    // case USER_UPDATE_INFO:
+    //  const {vegType,profileblob, password} = action.payload
+    //   return Object.assign({}, state, {
+    //     user: {
+    //         ...state.user,
+    //         vegType,
+    //         profileblob,
+    //         password
+    //     }
+    //   });
     case  WITHDRAW:
       return Object.assign({}, state, {
         user: {
