@@ -7,7 +7,7 @@ const { kakao } = window;
 const API_KEY = "8ae459a51f5b018322fee10f7aa86f24";
 
 export default function MapIndex({ latlng }) {
-  const selectPlace = useSelector(state=> state.selectplace)
+  const selectPlace = useSelector(state=> state.selectPlace)
   const MapCenter = useSelector(state => state.MapCenter)
   let lng = latlng.x !== 0 ? latlng.x : 127.10676860117488;
   let lat = latlng.y !== 0 ? latlng.y : 37.365264512305174;
