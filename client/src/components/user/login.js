@@ -24,15 +24,19 @@ export default function Login(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
     // axios 요청으로 닉네임 알아오기
-    axios.post("http://localhost/sign/signin", {email: user.email, password: user.password})
+    axios.post(`${process.env.REACT_APP_SERVER_URL}/sign/signin`, {email: user.email, password: user.password})
     .then(res=>{
     dispatch(
       isLogin({ isLogin: true, email: user.email, nickName: res.data.nickname })
     );})
+    .catch((err)=>{
+      console.log(err)
+    })
   };
   const responseGoogle = (res) => {
     const email = res.profileObj.email;
     const nickName = res.profileObj.name;
+   
     // axios 요청
     // 중복 되는 것이 있을때는 에러를 리턴
     dispatch(isLogin({ isLogin: true, email, nickName }));
@@ -57,7 +61,7 @@ export default function Login(props) {
       <LoginButton type="submit">로그인</LoginButton>
       <Message>아직 회원이 아니신가요? 회원가입</Message>
       <GoogleLogin
-        clientId="530151826698-d016iq7c5p3c4l2pl7jnhchpnrpim8bt.apps.googleusercontent.com"
+        clientId={process.env.REACT_APP_GOOGLE_OAUTH_ID}
         buttonText="Sign in with Google"
         onSuccess={responseGoogle}
       />

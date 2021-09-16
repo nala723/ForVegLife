@@ -1,8 +1,56 @@
-import React from "react";
+import React, {useState} from "react";
 import styled from "styled-components";
+import DefaultModal from "./defaultmodal";
+import theme from '../../styles/theme';
+import { useSelector, useDispatch } from "react-redux";
+import {useHistory} from 'react-router-dom';
+import { userInfo} from "../../actions";
+import { rootReducer} from '../../reducers';
+import axios from 'axios';
 
 export default function SignOut() {
+    const userState = useSelector((rootReducer) => rootReducer.userInfoReducer)
+    const {
+        user: { accessToken, email, nickName, vegType, password, profileblob, isLogin } 
+    } = userState;
+    const dispatch = useDispatch();
+    const history = useHistory();
+    const [isOpen,setIsOpen] = useState(false);
+    const [withDraw,setWithDraw] = useState(false);
 
+    const withdraw = (e) => {
+        e.preventDefault()
+        axios
+          .delete(`${process.env.REACT_APP_SERVER_URL}/sign/withdrawal`,{
+            headers: {
+                "Content-Type": "application/json",
+                authorization: `Bearer ` + accessToken
+                },
+            withCredentials: true
+        })
+        .then((res)=> {
+             if(res.status === 200){
+                   dispatch(userInfo("","","","",null,"",false))// 모달까지 완료 후 map페이지로 푸쉬하게 수정
+                 // 상태전달 
+             }
+             else{
+                  history.push('/notfound');
+             }
+            //  setIsLoding(false) 
+         })
+         .catch(err => {
+                console.log(err)
+        })
+    }
+
+   const handleClick = () => {
+       setIsOpen(!isOpen)
+   }
+  
+   //withdraw가 true라면 map 페이지로 푸쉬 (모달에서 확인 눌렀을 때- 상태전달해줘야함)
+   if(withDraw){
+       history.push('/')
+   }
   return(
     <Container>
     <Title>
@@ -38,15 +86,20 @@ export default function SignOut() {
                         </VegAnswer>
                     </UserAlertBox>
                     <ButtonBox>
-                        <button >탈퇴</button>
+                        <button onClick={handleClick} onClick={(e)=>withdraw(e)}>탈퇴</button>
                     </ButtonBox>
+                     {isOpen ? <DefaultModal isOpen={isOpen} handleClick={handleClick} header="회원 탈퇴가 완료되었습니다.">그동안 forVegLife서비스를 이용해 주셔서 감사합니다.<br></br>
+                                더욱더 노력하고 발전하는 forVegLife가 되겠습니다.</DefaultModal> : null}
                  </UserBottom>
            </UserContainer>
-       </Bottom>
+       </Bottom>   
+     
+
   </Container>
 )
 
 }    
+
 
  const Container = styled.div`
     width: calc(100%-7.313rem);
@@ -173,7 +226,7 @@ const VegAnswer = styled.div`
 
 `;
 
-
+/* 버튼 */
 const ButtonBox = styled.div`
   height:100%;
   width:100%;

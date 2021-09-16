@@ -1,18 +1,16 @@
 import { ISLOGIN } from "../actions/index";
+import { initialState } from './initialState';
 
-const initialState = {
-  isLogin: false,
-  email: null,
-  nickname: null,
-};
 
 export default function isLogin(state = initialState, action) {
   switch (action.type) {
     case ISLOGIN:
-      return {
-        ...state,
+      return Object.assign({}, state, {
+      user: {
+        ...state.user,
         ...action.payload.data,
-      };
+      }
+    })
     default: {
       return state;
     }
