@@ -1,17 +1,16 @@
 import { MAPCENTER } from "../actions/index";
+import { initialState } from './initialState';
 
-const initialState = {
-  x: 0,
-  y: 0,
-};
 
 export default function MapCenter(state = initialState, action) {
   switch (action.type) {
     case MAPCENTER:
-      return {
-        ...state,
+      return Object.assign({}, state, {
+      map:{
+        ...state.map,
         ...action.payload.data,
-      };
+      }
+    });
     default: {
       return state;
     }

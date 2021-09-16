@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {useHistory} from 'react-router-dom';
 import { userInfo,userUpdateInfo,newAccessToken } from "../../actions";
 import { rootReducer} from '../../reducers';
+import {Buffer} from 'buffer';
 import axios from 'axios';
 
 export default function UpdateInfo() {
@@ -14,23 +15,23 @@ export default function UpdateInfo() {
         user: { accessToken, email, nickName, vegType, password, profileblob, isLogin } 
     } = userState;
     const dispatch = useDispatch();
-    /*const history = useHistory(); */
+    const history = useHistory();
     const [isOpen,setIsOpen] = useState(false);
+    const [imageSizeError,setImageSizeError] = useState(false);
     const [currentInput, setCurrentInput] = useState({
         imgFile:'',
         previewUrl: '',
         inputPassword:'',
-        inputPasswordCheck:''
+        inputPasswordCheck:'',
+        inputVegtype:''
     })
-    // const [inputPassword, setInputPassword] = useState("");
-    // const [imgFile,setImgFile] = useState('');
-    // const [ previewUrl, setPreviewUrl] = useState('');
-    // const [inputPasswordCheck, setInputPasswordCheck] = useState("");
-    const [imageSizeError, setImageSizeError] = useState(false); // 이미지에러 메세지상태도 추가?
+    
     const [inValidEditMSG,setInvalidEditMSG] = useState("");
+    const [isFinish,setIsfinish] = useState(false)
     const refPassword = useRef(null);
     const refPasswordCheck = useRef(null);
-    const history = useHistory();
+    const photoInput = useRef(null);
+    
     // 최초 렌더링시 유저정보 받아오기
     useEffect(()=>{
         getUserInfo(accessToken)
@@ -39,7 +40,7 @@ export default function UpdateInfo() {
    // 유저 정보 요청 함수
     const getUserInfo = (accessToken) => {
         axios
-          .get(`${process.env.REACT_APP_URL}/mypage/user-info`,{
+          .get(`${process.env.REACT_APP_SERVER_URL}/mypage/user-info`,{
             headers: {
                 "Content-Type": "multipart/form-data",
                 authorization: `Bearer ${accessToken}`
@@ -52,7 +53,7 @@ export default function UpdateInfo() {
               }
              if(res.status === 200){
                    dispatch(userInfo(res.data.nickname,res.data.vegType,res.data.profileblob,res.data.email))
-                 // 그다음은 얻은 상태정보들을 렌더링하는 로직 
+                 // 상태전달 
              }
              else{
                   history.push('/notfound');
@@ -69,7 +70,7 @@ export default function UpdateInfo() {
     if(typeof(profileblob)==='string'){
         profileIMG = profileblob;
     }else{
-        profileIMG =  'data:image/png;base64, '+ Buffer(userInfo.profile,'binary').toString('base64');
+        profileIMG =  'data:image/png;base64, '+ Buffer(profileblob,'binary').toString('base64');
     } 
    // 이미지 업로드
     const imageFileHandler = (key) => (e) => {
@@ -82,35 +83,37 @@ export default function UpdateInfo() {
             setImageSizeError(false)
             reader.onloadend = () => {
                 setCurrentInput({
-                    imageFile : file,
+                    ...currentInput,
+                    imgFile : file,
                     previewUrl : reader.result
                 })
             }
             reader.readAsDataURL(file);
+            if(currentInput.inputPassword || currentInput.imgFile || currentInput.inputVegtype ){
+                setIsfinish(true)
+            }
         }
     }
-  //이미지삭제
-    const deleteImage = () => {
-        if(!!(currentInput.imageFile)){
-            setCurrentInput({
-                ...currentInput,
-                imageFile:'',
-                previewUrl:''
-            })
-        }
-        // else{
-        //     setCurrentInput({
-        //         ...currentInput,
-        //         imageFile: 'default_profile',
-        //         previewUrl: 'bros_blank.jpg'
-        //     })
-        // }
-    }
-    // 
 
+   // open모달 위한 상태변경함수
     const handleClick = () => {
+        // 아무것도 변경안했을때와 분기(다른모달)
+        if(!currentInput.inputPassword && !currentInput.imgFile && !currentInput.inputVegtype ){
+            setIsfinish(false)
+        }
+        if(currentInput.inputPassword || currentInput.imgFile || currentInput.inputVegtype ){
+            setIsfinish(true)
+        }
         setIsOpen(!isOpen)
     }
+
+   // 카메라아이콘 커스텀
+    const handlePhotoClick = (e) => {
+        e.preventDefault();
+
+        photoInput.current.click();
+    }
+    // 인풋창
     const handleInputValue = useCallback((key) => (e) => {
         setCurrentInput({ ...currentInput, [key]:e.target.value})
     },[currentInput])
@@ -129,8 +132,8 @@ export default function UpdateInfo() {
     };
     
      // 유효성 검사
-    const checkValidPW = useCallback((pw)=>{
-
+    const checkValidPW = ()=>{
+     let pw= currentInput.inputPassword
      let num = pw.search(/[0-9]/g);
      let eng = pw.search(/[a-z]/ig);
      let spe = pw.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
@@ -148,31 +151,33 @@ export default function UpdateInfo() {
         setInvalidEditMSG("영문,숫자, 특수문자를 혼합하여 입력해주세요.");
         return false;
       }
-      else {
+      else {   
+        setInvalidEditMSG("")
         return true;
       }
      
-     },[currentInput.inputPassword,inValidEditMSG])
+     }
 
-    const handleCompleteInput = () => {
+    // 두 비밀번호 모두 입력 시 일치 여부
+     const handleCompleteInput = () => {
         if(!checkValidPW(currentInput.inputPassword)){
-            refPassword.current?.focus();
-            return false;
+            return
         } 
         else if(currentInput.inputPasswordCheck !== currentInput.inputPassword){
-            refPasswordCheck.current?.focus();
             setInvalidEditMSG("비밀번호를 다시 확인해주세요")
+            return
         }
-        return true;
+        setInvalidEditMSG("")
+        if(currentInput.inputPassword || currentInput.imgFile || currentInput.inputVegtype ){
+            setIsfinish(true)
+        }
+        return 
     }
 
-    //회원정보 수정
+    //회원정보 수정 - 추후 퀄리티 업
 
-    // const handleUserEditInfo = () => {
-    //     // 비밀번호 조건 만족시 요청되는 함수 (추후 보충)
-    // }
-    // 수정 - 모달창에서 예를 눌렀을 때 실행
-    const onSubmitHandler = async (e) => {
+    const onSubmitHandler = async (e) => { //현재 안먹힘
+        e.preventDefault();
         const MAX_WIDTH = 320;
         const MAX_HEIGHT = 180;
         const MIME_TYPE = "image/jpeg";
@@ -180,7 +185,7 @@ export default function UpdateInfo() {
 
         let imgforaxios;
         
-        const file = currentInput.imageFile; // get the file
+        const file = currentInput.imgFile;  //이미지 선택안했을시 분기
         const blobURL = URL.createObjectURL(file);
         const img = new Image();
         img.src = blobURL;
@@ -199,26 +204,28 @@ export default function UpdateInfo() {
             canvas.toBlob(
             (blob) => {
                 imgforaxios=blob;
-                let tmpAccessToken = 'Bearer ' + accessToken;
                 const formData = new FormData();
                 formData.append("profileblob",imgforaxios);
-                formData.append("password",currentInput.username);
-
-                if(!!(currentInput.imageFile) || !!(currentInput.username)){
+                formData.append("password",currentInput.inputPassword);
+                formData.append("vegType",currentInput.inputVegtype);
+                for(let key of formData.entries()){ /* 데이터 체크 ,*/
+                    console.log(`${key}`)
+                   }
+               
                     axios
-                    .patch(`${process.env.REACT_APP_URL}/mypage/user-info`,{
+                    .patch(`${process.env.REACT_APP_SERVER_URL}/mypage/user-info`,formData,{
                            headers: {
                                 "Content-Type": "multipart/form-data",
-                                authorization: `Bearer ${accessToken}`
+                                authorization: 'Bearer ' + accessToken
                                 },
                            withCredentials: true
-                       },)
+                       })  
                        .then((res)=> {
                             if(res.headers.accessToken){
                                 dispatch(newAccessToken(res.headers.accessToken));
                                 }
                             if(res.status === 200){
-                                     dispatch(userUpdateInfo(res.data.nickname,res.data.vegType,res.data.profileblob,res.data.email))
+                                     dispatch(userUpdateInfo(res.data.vegType,res.data.profile,res.data.password))
                                    // 그다음은 얻은 상태정보들을 렌더링하는 로직 
                              }
                              else{
@@ -226,22 +233,40 @@ export default function UpdateInfo() {
                              }
                             //  setIsLoding(false) 
                         })
-                        .catch((error)=>{
-                            console.log('error')
-                        })
-                }
+                        .catch(error=>
+                            console.log(error)
+                        )
+                
             },
             MIME_TYPE,
             QUALITY
             );
         }; 
+        // 이미지 사이즈 계산
+        function calculateSize(img, maxWidth, maxHeight) {
+            let width = img.width;
+            let height = img.height;
+    
+            if (width > height) {
+                if (width > maxWidth) {
+                height = Math.round((height * maxWidth) / width);
+                width = maxWidth;
+                }
+            } else {
+                if (height > maxHeight) {
+                width = Math.round((width * maxHeight) / height);
+                height = maxHeight;
+                }
+            }
+            return [width, height];
+            }
 
-
+    };
 
     const veggieIcon = [
       {   
-            img :  '/image/abocado.svg',
-            name : '비건'
+        img :  '/image/abocado.svg',
+        name : '비건'
        },
        {   
         img :  '/image/cheese.svg',
@@ -260,6 +285,21 @@ export default function UpdateInfo() {
         name : '페스코'
        },
     ]
+   
+    // 채식 아이콘 선택 
+    const hanldeVegIcon = (name) => {
+       let iconname =
+            veggieIcon.filter(icon=>
+            icon.name=== name)
+            [0].name
+        setCurrentInput({
+            ...currentInput,
+            inputVegtype: iconname}); 
+         if(currentInput.inputPassword || currentInput.imgFile || currentInput.inputVegtype ){
+            setIsfinish(true)
+        }       
+    }
+  console.log(currentInput, `하하하하`)// 안먹힘???
 
     return (
         <Container>
@@ -268,11 +308,13 @@ export default function UpdateInfo() {
         </Title>
        <Bottom>
            <UserContainer>
-               <UserTop>  
+               <UserTop>     
                    <UserPhotoBox >
-                       <UserPhoto>
-                          <Camera src="/image/camera.svg"/>
-                           <UserPic />
+                       <UserPhoto>   
+                            <input type='file' accept='image/*' name='profileImage' ref={photoInput}
+                            onChange={imageFileHandler('profileblob')}  />
+                             <Camera src="/image/camera.svg" onClick={handlePhotoClick} />
+                                 <UserPic src={currentInput.imgFile?currentInput.previewUrl : profileIMG }/>   
                        </UserPhoto>
                    </UserPhotoBox >
                    <UserNmBox>
@@ -280,32 +322,35 @@ export default function UpdateInfo() {
                             <UserIcon src="/image/userIcon.svg"/>
                             <UserContent>
                                 <p>username</p>  
-                              <h1> {`Kimusername`} </h1>
+                              <h1> {nickName || 'Kimusername'} </h1>
                            </UserContent>
                         </UserNm >
                        <UserNm >
                            <UserIcon src="/image/email.svg"/>
                            <UserContent>
                                <p>e-mail</p>
-                             <h1> {`hahihuheho@gmail.com`}</h1> 
+                             <h1> {email || `hahihuheho@gmail.com`}</h1> 
                            </UserContent>
                        </UserNm >
                    </UserNmBox >
                 </UserTop>
                  <UserBottom>
                  <UserNmBox primary >
+                 <h5>{currentInput.inputPassword ? inValidEditMSG : null}</h5>
                     <UserNm primary> 
                             <UserIcon src="/image/lock.svg" primary/>
                             <UserContent >
                                 <p>new PW</p> 
-                              <PwContainer placeholder="새 비밀번호를 입력해주세요"/>
+                              <PwContainer placeholder="새 비밀번호를 입력해주세요"  onChange={handleInputValue('inputPassword')}
+                                onKeyPress={handleMoveTopPW} ref={refPassword} onBlur={checkValidPW}/>
                            </UserContent>
                         </UserNm >
                        <UserNm >
                            <UserIcon src="/image/lock.svg" primary/>
                            <UserContent>
                                <p>new PW</p>
-                             <PwContainer placeholder="새 비밀번호를 재입력해주세요"/>
+                             <PwContainer placeholder="새 비밀번호를 재입력해주세요" onChange={handleInputValue('inputPasswordCheck')}
+                             onKeyPress={handleMoveTopPWCheck} ref={refPasswordCheck} onBlur={handleCompleteInput} />
                            </UserContent>
                        </UserNm >
                     </UserNmBox>
@@ -313,11 +358,11 @@ export default function UpdateInfo() {
                        <p> 당신의 채식 타입을 선택해 주세요.</p>
                        <VegIconBox>
                            <VegImgBox>
-                       {veggieIcon.map(veg=>{
+                       {veggieIcon.map((veg,idx)=>{
                            return (
                              <div>
-                                <VegImg src={veg.img} />
-                                <p classname="p">{veg.name}</p>
+                                <VegImg key={idx} src={veg.img} onClick={()=>hanldeVegIcon(veg.name)}/>
+                                <p className="p">{veg.name}</p>
                              </div>
                              )
                           })
@@ -325,10 +370,11 @@ export default function UpdateInfo() {
                         </VegImgBox>
                     </VegIconBox>
                     </VegAnswer>
+                    
                     <ButtonBox>
-                        <button >수정</button>
+                        <button onClick={(e)=>onSubmitHandler(e)} onClick={handleClick} >수정</button>
                     </ButtonBox>
-                         {isOpen ? <DefaultModal isOpen={isOpen} handleClick={handleClick} header="회원정보 수정이 완료되었습니다.">
+                         {(isOpen && isFinish) ? <DefaultModal isOpen={isOpen} handleClick={handleClick} header="회원정보 수정이 완료되었습니다.">
                      앞으로도 계속 forVegLife 안에서 건강한 life 누리세요</DefaultModal> : null}
                     
                  </UserBottom>
@@ -377,19 +423,25 @@ const UserContainer = styled.div`
 const UserTop = styled(UserContainer)`
     
     height: 18.438rem;
+    >input{
+       display:none;
+       
+   }
 `; 
 const UserPhotoBox = styled(UserTop)`
     height: 7.375rem;
     position:relative; 
+
 `; 
 const Camera = styled.img` //처리
    width: 45px;
    height: 45px;
    position: absolute; 
-   z-index:999px;
+   z-index:5px;
    bottom: 5px;
    right:195px;
    cursor: pointer;
+   
 `;
 const UserPhoto = styled(UserPhotoBox)`
    height: 7.375rem;
@@ -399,6 +451,7 @@ const UserPhoto = styled(UserPhotoBox)`
    overflow: hidden;
    position: static;
    z-index:-1px;
+ 
    
 `;
 const UserPic = styled.img`
@@ -413,6 +466,10 @@ const UserNmBox = styled(UserTop)`
     padding: ${props => props.primary ? '2.3rem 2rem' : '2.3rem 3rem'};
     justify-content: center;
     align-items:center;
+    >h5{
+       color:red;
+       font-size: 12px;
+    }
 `; 
 const UserNm = styled.div`
    width: 100%;
@@ -457,7 +514,7 @@ const UserBottom = styled.div`
 `; 
 
 const PwContainer = styled.input.attrs(props=>({
-    type:'text',
+    type:'password',
 
 }))` // input으로 변경
   width:13rem;
@@ -551,4 +608,3 @@ const ButtonBox = styled.div`
        }
    }
 `;
-

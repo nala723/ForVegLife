@@ -10,9 +10,9 @@ import myPlaceReducer from "./userInfoReducer";
 const persistConfig = {
 	key: "root",
 	// localStorage에 저장합니다.
-	storage,
+	storage: storage,
   
-	whitelist: [     //----->이것만 저장
+	whitelist: [     //----->여러 reducer 중 이것만 저장
     "userInfoReducer",
     "isLogin",
   ],

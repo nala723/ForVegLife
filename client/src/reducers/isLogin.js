@@ -5,10 +5,12 @@ import { initialState } from './initialState';
 export default function isLogin(state = initialState, action) {
   switch (action.type) {
     case ISLOGIN:
-      return {
-        ...state,
+      return Object.assign({}, state, {
+      user: {
+        ...state.user,
         ...action.payload.data,
-      };
+      }
+    })
     default: {
       return state;
     }

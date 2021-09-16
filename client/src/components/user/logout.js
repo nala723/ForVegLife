@@ -7,7 +7,7 @@ export default function Logout() {
   let userData = useSelector((state) => state);
   const dispatch = useDispatch();
   const logout = (e) => {
-    dispatch(isLogin({ isLogin: false, email: null, nickName: null }));
+    dispatch(isLogin({ accessToken: "", isLogin: false, email: null, nickName: null }));
   };
   return (
     <>

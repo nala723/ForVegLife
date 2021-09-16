@@ -33,7 +33,9 @@ export default function SignUp(props) {
         console.log(res.data)
         setVerifyCode(res.data.data.emailcode)
       }
-    )
+    ).catch((err)=>{
+      console.log(err)
+    })
 
     // 오류는 중복되거나 또는 서버 오류
     setIsSend(true);
@@ -48,11 +50,13 @@ export default function SignUp(props) {
       console.log(res)
       setIsVerify(true)
       }
-    )
+    ).catch((err)=>{
+      console.log(err)
+    })
   };
   const onCreate = (data) => {
     // axios 요청 성공 시2
-    axios.post('http://localhost/sign/signup',{
+    axios.post(`${process.env.REACT_APP_SERVER_URL}/sign/signup`,{
       nickName: data.nickName,
       email: data.email,
       password: data.password
@@ -61,7 +65,9 @@ export default function SignUp(props) {
         const { email, nickName } = data;
     dispatch(isLogin({ isLogin: true, email, nickName }));
       }
-    )
+    ).catch((err)=>{
+      console.log(err)
+    })
   };
   const handleChange = (e) => {
     setUser({

@@ -1,34 +1,33 @@
-import React,{useState} from "react";
+import React from "react";
 import styled,{ css, keyframes} from "styled-components";
 import theme from '../../styles/theme';
 
+export default function DefaultModal(props) {
 
-export default function DefaultModal({isOpen,handleClick,header,children}) {
-    if (!isOpen) {
-        return null;
-      }
-  
- 
+   if (props.isOpen){
+     const  {isOpen,handleClick,header,children} = props;
     return (
-        <>
-         <Background className={`${isOpen ? "active" : ""}`} >
-                            <ModalSection className={`${isOpen ? "active" : ""}`}
-                            onClick={handleClick}>
-                                 <ModalTitle>
-                                        <img src="/image/logo.svg" /><div></div>
-                                        <p>{header}</p>
-                                       </ModalTitle>
-                                    <OkBtn>
-                                        <button>확인</button>
-                                    </OkBtn>
-                                <Content>{children}</Content>
-                            </ModalSection>
-                        </Background>
-        
-    
-        </>
-      );
-    };
+      <>
+       <Background className={`${isOpen ? "active" : ""}`} >
+                          <ModalSection className={`${isOpen ? "active" : ""}`}
+                          onClick={handleClick}>
+                               <ModalTitle>
+                                      <img src="/image/logo.svg" /><div></div>
+                                      <p>{header}</p>
+                                     </ModalTitle>
+                                  <OkBtn>
+                                      <button>확인</button>
+                                  </OkBtn>
+                              <Content>{children}</Content>
+                          </ModalSection>
+                      </Background>
+      
+  
+      </>
+    );
+  
+   }
+};
  // 애니메이션이 안먹힘 슬라이드같은거 줘야겠다  
 
 /* 버튼 */
