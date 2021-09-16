@@ -5,12 +5,9 @@ import { faStar as fullStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as EmptyStar } from "@fortawesome/free-regular-svg-icons";
 import theme from "../../../styles/theme";
 
-export default function Review({ review }) {
-  const avearge = review.reduce((acc, cur, idx, arr) => {
-    return acc + cur.star / arr.length;
-  }, 0);
-  const date = Date.now();
-  console.log(date);
+export default function Review({ review, inReview  }) {
+  let avearge = 0;
+  let star =[0,0,0,0,0];
   const fillStar = (avearge) => {
     let CeilStar = Math.round(avearge);
     let array = [];
@@ -22,11 +19,16 @@ export default function Review({ review }) {
     }
     return array;
   };
-  let star = fillStar(avearge);
+  if(review.length !== 0){
+  avearge = review.reduce((acc, cur, idx, arr) => {
+    return acc + cur.star / arr.length;
+  }, 0);
+
+   star = fillStar(avearge)}
   return (
     <Temp>
       <Title> 후기 </Title>
-      <GoReview> 후기 남기러 가기</GoReview>
+      <GoReview onClick={()=>inReview()}> 후기 남기러 가기</GoReview>
       <Avearge>
         <Score> {avearge}점 </Score>
         {star.map((x) => {
@@ -34,7 +36,7 @@ export default function Review({ review }) {
         })}
       </Avearge>
       <ReviewForm>
-        {review.map((x) => {
+        {review.length !== 0 ? review.map((x) => {
           return (
             <ReviewData>
               <Review_1>
@@ -44,7 +46,7 @@ export default function Review({ review }) {
                   ))}
                 </ReviewStar>
                 <ReviewAt>
-                  {x.createdAt.split(" ")[0].replaceAll("-", ":")}
+                  {x.createdAt.split("T")[0].replaceAll("-", ":")}
                 </ReviewAt>
               </Review_1>
               <Review_2>
@@ -53,7 +55,7 @@ export default function Review({ review }) {
               </Review_2>
             </ReviewData>
           );
-        })}
+        }): ""}
         <More> ...더보기</More>
       </ReviewForm>
     </Temp>

@@ -8,8 +8,6 @@ import { useState } from "react";
 import { isLogin } from "../actions/index"
 import Login from "./user/login";
 import SignUp from "./user/sign-up";
-import ReviewModal from "./map/review-modal";
-import EnrollPlace from "./map/submit-modal";
 const Navbar = () => {
   const loginState = useSelector((state) => state.isLogin.isLogin);
   const dispatch = useDispatch()
@@ -39,22 +37,21 @@ const Navbar = () => {
           <Header>
             <Logo>Logo</Logo>
             <StyledLogin onClick={logout}>Logout</StyledLogin>
-            <StyledMypage to="/mypage">Mypage</StyledMypage>{" "}
+            <StyledMypage to="/mypage">Mypage</StyledMypage>
           </Header>
         ) : (
           <Header>
             <Logo>Logo</Logo>
             <StyledLogin onClick={userLogin}>Login</StyledLogin>
-            <StyledRegister onClick={Register}>Register</StyledRegister>{" "}
+            <StyledRegister onClick={Register}>Register</StyledRegister>
           </Header>
         )}
 
         <Switch>
           <Route exact path="/">
-            <MapPage>
+            <MapPage login={loginModal} register={registerModal}>
               {loginState ? "" : loginModal? <Login exit={userLoginExit}/> : ""}
               {loginState ? "": registerModal? <SignUp exit={RegisterExit}/>: ""}
-              <EnrollPlace/>
             </MapPage>
           </Route>
           <Route path="/mypage">
@@ -71,10 +68,11 @@ const Header = styled.header`
   justify-content: center;
   align-items: center;
   background-color: white;
+
   color: black;
   top: 0;
   width: 100%;
-  min-height: 5vh;
+  height: 5vh;
   display: flex;
   justify-content: space-around;
 `;

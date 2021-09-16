@@ -4,9 +4,16 @@ import { Bar } from "react-chartjs-2/dist/index";
 import theme from "../../../styles/theme";
 
 export default function PlaceInfo({ user }) {
+  let type;
+  let ratio;
+  if(user === {}){
   const likeType = Object.entries(user);
-  const type = likeType.map((x) => x[0]);
-  const ratio = likeType.map((x) => x[1].slice(0, -1));
+  type = likeType.map((x) => x[0]);
+  ratio = likeType.map((x) => x[1].slice(0, -1));
+}else{
+  type =[0,0,0,0,0]
+  ratio = [0,0,0,0,0]
+}
   let data = {
     labels: type,
     datasets: [

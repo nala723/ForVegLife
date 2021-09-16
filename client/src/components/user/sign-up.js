@@ -179,7 +179,8 @@ export default function SignUp(props) {
 const Temp = styled.div`
  width:100vw;
  height: 95vh;
- background-color: rgba(0,0,0,0.4)
+ background-color: rgba(0,0,0,0.4);
+ z-index: 2;
 `;
 const Exit = styled.div`
 position: absolute;

@@ -3,6 +3,7 @@ import { SELECTPLACE } from "../actions/index";
 const initialState = {
     x:0,
     y:0,
+    id: 0,
 };
 
 export default function selectPlace(state = initialState, action) {

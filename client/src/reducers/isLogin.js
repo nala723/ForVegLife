@@ -4,6 +4,7 @@ const initialState = {
   isLogin: false,
   email: null,
   nickname: null,
+  acessToken: "",
 };
 
 export default function isLogin(state = initialState, action) {

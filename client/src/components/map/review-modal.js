@@ -4,15 +4,26 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { faStar as fullStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as EmptyStar } from "@fortawesome/free-regular-svg-icons";
+import { useSelector, useDispatch } from "react-redux";
 import theme from "../../styles/theme";
+import axios from "axios";
 
-export default function ReviewModal(){
+export default function ReviewModal(props){
+  const selPlace = useSelector(state=> state.selectPlace)
+  const user =useSelector(state=> state.isLogin)
     const [star,setStar]=useState({
         array: [0,0,0,0,0]})
     const [content,setContent] = useState("")
     const handleSubmit = (e)=>{
         e.preventDefault();
+        console.log(star)
         console.log(content)
+        axios.post(`http://localhost/restaurant/${selPlace.id}/review`,{
+          content: content,
+          star: star.array.findIndex(x=> x===1)
+        },{headers:{
+          authorization: `Bearer ${user.acessToken}`}}
+          ).then(res=> console.log(res))
     }
     const contentChange = (e)=>{
         setContent(
@@ -37,7 +48,7 @@ export default function ReviewModal(){
     <Temp>
         
     <ReviewModalForm onSubmit={handleSubmit}>
-    <Exit>
+    <Exit onClick={()=>props.exit()}>
         <FontAwesomeIcon color={"green"} icon={faTimes}/>
      </Exit>
      <ReviewTitle>

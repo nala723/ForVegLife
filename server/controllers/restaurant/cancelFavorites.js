@@ -5,7 +5,7 @@ module.exports = async (req, res) => {
     // res.send('즐겨찾기 해제')
     try {const authorization = req.headers['authorization'];
     const placeId = req.params.placeId
-
+    console.log(authorization)
     if(!authorization){
       res.status(401).json('invalid token')
     }

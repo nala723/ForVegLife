@@ -3,16 +3,31 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as fullHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as EmptyHeart } from "@fortawesome/free-regular-svg-icons";
+import { useSelector, useDispatch } from "react-redux";
 import theme from "../../../styles/theme";
 const axios = require("axios");
 export default function MenuInfo({ place, menu, price }) {
+  const selPlace =useSelector(state=> state.selectPlace)
+  const user =useSelector(state=> state.isLogin)
   const [favirote, setFavirote] = useState(false);
-  console.log(favirote);
+
   const onLike = () => {
-    setFavirote(true);
+
+    axios.post(`http://localhost/restaurant/${selPlace.id}/like`,{},{headers:{
+      authorization: `Bearer ${user.acessToken}`}}
+      ).then(
+        res=> {console.log(res)
+          setFavirote(true);}
+      )
   };
+
   const onDisLike = () => {
-    setFavirote(false);
+    axios.delete(`http://localhost/restaurant/${selPlace.id}/dislike`,{headers:{
+      authorization: `Bearer ${user.acessToken}`}}
+      ).then(
+        res=> {console.log(res)
+          setFavirote(false);}
+      )
   };
 
   return (
@@ -30,20 +45,21 @@ export default function MenuInfo({ place, menu, price }) {
         )}
       </Placename>
       <Menubar>
-        {menu.map((x, idx) => {
+        {menu=== [] ?menu.map((x, idx) => {
           return (
             <MenuPrice>
               <Menu> {x}</Menu>
               <Price> {price[idx]}</Price>
             </MenuPrice>
           );
-        })}
+        }): ""}
       </Menubar>
     </Temp>
   );
 }
 const Temp = styled.div`
   display: flex;
+  padding-top: 1rem;
   flex-direction: column;
   width: 80%;
   margin: 1rem;

@@ -1,11 +1,14 @@
 const models = require("../../models")
+const sequelize = require("sequelize");
+const Op = sequelize.Op;
 
 module.exports = async (req, res) => {
     // res.send('카테고리별로 불러오기')
     
    try { const category = req.params.category
     const address = req.params.address
-console.log(category)
+    
+    console.log(address)
     let data = []
     const allData = await models.place.findAll({
       include: [
@@ -15,7 +18,9 @@ console.log(category)
           where:{category:category}
         },
       ],
-      where:{address:address},raw:true
+      where:{address:{
+        [Op.like]: address +"%"
+      }},raw:true
     })
     console.log(allData)
 
