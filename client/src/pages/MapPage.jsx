@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import theme from "../styles/theme";
 import axios from "axios";
 
+
 export default function MapPage(props) {
   const selPlace = useSelector((state) => state.selectPlace );
   const mapCenter = useSelector((state) => state.MapCenter );
@@ -27,7 +28,7 @@ export default function MapPage(props) {
     setReview(true)
   }
   useEffect( ()=>{
-    axios.get(`http://localhost/restaurant/category/vegetarian/${mapCenter.address}`,{
+    axios.get(`${process.env.REACT_APP_SERVER_URL}/restaurant/category/vegetarian/${mapCenter.address}`,{
     }).then( res=>{
       console.log(res.data)
       setData(res.data)}
