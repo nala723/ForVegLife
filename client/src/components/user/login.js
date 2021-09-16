@@ -26,8 +26,9 @@ export default function Login(props) {
     // axios 요청으로 닉네임 알아오기
     axios.post(`${process.env.REACT_APP_SERVER_URL}/sign/signin`, {email: user.email, password: user.password})
     .then(res=>{
+      console.log(res.data)
     dispatch(
-      isLogin({ isLogin: true, email: user.email, nickName: res.data.nickname })
+      isLogin({ isLogin: true, email: user.email, nickName: res.data.nickname, acessToken: res.data.accessToken})
     );})
     .catch((err)=>{
       console.log(err)
@@ -73,6 +74,7 @@ export default function Login(props) {
 const Temp = styled.div`
  width:100vw;
  height: 95vh;
+ z-index: 2;
  background-color: rgba(0,0,0,0.4)
 `;
 const Exit = styled.div`

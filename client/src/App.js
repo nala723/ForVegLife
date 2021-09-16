@@ -10,12 +10,10 @@ axios.defaults.withCredentials = true;
 function App() {
 
   return (
-    <>
     <ThemeProvider theme={theme}>
-      <GlobalStyles />
+       <GlobalStyles />
       <Navbar />
-      </ThemeProvider>
-    </>
+    </ThemeProvider>
   );
 }
 

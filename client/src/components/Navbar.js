@@ -39,19 +39,19 @@ const Navbar = () => {
           <Header>
             <Logo>Logo</Logo>
             <StyledLogin onClick={logout}>Logout</StyledLogin>
-            <StyledMypage to="/mypage">Mypage</StyledMypage>{" "}
+            <StyledMypage to="/mypage">Mypage</StyledMypage>
           </Header>
         ) : (
           <Header>
             <Logo>Logo</Logo>
             <StyledLogin onClick={userLogin}>Login</StyledLogin>
-            <StyledRegister onClick={Register}>Register</StyledRegister>{" "}
+            <StyledRegister onClick={Register}>Register</StyledRegister>
           </Header>
         )}
 
         <Switch>
           <Route exact path="/">
-            <MapPage>
+            <MapPage login={loginModal} register={registerModal}>
               {loginState ? "" : loginModal? <Login exit={userLoginExit}/> : ""}
               {loginState ? "": registerModal? <SignUp exit={RegisterExit}/>: ""}
             </MapPage>
@@ -71,10 +71,11 @@ const Header = styled.header`
   justify-content: center;
   align-items: center;
   background-color: white;
+
   color: black;
   top: 0;
   width: 100%;
-  min-height: 5vh;
+  height: 5vh;
   display: flex;
   justify-content: space-around;
 `;

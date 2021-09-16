@@ -7,26 +7,15 @@ import { initialState } from './initialState';
 const myPlaceReducer = (state = initialState, action) => {
     switch (action.type) {
       case GET_MY_REVIEW:
-        const {placeId,title,content,star,createdAt,reviewId} = action.payload
-        return Object.assign({}, state, {
-         reivew : {
-            placeId,
-            title,
-            content,
-            star,
-            createdAt,
-            reviewId  
-         }
+        return Object.assign({}, state.review, {
+          ...state.review,
+        ...action.payload
+         
         });
       case GET_MY_FAVORITE:
-       const {placeId,title,pictureUrl,address} = action.payload
-        return Object.assign({}, state, {
-          favorite: {
-              placeId,
-              title,
-              pictureUrl,
-              address
-          }
+      return Object.assign({}, state.favorite, {
+        ...state.favorite,
+        ...action.payload
         });
       default:
         return state;

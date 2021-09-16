@@ -3,9 +3,10 @@ import MapIndex from "./index";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { selectPlace } from "../../actions";
+import axios from "axios";
 const { kakao } = window;
 
-export default function SearchPlace() {
+export default function SearchPlace({selData}) {
   const mapCenter = useSelector((state) => state.MapCenter);
   const dispatch = useDispatch()
   const [latlng, setLatlng] = useState({
@@ -14,6 +15,7 @@ export default function SearchPlace() {
   });
   const [inputText, setInputText] = useState("");
   const [place, setPlace] = useState("");
+  const [serachData, setSearchData] = useState([])
   // const ps = new kakao.maps.services.Places();
   const [data, setData] = useState([]);
   const onChange = (e) => {
@@ -31,22 +33,21 @@ export default function SearchPlace() {
     places.keywordSearch(inputText, callback, {
       x: mapCenter.x,
       y: mapCenter.y,
-      radius: 500,
+      radius: 1000
     });
   }, [mapCenter, inputText]);
-
   const handleSubmit = (e) => {
     e.preventDefault();
     setPlace(inputText);
     setInputText("");
   };
-  const onClick = (x, y) => {
+  const onClick = (x, y, address) => {
     setLatlng({
       ...latlng,
       x,
       y,
     });
-    dispatch(selectPlace({x,y}))
+    dispatch(selectPlace({x,y, address: address}))
   };
 
   return (
@@ -65,7 +66,7 @@ export default function SearchPlace() {
           <Keyword>
             {data.map((x) => {
               return (
-                <PlaceData onClick={() => onClick(x.x, x.y)}>
+                <PlaceData onClick={() => onClick(x.x, x.y, x.address_name)}>
                   <PlaceName>{x.place_name}</PlaceName>
                   <PlaceAddress>{x.address_name}</PlaceAddress>
                 </PlaceData>
@@ -73,7 +74,7 @@ export default function SearchPlace() {
             })}
           </Keyword>
         </SearchForm>
-        <MapIndex latlng={latlng} />
+        <MapIndex data={selData} latlng={latlng} />
       </Map>
     </>
   );
