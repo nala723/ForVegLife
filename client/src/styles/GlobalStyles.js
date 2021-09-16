@@ -3,7 +3,7 @@ import reset from "styled-reset"; // style-reset 패키지
 
 const GlobalStyles = createGlobalStyle` 
     ${reset}
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&family=Orienta&family=Roboto&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&family=Orienta&family=Roboto:wght@300&display=swap');
     a{
         text-decoration: none;
         color: inherit;
@@ -16,8 +16,8 @@ const GlobalStyles = createGlobalStyle`
    }
    :root {
     --font-base: Roboto, 'Orienta', sans-serif;
-    --font-button: button: 'Montserrat', serif;
-    --font-logo: logo: 'Berkshire Swash';
+    --font-button:  'Montserrat', serif;
+    --font-logo: 'Berkshire Swash';
     --font-mypage: 'Orienta',Roboto, sans-serif;
     --font-size-sm: 10px;
     --font-size-base: 15px;

@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 export default function UserSideBar() {
 
@@ -24,10 +25,10 @@ export default function UserSideBar() {
                     <Title>
                         My Place
                         <Content>
-                          나의 즐겨찾기
+                        <Link to="/mypage"> 나의 즐겨찾기</Link>
                         </Content>
                         <Content>
-                           내가 준 별점
+                        <Link to="/mypage/star">내가 준 별점</Link>
                         </Content>
                     </Title>
                 </BottomBox>
@@ -35,10 +36,10 @@ export default function UserSideBar() {
                 <Title>
                         My Info
                         <Content>
-                           나의 정보 수정
+                          <Link to="/mypage/updateinfo"> 나의 정보 수정</Link>
                         </Content>
                         <Content>
-                            탈퇴하기
+                          <Link to="/mypage/signout">회원 탈퇴하기</Link>
                         </Content>
                     </Title>
                 </BottomBox>
@@ -102,6 +103,7 @@ const TextBox = styled.div`
     text-align: center;
     color: var(--color-darkgrey);
     font-style: var(--font-mypage);
+    font-weight: var(--font-weight-bold)
 `;
 
 const UserName = styled.p`
@@ -109,7 +111,7 @@ const UserName = styled.p`
     height: 100%;
     word-break:break-all;
     font-size: var(--font-size-lg);
-    font-weight: 500;
+   
 `;
 const UserEmail = styled.p`
     width: inherit;
@@ -151,7 +153,10 @@ const Title = styled.ul`
 const Content = styled.li`
      width: 100%;
      font-size: var(--font-size-base);
-     font-weight: var(--font-weight-normal);
+     font-weight: 500;
      color: var(--color-brown);
      letter-spacing: 0;
+     :hover{
+        color:  var(--color-grey);
+     }
 `;
