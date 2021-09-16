@@ -9,6 +9,9 @@ export const WITHDRAW = "WITHDRAW";
 export const GET_MY_REVIEW = "GET_MY_REVIEW";
 export const GET_MY_FAVORITE = "GET_MY_FAVORITE";
 
+// get new accessToken
+export const GET_NEW_ACCESSTOKEN = "GET_NEW_ACCESSTOKEN";
+
 /* 액션 생성함수 만들기 */
 // 액션 생성함수를 만들고 export 키워드를 사용해서 내보내주세요.
 export const isLogin = (data) => {
@@ -20,6 +23,16 @@ export const mapCenter = (data) => {
 export const selectPlace = (data) => {
   return { type: SELECTPLACE, payload: {data} };
 };
+
+//new accessToken
+export const newAccessToken = (accessToken) => {
+  return {
+    type: GET_NEW_ACCESSTOKEN,
+    payload: {
+      accessToken
+    }
+  }
+}
 
 // my page
 export const userInfo = ( nickName,vegType,profileblob,email) => {

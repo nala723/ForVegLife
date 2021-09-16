@@ -6,13 +6,16 @@ const initialState = {
   address: ""
 };
 
+
 export default function MapCenter(state = initialState, action) {
   switch (action.type) {
     case MAPCENTER:
-      return {
-        ...state,
+      return Object.assign({}, state, {
+      map:{
+        ...state.map,
         ...action.payload.data,
-      };
+      }
+    });
     default: {
       return state;
     }
