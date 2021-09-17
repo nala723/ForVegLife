@@ -3,12 +3,20 @@ import reset from "styled-reset"; // style-reset 패키지
 
 const GlobalStyles = createGlobalStyle` 
     ${reset}
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&family=Orienta&family=Roboto:wght@300&display=swap');
+   
     a{
         text-decoration: none;
         color: inherit;
     }
+    *, :after, :before{
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
     body {
+        padding: 0;
+        margin: 0;
+        width:100vw;
+        height: 100vh;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     }
     ol, ul, li {

@@ -4,15 +4,14 @@ import DefaultModal from "./defaultmodal";
 import theme from "../../styles/theme";
 import { useSelector, useDispatch } from "react-redux";
 import {useHistory} from 'react-router-dom';
-import { userInfo,userUpdateInfo,newAccessToken } from "../../actions";
-import { rootReducer} from '../../reducers';
+import { userInfo,userUpdateInfo,newAccessToken } from "../../actions/index";
 import {Buffer} from 'buffer';
 import axios from 'axios';
 
 export default function UpdateInfo() {
-    const userState = useSelector((rootReducer) => rootReducer.userInfoReducer)
+    const userState = useSelector((state) => state.userReducer)
     const {
-        user: { accessToken, email, nickName, vegType, password, profileblob, isLogin } 
+      accessToken, email, nickName, vegType, password, profileblob, isLogin 
     } = userState;
     const dispatch = useDispatch();
     const history = useHistory();
@@ -31,7 +30,7 @@ export default function UpdateInfo() {
     const refPassword = useRef(null);
     const refPasswordCheck = useRef(null);
     const photoInput = useRef(null);
-    
+    console.log(`gkgkgk`,accessToken,userState)
     // 최초 렌더링시 유저정보 받아오기
     useEffect(()=>{
         getUserInfo(accessToken)
@@ -43,16 +42,16 @@ export default function UpdateInfo() {
           .get(`${process.env.REACT_APP_SERVER_URL}/mypage/user-info`,{
             headers: {
                 "Content-Type": "multipart/form-data",
-                authorization: `Bearer ${accessToken}`
+                authorization: `Bearer ` + accessToken
                 },
             withCredentials: true
         })
         .then((res)=> {
             if(res.headers.accessToken){
-              dispatch(newAccessToken(res.headers.accessToken));
+              dispatch(newAccessToken({accessToken: res.headers.accessToken}));
               }
              if(res.status === 200){
-                   dispatch(userInfo(res.data.nickname,res.data.vegType,res.data.profileblob,res.data.email))
+                   dispatch(userInfo({nickName :res.data.nickname,vegType :res.data.vegType,profileblob:res.data.profileblob, email:res.data.email}))
                  // 상태전달 
              }
              else{
@@ -216,7 +215,7 @@ export default function UpdateInfo() {
                     .patch(`${process.env.REACT_APP_SERVER_URL}/mypage/user-info`,formData,{
                            headers: {
                                 "Content-Type": "multipart/form-data",
-                                authorization: 'Bearer ' + accessToken
+                                authorization: `Bearer ` + accessToken
                                 },
                            withCredentials: true
                        })  
@@ -225,7 +224,7 @@ export default function UpdateInfo() {
                                 dispatch(newAccessToken(res.headers.accessToken));
                                 }
                             if(res.status === 200){
-                                     dispatch(userUpdateInfo(res.data.vegType,res.data.profile,res.data.password))
+                                     dispatch(userUpdateInfo({vegType: res.data.vegType,profileblob: res.data.profile,password: res.data.password}))
                                    // 그다음은 얻은 상태정보들을 렌더링하는 로직 
                              }
                              else{
@@ -360,8 +359,8 @@ export default function UpdateInfo() {
                            <VegImgBox>
                        {veggieIcon.map((veg,idx)=>{
                            return (
-                             <div>
-                                <VegImg key={idx} src={veg.img} onClick={()=>hanldeVegIcon(veg.name)}/>
+                             <div key={idx}>
+                                <VegImg src={veg.img} onClick={()=>hanldeVegIcon(veg.name)}/>
                                 <p className="p">{veg.name}</p>
                              </div>
                              )
