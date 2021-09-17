@@ -4,14 +4,14 @@ import styled from "styled-components";
 
 import Mypage from "../pages/MyPage";
 import MapPage from "../pages/MapPage";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { isLogin } from "../actions/index";
 import Login from "./user/login";
 import SignUp from "./user/sign-up";
 import NotFound from "../pages/NotFoundPage";
 
 const Navbar = () => {
-  const loginState = useSelector((state) => state.isLogin.isLogin);
+  const loginState = useSelector((state) => state.isLogin);
   const dispatch = useDispatch();
   const [loginModal, setLoginModal] = useState(false);
   const [registerModal, setRegisterModal] = useState(false);
@@ -32,6 +32,15 @@ const Navbar = () => {
     setLoginModal(false);
     setRegisterModal(false);
   };
+  let data = loginState.profileblob;
+  console.log(data);
+  let bytes, blob;
+  bytes = new Uint8Array(data.data);
+  blob = new Blob([bytes], { type: "image/bmp" });
+  data["src"] = window.URL.createObjectURL(blob);
+  useEffect(() => {
+    document.getElementById("blob-image").src = data.src;
+  }, []);
   return (
     <>
       <Router>
@@ -40,6 +49,7 @@ const Navbar = () => {
             <Logo>Logo</Logo>
             <StyledLogin onClick={logout}>Logout</StyledLogin>
             <StyledMypage to="/mypage">Mypage</StyledMypage>
+            <Image src={data.src} id="blob-image" />
           </Header>
         ) : (
           <Header>
@@ -90,6 +100,11 @@ const Header = styled.header`
   height: 5vh;
   display: flex;
   justify-content: space-around;
+`;
+const Image = styled.image`
+  width: 5rem;
+  height: 5vh;
+  z-index: 4;
 `;
 const Logo = styled.div`
   width: 70%;

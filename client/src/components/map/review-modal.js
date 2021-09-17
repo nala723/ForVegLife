@@ -20,7 +20,7 @@ export default function ReviewModal(props) {
     const Star = star.array.reduce((acc, cur) => acc + cur);
     axios
       .post(
-        `http://localhost/restaurant/${selPlace.id}/review`,
+        `${process.env.REACT_APP_SERVER_URL}/restaurant/${selPlace.id}/review`,
         {
           content: content,
           stars: Star,
@@ -32,7 +32,7 @@ export default function ReviewModal(props) {
         }
       )
       .then((res) => console.log(res));
-      props.exit()
+    props.exit();
   };
   const contentChange = (e) => {
     setContent(e.target.value);

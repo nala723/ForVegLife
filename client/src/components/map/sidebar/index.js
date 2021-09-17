@@ -16,7 +16,7 @@ export default function SideBar({ select, inReview, exitReview }) {
   const [tempdata, setTempData] = useState([]);
   useEffect(() => {
     axios
-      .get(`http://localhost/restaurant/${selPlace.id}`, {
+      .get(`${process.env.REACT_APP_SERVER_URL}/restaurant/${selPlace.id}`, {
         headers: {
           authorization: `Bearer ${user.accessToken}`,
         },

@@ -24,65 +24,82 @@ export default function Login(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
     // axios 요청으로 닉네임 알아오기
-    axios.post(`${process.env.REACT_APP_SERVER_URL}/sign/signin`, {email: user.email, password: user.password})
-    .then(res=>{
-      console.log(res.data)
-    dispatch(
-      isLogin({ isLogin: true, email: user.email, nickName: res.data.nickname, accessToken: res.data.accessToken})
-    );})
-    .catch((err)=>{
-      console.log(err)
-    })
+    axios
+      .post(`${process.env.REACT_APP_SERVER_URL}/sign/signin`, {
+        email: user.email,
+        password: user.password,
+      })
+      .then((res) => {
+        console.log(res.data);
+        dispatch(
+          isLogin({
+            isLogin: true,
+            email: user.email,
+            nickName: res.data.nickName,
+            accessToken: res.data.accessToken,
+            profileblob: res.data.profileblob,
+          })
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   const responseGoogle = (res) => {
     const email = res.profileObj.email;
     const nickName = res.profileObj.name;
-   
+    axios
+      .post(`${process.env.REACT_APP_SERVER_URL}/google/signin`, {
+        email,
+        nickName,
+      })
+      .then((res) => dispatch(isLogin({ isLogin: true, email, nickName })));
     // axios 요청
     // 중복 되는 것이 있을때는 에러를 리턴
-    dispatch(isLogin({ isLogin: true, email, nickName }));
   };
   return (
     <Temp>
-      <Exit onClick={props.exit}><FontAwesomeIcon color={"white"} icon={faTimes}/></Exit>
-    <LoginForm onSubmit={handleSubmit}>
-      <Logo>LoGo</Logo>
-      <LoginInput
-        name="email"
-        value={user.email}
-        placeholder="email"
-        onChange={handleChange}
-      />
-      <LoginInput
-        name="password"
-        value={user.password}
-        placeholder="password"
-        onChange={handleChange}
-      />
-      <LoginButton type="submit">로그인</LoginButton>
-      <Message>아직 회원이 아니신가요? 회원가입</Message>
-      <GoogleLogin
-        clientId={process.env.REACT_APP_GOOGLE_OAUTH_ID}
-        buttonText="Sign in with Google"
-        onSuccess={responseGoogle}
-      />
-    </LoginForm>
+      <Exit onClick={props.exit}>
+        <FontAwesomeIcon color={"white"} icon={faTimes} />
+      </Exit>
+      <LoginForm onSubmit={handleSubmit}>
+        <Logo>LoGo</Logo>
+        <LoginInput
+          name="email"
+          value={user.email}
+          placeholder="email"
+          onChange={handleChange}
+        />
+        <LoginInput
+          name="password"
+          value={user.password}
+          placeholder="password"
+          onChange={handleChange}
+        />
+        <LoginButton type="submit">로그인</LoginButton>
+        <Message>아직 회원이 아니신가요? 회원가입</Message>
+        <GoogleLogin
+          clientId={process.env.REACT_APP_GOOGLE_OAUTH_ID}
+          buttonText="Sign in with Google"
+          onSuccess={responseGoogle}
+        />
+      </LoginForm>
     </Temp>
   );
 }
 
 const Temp = styled.div`
- width:100vw;
- height: 95vh;
- z-index: 2;
- background-color: rgba(0,0,0,0.4)
+  width: 100vw;
+  height: 95vh;
+  z-index: 2;
+  background-color: rgba(0, 0, 0, 0.4);
 `;
 const Exit = styled.div`
-position: absolute;
-top:1rem;
-right:1rem;
-font-size: 2rem;
-`
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 2rem;
+`;
 const LoginForm = styled.form`
   position: absolute;
   display: flex;
