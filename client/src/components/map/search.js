@@ -6,16 +6,16 @@ import { selectPlace } from "../../actions";
 import axios from "axios";
 const { kakao } = window;
 
-export default function SearchPlace({selData}) {
+export default function SearchPlace({ selData }) {
   const mapCenter = useSelector((state) => state.MapCenter);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [latlng, setLatlng] = useState({
     x: 0,
     y: 0,
   });
   const [inputText, setInputText] = useState("");
   const [place, setPlace] = useState("");
-  const [serachData, setSearchData] = useState([])
+  const [serachData, setSearchData] = useState([]);
   // const ps = new kakao.maps.services.Places();
   const [data, setData] = useState([]);
   const onChange = (e) => {
@@ -33,7 +33,7 @@ export default function SearchPlace({selData}) {
     places.keywordSearch(inputText, callback, {
       x: mapCenter.x,
       y: mapCenter.y,
-      radius: 1000
+      radius: 1000,
     });
   }, [mapCenter, inputText]);
   const handleSubmit = (e) => {
@@ -41,13 +41,13 @@ export default function SearchPlace({selData}) {
     setPlace(inputText);
     setInputText("");
   };
-  const onClick = (x, y, address) => {
+  const onClick = (x, y, address, name) => {
     setLatlng({
       ...latlng,
       x,
       y,
     });
-    dispatch(selectPlace({x,y, address: address}))
+    dispatch(selectPlace({ x, y, address: address, name: name }));
   };
 
   return (
@@ -66,7 +66,11 @@ export default function SearchPlace({selData}) {
           <Keyword>
             {data.map((x) => {
               return (
-                <PlaceData onClick={() => onClick(x.x, x.y, x.address_name)}>
+                <PlaceData
+                  onClick={() =>
+                    onClick(x.x, x.y, x.address_name, x.place_name)
+                  }
+                >
                   <PlaceName>{x.place_name}</PlaceName>
                   <PlaceAddress>{x.address_name}</PlaceAddress>
                 </PlaceData>
@@ -90,7 +94,6 @@ const SearchForm = styled.form`
 `;
 const SearchButton = styled.button`
   background-color: rgba(0, 0, 0, 0);
-  
 `;
 const PlaceInput = styled.input`
   background-color: rgba(0, 0, 0, 0);

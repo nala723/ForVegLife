@@ -28,7 +28,7 @@ export default function Login(props) {
     .then(res=>{
       console.log(res.data)
     dispatch(
-      isLogin({ isLogin: true, email: user.email, nickName: res.data.nickname, acessToken: res.data.accessToken})
+      isLogin({ isLogin: true, email: user.email, nickName: res.data.nickname, accessToken: res.data.accessToken})
     );})
     .catch((err)=>{
       console.log(err)

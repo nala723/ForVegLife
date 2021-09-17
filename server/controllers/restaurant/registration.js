@@ -27,12 +27,12 @@ module.exports = async (req, res) => {
         latitude: latitude,
         address: address
       })
-        for(let i=0; i<category.length; i++){
+       
           models.vegCategory.create({
             place_id:placeData.id,
-            category:category[i]
+            category:category
           })
-        }
+        
         for(let i=0; i<menu.length; i++){
           models.menuprice.create({
             menu: menu[i],

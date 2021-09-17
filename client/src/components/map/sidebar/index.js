@@ -10,19 +10,24 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 
 export default function SideBar({ select, inReview, exitReview }) {
-
-  const dispatch =useDispatch()
-  const mapCenter = useSelector(state=> state.MapCenter)
-  const selPlace = useSelector(state=> state.selectPlace)
-  const [tempdata,setTempData] = useState([])
-  useEffect(()=>{
-    axios.get(`http://localhost/restaurant/${selPlace.id}`).
-    then(res=> setTempData(
-        ...res.data)
-        )
-  },[selPlace.id])
-  let data = tempdata
-  console.log(data)
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.isLogin);
+  const selPlace = useSelector((state) => state.selectPlace);
+  const [tempdata, setTempData] = useState([]);
+  useEffect(() => {
+    axios
+      .get(`http://localhost/restaurant/${selPlace.id}`, {
+        headers: {
+          authorization: `Bearer ${user.accessToken}`,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setTempData(...res.data);
+      });
+  }, [selPlace.id]);
+  let data = tempdata;
+  console.log(data);
   // axios 요청으로 받아오기
   // 일단은 더미데이터
   // const data = {
@@ -57,23 +62,37 @@ export default function SideBar({ select, inReview, exitReview }) {
   // };
   return (
     <>
-    {!(Array.isArray(data) && data.length === 0) ?  
-       <Side>
-      <Exit onClick={()=>dispatch(selectPlace({x:0, y:0, id: 0}))}><FontAwesomeIcon  icon={faTimes}/></Exit>
-      <MenuInfo place={data.title} menu={data.menu} price={data.price} />
-      <PlaceInfo user={data.like} />
-      <Review review={data.review} inReview={inReview} exitReview={exitReview}/>
-    </Side> : "" }
-   </>
+      {!(Array.isArray(data) && data.length === 0) ? (
+        <Side>
+          <Exit onClick={() => dispatch(selectPlace({ x: 0, y: 0, id: 0 }))}>
+            <FontAwesomeIcon icon={faTimes} />
+          </Exit>
+          <MenuInfo
+            place={data.title}
+            menu={data.menu}
+            price={data.price}
+            like={data.favirote}
+          />
+          <PlaceInfo user={data.like} />
+          <Review
+            review={data.review}
+            inReview={inReview}
+            exitReview={exitReview}
+          />
+        </Side>
+      ) : (
+        ""
+      )}
+    </>
   );
 }
 
 const Exit = styled.div`
-position: absolute;
-top:0.2rem;
-right:0.2rem;
-font-size: 2rem;
-`
+  position: absolute;
+  top: 0.2rem;
+  right: 0.2rem;
+  font-size: 2rem;
+`;
 const Side = styled.div`
   display: flex;
   flex-direction: column;
