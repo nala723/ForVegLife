@@ -9,8 +9,8 @@ const API_KEY = "8ae459a51f5b018322fee10f7aa86f24";
 export default function MapIndex({ data, latlng }) {
   const selPlace = useSelector((state) => state.selectPlace);
   const MapCenter = useSelector((state) => state.MapCenter);
-  let lng = MapCenter.x !== 0 ? MapCenter.x : 127.10676860117488;
-  let lat = MapCenter.y !== 0 ? MapCenter.y : 37.365264512305174;
+  let lng = MapCenter.x !== 0 ? MapCenter.x : 126.92512436231502;
+  let lat = MapCenter.y !== 0 ? MapCenter.y : 37.54994023025598;
   const dispatch = useDispatch();
   useEffect(() => {
     let address = "";
