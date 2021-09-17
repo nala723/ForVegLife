@@ -1,7 +1,118 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { getmyfavorite,newAccessToken } from "../../actions";
+import axios from "axios";
 
 export default function Favorite() {
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const state = useSelector((state)=> state);
+  const { 
+    myPlaceReducer :{ placeId,title,content,star,createdAt, reviewId,address,pictureUrl },
+    userReducer
+   } = state;
+   const accessToken = userReducer.accessToken;
+  //최초렌더링시- 
+  console.log(state)
+  useEffect(()=> {
+    getFavList()
+  },[])
+
+  // 유저가 즐찾한 것 목록 받아오기  
+  
+  const getFavList= () => {
+      axios
+          .get(`${process.env.REACT_APP_SERVER_URL}/mypage/like`,{ 
+            headers: {
+                "Content-Type": "application/json",
+                authorization: `Bearer ` + accessToken
+                },
+            withCredentials: true
+        })
+        .then((res)=> {
+            if(res.headers.accessToken){
+                dispatch(newAccessToken({accessToken: res.headers.accessToken}));
+            } 
+             if(res.status === 200){
+                   dispatch(getmyfavorite({placeId: res.data.place_Id, title: res.data.title, pictureUrl: res.data.picture_url,address: res.data.address}))
+                 // 상태전달 
+             }
+             else{
+                  history.push('/notfound');
+             }
+            //  setIsLoding(false) 
+         })
+         .catch(err => {
+                console.log(err)
+        })
+  }
+
+  // 삭제
+ const deleteFavList = () => {
+   axios.
+     delete(`${process.env.REACT_APP_SERVER_URL}/restaurant/${placeId}/dislike`,{ 
+      headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ` + accessToken
+          },
+      withCredentials: true
+  })
+  .then((res)=> {
+      if(res.headers.accessToken){
+          dispatch(newAccessToken({accessToken: res.headers.accessToken}));
+      } 
+       if(res.status === 200){
+            getFavList() // 다시 렌더링 호출
+       }
+       else{
+            history.push('/notfound');
+       }
+      //  setIsLoding(false) 
+   })
+   .catch(err => {
+          console.log(err)
+  })
+ }
+
+  // 장소 별 검색
+
+
+  // 장소등록하러 가기
+
+  // sns 공유
+
+
+  // 아직 아무장소도 등록하지 않았을 때, 핫플레이스(추천) 몇개 배치해둘 수도 있겠음.
+  // 임시 데이터
+  const dummyplace = [
+    {   
+      img :  '/image/cakes.png',
+      title : `어느 Vegan 카페`,
+      address : `서울시 광장동 구의 사거리 가동 202호`
+     },
+     {   
+      img :  '/image/cakes.png',
+      title : `어느 Vegan 카페`,
+      address : `서울시 광장동 구의 사거리 가동 202호`
+     },
+     {   
+      img :  '/image/cakes.png',
+      title : `어느 Vegan 카페`,
+      address : `서울시 광장동 구의 사거리 가동 202호`
+     },
+     {   
+      img :  '/image/cakes.png',
+      title : `어느 Vegan 카페`,
+      address : `서울시 광장동 구의 사거리 가동 202호`
+     },
+     {   
+      img :  '/image/cakes.png',
+      title : `어느 Vegan 카페`,
+      address : `서울시 광장동 구의 사거리 가동 202호`
+     }
+  ]
   
     return (
            <Container>
@@ -14,20 +125,18 @@ export default function Favorite() {
                         </Search>
                   </SearchContainer>
                     <CardBox>
-                        <Card>
-                            <CardImg src='/image/cakes.png'/>
+                      {dummyplace.map((dum) => {
+                        return (
+                           <Card>
+                            <CardImg src={dum.img}/>
                                 <CardContent>
-                                  <h4>{`어느 Vegan 카페`}</h4>
-                                  <p>{`서울시 광장동 구의 사거리 가동 202호`}</p>
+                                  <h4>{dum.title}</h4>
+                                  <p>{dum.address}</p>
                                 </CardContent>
                                <CardSns><img src="/image/kakaotalk.svg" />카카오로 공유하기</CardSns>
                         </Card>
-                        <Card>
-                        </Card>
-                        <Card>
-                        </Card>
-                        <Card>
-                        </Card>
+                        )
+                      })}
                         <Card/>
                         <Card/>
                         <Card/>

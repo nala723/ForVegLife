@@ -11,7 +11,7 @@ import SignUp from "./user/sign-up";
 import NotFound from "../pages/NotFoundPage";
 
 const Navbar = () => {
-  const loginState = useSelector((state) => state.isLogin.isLogin);
+  const loginState = useSelector((state) => state.userReducer.isLogin);
   const dispatch = useDispatch()
   const [ loginModal , setLoginModal] = useState(false)
   const [registerModal, setRegisterModal] = useState(false)
