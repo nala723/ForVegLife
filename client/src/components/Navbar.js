@@ -33,13 +33,7 @@ const Navbar = () => {
     setLoginModal(false);
     setRegisterModal(false);
   };
-  let data = loginState.profileblob;
-  if (data) {
-    let bytes, blob;
-    bytes = new Uint8Array(data.data);
-    blob = new Blob([bytes], { type: "image/bmp" });
-    data.src = window.URL.createObjectURL(blob);
-  }
+
   return (
     <>
       <Router>
@@ -48,7 +42,14 @@ const Navbar = () => {
             <Logo>Logo</Logo>
             <StyledLogin onClick={logout}>Logout</StyledLogin>
             <StyledMypage to="/mypage">Mypage</StyledMypage>
-            <Image src={data.src} id="blob-image" />
+            <Image
+              src={
+                typeof loginState.profile === "string"
+                  ? loginState.profile
+                  : "data:image/png;base64," +
+                    Buffer(loginState.profileblob, "binary").toString("base64")
+              }
+            />
           </Header>
         ) : (
           <Header>
@@ -90,7 +91,7 @@ const Navbar = () => {
 const Header = styled.header`
   justify-content: center;
   align-items: center;
-  background-color: white;
+  background-color: none;
   color: black;
 
   width: 100%;
@@ -101,10 +102,9 @@ const Header = styled.header`
 const Image = styled.image`
   width: 5rem;
   height: 5vh;
-  z-index: 4;
 `;
 const Logo = styled.div`
-  width: 70%;
+  width: 60%;
   margin-left: 1rem;
 `;
 const StyledLogin = styled.div`

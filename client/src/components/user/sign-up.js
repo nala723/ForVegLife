@@ -165,6 +165,7 @@ export default function SignUp(props) {
           <RepasswordInput
             name="password"
             value={user.password}
+            type="password"
             placeholder="password"
             onChange={handleChange}
           />
@@ -173,6 +174,7 @@ export default function SignUp(props) {
         <Repassword>
           <RepasswordInput
             name="rePassword"
+            type="password"
             value={user.repassword}
             placeholder="password confirm"
             onChange={handleChange}

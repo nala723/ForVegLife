@@ -72,6 +72,7 @@ export default function Login(props) {
         />
         <LoginInput
           name="password"
+          type="password"
           value={user.password}
           placeholder="password"
           onChange={handleChange}
