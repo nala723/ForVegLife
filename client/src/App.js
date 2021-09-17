@@ -1,5 +1,5 @@
 import GlobalStyles from "./styles/GlobalStyles";
-
+import './App.css';
 import Navbar from "./components/Navbar";
 import styled, {ThemeProvider} from 'styled-components'
 import theme from '../src/styles/theme'

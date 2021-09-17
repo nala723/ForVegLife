@@ -1,11 +1,10 @@
 import { persistReducer} from 'redux-persist';
 import { combineReducers } from "redux";
 import storage from "redux-persist/lib/storage";// local storage에 저장
-import isLogin from "./isLogin";
 import MapCenter from "./MapCenter";
-import  selectPlace from "./selectPlace";
-import userInfoReducer from "./userInfoReducer";
-import myPlaceReducer from "./userInfoReducer";
+import selectPlace from "./selectPlace";
+import userReducer from './userReducer';
+import myPlaceReducer from "./myPlaceReducer";
 
 const persistConfig = {
 	key: "root",
@@ -13,17 +12,15 @@ const persistConfig = {
 	storage: storage,
   
 	whitelist: [     //----->여러 reducer 중 이것만 저장
-    "userInfoReducer",
-    "isLogin",
+    "userReducer",
   ],
 	// blacklist -> 그것만 제외합니다
 };
 
 const rootReducer = combineReducers({
-  isLogin,
+  userReducer,
   MapCenter,
   selectPlace,
-  userInfoReducer,
   myPlaceReducer
 
 });

@@ -25,35 +25,30 @@ export const selectPlace = (data) => {
 };
 
 //new accessToken
-export const newAccessToken = (accessToken) => {
+export const newAccessToken = (data) => {
   return {
     type: GET_NEW_ACCESSTOKEN,
     payload: {
-      accessToken
+      data
     }
   }
 }
 
 // my page
-export const userInfo = ( nickName,vegType,profileblob,email) => {
+export const userInfo = ( data) => {
    return {
       type: USER_INFO,
       payload : {
-        nickName,
-        vegType,
-        profileblob,
-        email
+       data
       }
    }
 };
 
-export const userUpdateInfo = (vegType,profileblob,password) => {
+export const userUpdateInfo = (data) => {
   return {
      type: USER_UPDATE_INFO,
      payload : {
-       vegType,
-       profileblob,
-       password
+       data
      }
   }
 };
@@ -64,28 +59,20 @@ export const withdraw = () => {
   }
 };
 
-export const getmyreview = (placeId,title,content,star,createdAt,reviewId) => {
+export const getmyreview = (data) => {
   return {
      type: GET_MY_REVIEW,
      payload : {
-       placeId,
-       title,
-       content,
-       star,
-       createdAt,
-       reviewId
+       data
      }
   }
 };
 
-export const getmyfavorite = (placeId,title,pictureUrl,address) => {
+export const getmyfavorite = (data) => {
   return {
      type: GET_MY_FAVORITE,
      payload : {
-       placeId,
-       title,
-       pictureUrl,
-       address
+       data
      }
   }
 };
