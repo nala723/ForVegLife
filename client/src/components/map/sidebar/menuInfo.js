@@ -8,7 +8,7 @@ import theme from "../../../styles/theme";
 const axios = require("axios");
 export default function MenuInfo({ place, menu, price, like }) {
   const selPlace = useSelector((state) => state.selectPlace);
-  const user = useSelector((state) => state.isLogin);
+  const user = useSelector((state) => state.userReducer);
   const [favirote, setFavirote] = useState(false);
   useEffect(() => {
     if (like) {

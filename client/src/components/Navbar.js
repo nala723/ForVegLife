@@ -11,12 +11,13 @@ import SignUp from "./user/sign-up";
 import NotFound from "../pages/NotFoundPage";
 
 const Navbar = () => {
-  const loginState = useSelector((state) => state.isLogin);
+  const loginState = useSelector((state) => state.userReducer);
   const dispatch = useDispatch();
   const [loginModal, setLoginModal] = useState(false);
   const [registerModal, setRegisterModal] = useState(false);
   const userLogin = () => {
     setLoginModal(true);
+    console.log(loginModal);
   };
   const userLoginExit = () => {
     setLoginModal(false);
@@ -33,18 +34,16 @@ const Navbar = () => {
     setRegisterModal(false);
   };
   let data = loginState.profileblob;
-  console.log(data);
-  let bytes, blob;
-  bytes = new Uint8Array(data.data);
-  blob = new Blob([bytes], { type: "image/bmp" });
-  data["src"] = window.URL.createObjectURL(blob);
-  useEffect(() => {
-    document.getElementById("blob-image").src = data.src;
-  }, []);
+  if (data) {
+    let bytes, blob;
+    bytes = new Uint8Array(data.data);
+    blob = new Blob([bytes], { type: "image/bmp" });
+    data.src = window.URL.createObjectURL(blob);
+  }
   return (
     <>
       <Router>
-        {loginState ? (
+        {loginState.isLogin ? (
           <Header>
             <Logo>Logo</Logo>
             <StyledLogin onClick={logout}>Logout</StyledLogin>
@@ -62,14 +61,14 @@ const Navbar = () => {
         <Switch>
           <Route exact path="/">
             <MapPage login={loginModal} register={registerModal}>
-              {loginState ? (
+              {loginState.isLogin ? (
                 ""
               ) : loginModal ? (
                 <Login exit={userLoginExit} />
               ) : (
                 ""
               )}
-              {loginState ? (
+              {loginState.isLogin ? (
                 ""
               ) : registerModal ? (
                 <SignUp exit={RegisterExit} />
@@ -89,13 +88,11 @@ const Navbar = () => {
 };
 
 const Header = styled.header`
-  display: flex;
   justify-content: center;
   align-items: center;
   background-color: white;
-
   color: black;
-  top: 0;
+
   width: 100%;
   height: 5vh;
   display: flex;

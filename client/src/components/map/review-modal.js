@@ -10,7 +10,7 @@ import axios from "axios";
 
 export default function ReviewModal(props) {
   const selPlace = useSelector((state) => state.selectPlace);
-  const user = useSelector((state) => state.isLogin);
+  const user = useSelector((state) => state.userReducer);
   const [star, setStar] = useState({
     array: [0, 0, 0, 0, 0],
   });

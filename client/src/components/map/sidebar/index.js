@@ -11,7 +11,7 @@ import axios from "axios";
 
 export default function SideBar({ select, inReview, exitReview }) {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.isLogin);
+  const user = useSelector((state) => state.userReducer);
   const selPlace = useSelector((state) => state.selectPlace);
   const [tempdata, setTempData] = useState([]);
   useEffect(() => {

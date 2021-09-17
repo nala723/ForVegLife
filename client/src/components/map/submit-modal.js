@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 export default function EnrollPlace(props) {
   const selPlace = useSelector((state) => state.selectPlace);
-  const user = useSelector((state) => state.isLogin);
+  const user = useSelector((state) => state.userReducer);
   const [place, setPlace] = useState({
     place: selPlace.name,
     address: selPlace.address,
