@@ -11,6 +11,7 @@ module.exports = async (req, res) => {
     }
     else{
       const accessToken = authorization.split(' ')[1];
+  
       const userData = isAuthorized(accessToken);
       const userId = userData.id;
       if(!userId){

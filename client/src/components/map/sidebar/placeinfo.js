@@ -6,14 +6,15 @@ import theme from "../../../styles/theme";
 export default function PlaceInfo({ user }) {
   let type;
   let ratio;
-  if(user === {}){
-  const likeType = Object.entries(user);
-  type = likeType.map((x) => x[0]);
-  ratio = likeType.map((x) => x[1].slice(0, -1));
-}else{
-  type =[0,0,0,0,0]
-  ratio = [0,0,0,0,0]
-}
+  if (user) {
+    const likeType = Object.entries(user);
+    console.log(likeType);
+    type = likeType.map((x) => x[0]);
+    ratio = likeType.map((x) => x[1]);
+  } else {
+    type = [0, 0, 0, 0, 0];
+    ratio = [0, 0, 0, 0, 0];
+  }
   let data = {
     labels: type,
     datasets: [
@@ -61,19 +62,25 @@ export default function PlaceInfo({ user }) {
   return (
     <Temp>
       <Title> 타입별 인기도 </Title>
-      <Bar data={data} style={{marginBottom: "1rem"}} width="100%" height="100%" options={options} />
+      <Bar
+        data={data}
+        style={{ marginBottom: "1rem" }}
+        width="100%"
+        height="100%"
+        options={options}
+      />
     </Temp>
   );
 }
 
 const Title = styled.div`
   margin: 0 1rem 1rem 0;
-  color: ${theme.colors.mapgrey}
+  color: ${theme.colors.mapgrey};
 `;
 const Temp = styled.div`
   display: flex;
   flex-direction: column;
   width: 80%;
   margin: 1rem;
-  border-bottom: 0.1rem solid rgba(187, 187, 187, 0.5);;
+  border-bottom: 0.1rem solid rgba(187, 187, 187, 0.5); ;
 `;
