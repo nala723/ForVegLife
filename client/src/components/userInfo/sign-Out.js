@@ -10,14 +10,33 @@ import axios from 'axios';
 export default function SignOut() {
     const userState = useSelector((state) => state.userReducer)
     const {
-        user: { accessToken, email, nickName, vegType, password, profileblob, isLogin } 
+       accessToken, email, nickName, vegType, password, profileblob, isLogin 
     } = userState;
+    const googleState = useSelector((state)=> state.googleReducer);
+    const {googleToken} = googleState;
     const dispatch = useDispatch();
     const history = useHistory();
     const [isOpen,setIsOpen] = useState(false);
     const [userwithDraw,setUserWithDraw] = useState(false);
+    const [checked,setIsChecked] = useState(false);
+
+
+    if(googleToken){
+        accessToken = googleToken;
+      }
+   
+
+      //체크박스 체크여부
+    const handleChecked = (e) => {
+        e.preventDefault()
+        setIsChecked(!checked);
+    }
+  
 
     const Handlewithdraw = (e) => {
+        if(!checked){
+            return;
+        }
         e.preventDefault()
         axios
           .delete(`${process.env.REACT_APP_SERVER_URL}/sign/withdrawal`,{
@@ -30,7 +49,8 @@ export default function SignOut() {
         .then((res)=> {
              if(res.status === 200){
                    dispatch(withdraw())// 모달까지 완료 후 map페이지로 푸쉬하게 수정
-                 // 상태전달 
+                  setUserWithDraw(true);
+                  handleClick()
              }
              else{
                   history.push('/notfound');
@@ -46,8 +66,8 @@ export default function SignOut() {
        setIsOpen(!isOpen)
    }
   
-   //withdraw가 true라면 map 페이지로 푸쉬 (모달에서 확인 눌렀을 때- 상태전달해줘야함)
-   if(userwithDraw){
+   //withdraw가 true라면 map 페이지로 푸쉬 (모달에서 확인 눌렀을 때)
+   if(userwithDraw && !isOpen){
        history.push('/')
    }
   return(
@@ -81,13 +101,13 @@ export default function SignOut() {
                           신중하게 결정해주세요.</p>
                        </UserNm > 
                         <VegAnswer>
-                        <input type="checkbox"/><p> 해당 내용을 모두 확인했으며, 회원탈퇴에 동의합니다.</p>
+                        <input type="checkbox" onChange={handleChecked} /><p> 해당 내용을 모두 확인했으며, 회원탈퇴에 동의합니다.</p>
                         </VegAnswer>
                     </UserAlertBox>
                     <ButtonBox>
-                        <button onClick={handleClick} onClick={(e)=>Handlewithdraw(e)}>탈퇴</button>
+                        <button onClick={(e)=>Handlewithdraw(e)}>탈퇴</button>
                     </ButtonBox>
-                     {isOpen ? <DefaultModal isOpen={isOpen} handleClick={handleClick} header="회원 탈퇴가 완료되었습니다.">그동안 forVegLife서비스를 이용해 주셔서 감사합니다.<br></br>
+                     {isOpen && userwithDraw ? <DefaultModal isOpen={isOpen} handleClick={handleClick} header="회원 탈퇴가 완료되었습니다.">그동안 forVegLife서비스를 이용해 주셔서 감사합니다.<br></br>
                                 더욱더 노력하고 발전하는 forVegLife가 되겠습니다.</DefaultModal> : null}
                  </UserBottom>
            </UserContainer>

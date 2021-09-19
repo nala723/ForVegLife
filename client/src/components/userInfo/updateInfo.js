@@ -4,18 +4,22 @@ import DefaultModal from "./defaultmodal";
 import theme from "../../styles/theme";
 import { useSelector, useDispatch } from "react-redux";
 import {useHistory} from 'react-router-dom';
-import { userInfo,userUpdateInfo,newAccessToken } from "../../actions/index";
+import { userInfo,userUpdateInfo,newAccessToken} from "../../actions/index";
 import {Buffer} from 'buffer';
 import axios from 'axios';
+import { dummydatas } from "./dummydatas";
 
 export default function UpdateInfo() {
-    const userState = useSelector((state) => state.userReducer)
+    const userState = useSelector((state) => state.userReducer);
+    const googleState = useSelector((state)=> state.googleReducer);
     const {
       accessToken, email, nickName, vegType, password, profileblob, isLogin 
     } = userState;
+    const {googleToken} = googleState;
     const dispatch = useDispatch();
     const history = useHistory();
     const [isOpen,setIsOpen] = useState(false);
+    const [isGoogleUser,setGoogleUser] = useState(false); // 구글 유저 수정 금지 모달 위함
     const [imageSizeError,setImageSizeError] = useState(false);
     const [currentInput, setCurrentInput] = useState({
         imgFile:'',
@@ -26,14 +30,20 @@ export default function UpdateInfo() {
     })
     
     const [inValidEditMSG,setInvalidEditMSG] = useState("");
-    const [isFinish,setIsfinish] = useState(false)
+    const [changed,setIsChanged] = useState(false)
     const refPassword = useRef(null);
     const refPasswordCheck = useRef(null);
     const photoInput = useRef(null);
+    const veggieIcon = dummydatas.veggieIcon; // 임시 - 더미데이터, 추후 교체
     console.log(`gkgkgk`,accessToken,userState)
+
     // 최초 렌더링시 유저정보 받아오기
     useEffect(()=>{
-        getUserInfo(accessToken)
+        if(googleToken){
+           setGoogleUser(true)
+        }else {
+         getUserInfo(accessToken)
+        }
     },[])
 
    // 유저 정보 요청 함수
@@ -71,6 +81,7 @@ export default function UpdateInfo() {
     }else{
         profileIMG =  'data:image/png;base64, '+ Buffer(profileblob,'binary').toString('base64');
     } 
+
    // 이미지 업로드
     const imageFileHandler = (key) => (e) => {
         e.preventDefault();
@@ -88,33 +99,36 @@ export default function UpdateInfo() {
                 })
             }
             reader.readAsDataURL(file);
-            if(currentInput.inputPassword || currentInput.imgFile || currentInput.inputVegtype ){
-                setIsfinish(true)
-            }
+            console.log('이미지업로드',currentInput)
+          
         }
     }
 
    // open모달 위한 상태변경함수
     const handleClick = () => {
         // 아무것도 변경안했을때와 분기(다른모달)
-        if(!currentInput.inputPassword && !currentInput.imgFile && !currentInput.inputVegtype ){
-            setIsfinish(false)
+        if((currentInput.inputPassword && inValidEditMSG) || !currentInput.imgFile || !currentInput.inputVegtype){
+            setIsOpen(false)
         }
-        if(currentInput.inputPassword || currentInput.imgFile || currentInput.inputVegtype ){
-            setIsfinish(true)
+        if((currentInput.inputPassword && !inValidEditMSG) || currentInput.imgFile || currentInput.inputVegtype ){
+            setIsOpen(true)
         }
-        setIsOpen(!isOpen)
+        if(!isOpen && changed){
+            history.push('/mypage/updateinfo') // or함수호출?
+        }
+      setIsOpen(!isOpen)
     }
 
    // 카메라아이콘 커스텀
     const handlePhotoClick = (e) => {
         e.preventDefault();
-
+        console.log('포토클릭',currentInput)
         photoInput.current.click();
     }
     // 인풋창
     const handleInputValue = useCallback((key) => (e) => {
         setCurrentInput({ ...currentInput, [key]:e.target.value})
+        console.log('인풋잘되나',inValidEditMSG)
     },[currentInput])
 
 
@@ -167,15 +181,15 @@ export default function UpdateInfo() {
             return
         }
         setInvalidEditMSG("")
-        if(currentInput.inputPassword || currentInput.imgFile || currentInput.inputVegtype ){
-            setIsfinish(true)
-        }
         return 
     }
 
     //회원정보 수정 - 추후 퀄리티 업
 
     const onSubmitHandler = async (e) => { //현재 안먹힘
+        if((currentInput.inputPassword && inValidEditMSG) || !currentInput.imgFile || !currentInput.inputVegtype){
+            return;
+        }
         e.preventDefault();
         const MAX_WIDTH = 320;
         const MAX_HEIGHT = 180;
@@ -225,7 +239,10 @@ export default function UpdateInfo() {
                                 }
                             if(res.status === 200){
                                      dispatch(userUpdateInfo({vegType: res.data.vegType,profileblob: res.data.profile,password: res.data.password}))
-                                   // 그다음은 얻은 상태정보들을 렌더링하는 로직 
+                                   // 그다음은 얻은 상태정보들을 전달
+                                    // 모달 오픈 위한 콜
+                                    handleClick();
+                                     setIsChanged(true);
                              }
                              else{
                                  history.push('/notfound');
@@ -261,29 +278,6 @@ export default function UpdateInfo() {
             }
 
     };
-
-    const veggieIcon = [
-      {   
-        img :  '/image/abocado.svg',
-        name : '비건'
-       },
-       {   
-        img :  '/image/cheese.svg',
-        name : '오보'
-       },
-       {   
-        img :   '/image/egg.svg',
-        name : '락토'
-       },
-       {   
-        img :   '/image/eggcheese.svg',
-        name : '락토오보' 
-       },
-       {   
-        img :   '/image/fish.svg',
-        name : '페스코'
-       },
-    ]
    
     // 채식 아이콘 선택 
     const hanldeVegIcon = (name) => {
@@ -291,14 +285,33 @@ export default function UpdateInfo() {
             veggieIcon.filter(icon=>
             icon.name=== name)
             [0].name
+            console.log('아이콘선택',iconname)
         setCurrentInput({
             ...currentInput,
             inputVegtype: iconname}); 
-         if(currentInput.inputPassword || currentInput.imgFile || currentInput.inputVegtype ){
-            setIsfinish(true)
-        }       
+           
     }
   console.log(currentInput, `하하하하`)// 안먹힘???
+
+   if(isGoogleUser){
+    
+        setIsOpen(!isOpen)
+        const handleBack = (e) => {
+          e.preventDefault();
+          if(!isOpen){
+           history.push('/mypage');
+          }
+        }
+
+      
+       return(
+        <DefaultModal isOpen={isOpen} handleClick={handleBack} header="경고">
+        소셜 로그인 유저는 회원정보수정을 할 수 없습니다</DefaultModal>
+
+       )
+   }
+
+
 
     return (
         <Container>
@@ -334,7 +347,7 @@ export default function UpdateInfo() {
                    </UserNmBox >
                 </UserTop>
                  <UserBottom>
-                 <UserNmBox primary >
+                 <UserBotBox className={inValidEditMSG ? 'msg' : ''}>
                  <h5>{currentInput.inputPassword ? inValidEditMSG : null}</h5>
                     <UserNm primary> 
                             <UserIcon src="/image/lock.svg" primary/>
@@ -352,16 +365,16 @@ export default function UpdateInfo() {
                              onKeyPress={handleMoveTopPWCheck} ref={refPasswordCheck} onBlur={handleCompleteInput} />
                            </UserContent>
                        </UserNm >
-                    </UserNmBox>
+                    </UserBotBox>
                     <VegAnswer>
-                       <p> 당신의 채식 타입을 선택해 주세요.</p>
+                       <p> 해당하는 채식 타입을 선택해 주세요.</p>
                        <VegIconBox>
                            <VegImgBox>
                        {veggieIcon.map((veg,idx)=>{
                            return (
                              <div key={idx}>
-                                <VegImg src={veg.img} onClick={()=>hanldeVegIcon(veg.name)}/>
-                                <p className="p">{veg.name}</p>
+                                <VegImg src={veg.img} onClick={()=>hanldeVegIcon(veg.name)} className={currentInput.inputVegtype===veg.name ? 'selected' : ''}/>
+                                <div>{veg.name}</div>
                              </div>
                              )
                           })
@@ -371,9 +384,9 @@ export default function UpdateInfo() {
                     </VegAnswer>
                     
                     <ButtonBox>
-                        <button onClick={(e)=>onSubmitHandler(e)} onClick={handleClick} >수정</button>
+                        <button onClick={(e)=>onSubmitHandler(e)} >수정</button>
                     </ButtonBox>
-                         {(isOpen && isFinish) ? <DefaultModal isOpen={isOpen} handleClick={handleClick} header="회원정보 수정이 완료되었습니다.">
+                         {(isOpen && changed) ? <DefaultModal isOpen={isOpen} handleClick={handleClick} header="회원정보 수정이 완료되었습니다.">
                      앞으로도 계속 forVegLife 안에서 건강한 life 누리세요</DefaultModal> : null}
                     
                  </UserBottom>
@@ -420,7 +433,7 @@ const UserContainer = styled.div`
     
 `; 
 const UserTop = styled(UserContainer)`
-    
+     
     height: 18.438rem;
     >input{
        display:none;
@@ -462,13 +475,10 @@ const UserPic = styled.img`
 const UserNmBox = styled(UserTop)`
     width: 100%;
     height:11.5rem;
-    padding: ${props => props.primary ? '2.3rem 2rem' : '2.3rem 3rem'};
+    padding: 2.3rem 3rem;
     justify-content: center;
     align-items:center;
-    >h5{
-       color:red;
-       font-size: 12px;
-    }
+
 `; 
 const UserNm = styled.div`
    width: 100%;
@@ -512,6 +522,24 @@ const UserBottom = styled.div`
     border-radius:1rem;
 `; 
 
+const UserBotBox = styled(UserTop)`
+    width: 100%;
+    height:11.5rem;
+    padding: 2.3rem 2rem;
+    justify-content: center;
+    align-items:center;
+    >h5{
+       color:red;
+       font-size: 12px;
+    
+    }
+    &.msg{
+        padding-top: 1.5rem;
+    }
+
+`; 
+
+
 const PwContainer = styled.input.attrs(props=>({
     type:'password',
 
@@ -539,11 +567,11 @@ const PwContainer = styled.input.attrs(props=>({
 const VegAnswer = styled.div`
   display:flex;
   flex-direction: column;
- 
   width:100%;
    >p{
        color:  ${({theme})=>theme.colors.green};
-      margin-left:2.5rem;
+       margin-left:2.5rem;
+       margin-top:1rem;
    }
 
 `;
@@ -551,7 +579,7 @@ const VegIconBox = styled.div`
   display:flex;
   flex-direction: column;
   width:100%;
-  height:8.125rem;
+  height:7rem;
   justify-content: flex-end;
   align-items:center;
   gap: 1rem;
@@ -563,8 +591,10 @@ const VegImgBox = styled.div`
   width:90%;
   display:flex;
   justify-content: space-between;
+  
   >div{
-      >p{  
+      >div{  
+           text-align:center;
             color: ${({theme})=>theme.colors.mapgrey}; //고치기 색..
         }
   }
@@ -575,11 +605,18 @@ const VegImg = styled.img`
   height:50px;
   width:50px;
   margin-bottom:0.6rem; 
+  transition: all 0.2s ease;
   :hover{
        cursor:pointer;
-       
+      transform: scale(1.1);
        border-radius: 100%; //추후수정?
-       box-shadow:  8px 8px 16px rgba(0, 0, 0, 0.2);
+       box-shadow: 0 3px 9px rgba(0, 0, 0, 0.15);
+   }
+   &.selected{
+       border-radius:100%;
+       transform: scale(1.1);
+       border: 2px solid ${theme.colors.lightgreen};
+       transition: all 0.3s ease;
    }
 `;
 const ButtonBox = styled.div`

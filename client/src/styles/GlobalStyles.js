@@ -12,7 +12,16 @@ const GlobalStyles = createGlobalStyle`
         box-sizing: border-box;
         -webkit-box-sizing: border-box;
     }
- 
+    body {
+        padding: 0;
+        margin: 0;
+        width:100vw;
+        height: 100vh;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+    ol, ul, li {
+    list-style: none;
+   }
    :root {
     --font-base: Roboto, 'Orienta', sans-serif;
     --font-button:  'Montserrat', serif;
@@ -25,7 +34,6 @@ const GlobalStyles = createGlobalStyle`
     --font-weight-light: 100;
     --font-weight-normal: 400;
     --font-weight-bold: 700;
-
     --color-lightgreen : #C5E87C;
     --color-green: #7CB700;
     --color-red: #D90000;
@@ -38,7 +46,6 @@ const GlobalStyles = createGlobalStyle`
     --color-lightgrey: #DFDFDF;
     --color-mapgrey: #7C6D6D;
   }
-
 `;
 
 export default GlobalStyles;

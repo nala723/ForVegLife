@@ -1,6 +1,7 @@
 export const ISLOGIN = "ISLOGIN";
 export const MAPCENTER = "MAPCENTER";
 export const SELECTPLACE = "SELECTPLACE";
+export const GET_GOOGLE_TOKEN = "GET_GOOGLE_TOKEN";
 
 // my page
 export const USER_INFO = "USER_INFO";
@@ -8,6 +9,7 @@ export const USER_UPDATE_INFO = "USER_UPDATE_INFO";
 export const WITHDRAW = "WITHDRAW";
 export const GET_MY_REVIEW = "GET_MY_REVIEW";
 export const GET_MY_FAVORITE = "GET_MY_FAVORITE";
+export const DELETE_MY_FAVORITE = "DELETE_MY_FAVORITE";
 
 // get new accessToken
 export const GET_NEW_ACCESSTOKEN = "GET_NEW_ACCESSTOKEN";
@@ -23,6 +25,18 @@ export const mapCenter = (data) => {
 export const selectPlace = (data) => {
   return { type: SELECTPLACE, payload: {data} };
 };
+
+//get googletoken
+
+export const googleToken = (data) => {
+  return {
+    type: GET_GOOGLE_TOKEN,
+    payload:{
+      data
+    }
+  }
+}
+
 
 //new accessToken
 export const newAccessToken = (data) => {
@@ -76,3 +90,13 @@ export const getmyfavorite = (data) => {
      }
   }
 };
+
+export const deletemyfavorite = (id) => {
+  return {
+    type: DELETE_MY_FAVORITE,
+    payload : {
+        id
+    }
+  }
+} 
+

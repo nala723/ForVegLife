@@ -1,29 +1,43 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import {useHistory} from 'react-router-dom';
+import {Buffer} from 'buffer';
+import state from '../../reducers/userReducer'
 
 export default function UserSideBar() {
+  const userState = useSelector((state)=> state)
+  const {    accessToken,email,nickName,vegType,password, profileblob,isLogin} = userState;
+  
+    // 프로필 이미지 설정
+    let profileIMG
+    // if(typeof(profileblob)==='string'){
+    //     profileIMG = profileblob;
+    // }else{
+    //     profileIMG =  'data:image/png;base64, '+ Buffer(profileblob,'binary').toString('base64');
+    // } 
 
  return(
      <Sidebar>
         <Container>
             <Top>
                 <UserBox>
-                    <Pic></Pic>
+                    <Pic src={profileIMG ? profileIMG : null}></Pic>
                 </UserBox>
                 <TextBox>
                    <UserName>
-                       {`Kimusername`}
+                       {nickName ? nickName : 'Kimusername'}
                    </UserName>
                    <UserEmail>
-                       {`hahihuhe3@gmail.com`}
+                       {email ? email : `hahihuhe3@gmail.com`}
                    </UserEmail>
                </TextBox>
             </Top>
             <Bottom>
                 <BottomBox>
                     <Title>
-                        My Place
+                         <p>My Place</p>
                         <Content>
                         <Link to="/mypage"> 나의 즐겨찾기</Link>
                         </Content>
@@ -33,8 +47,8 @@ export default function UserSideBar() {
                     </Title>
                 </BottomBox>
                 <BottomBox> 
-                <Title>
-                        My Info
+                <Title primary>
+                         <p>My Info</p>
                         <Content>
                           <Link to="/mypage/updateinfo"> 나의 정보 수정</Link>
                         </Content>
@@ -62,12 +76,13 @@ const Sidebar = styled.div`
  border: 2.5px solid var(--color-lightgreen);
  border-radius: 0.6rem;
  align-items: center;
+ position: sticky;
 `;
 
 const Container =styled.div`
  width: 11rem;
- padding-top: 1rem;
- height: 30.938rem;
+ padding-top: 2rem;
+ height: 30.9rem;
  display: flex;
  flex-direction: column;
 `;
@@ -77,7 +92,6 @@ const Top =styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-
 `;
 const UserBox = styled.div`
    width: 7.063rem;
@@ -146,16 +160,21 @@ const Title = styled.ul`
      font-weight: var(--font-weight-bold);
      display: flex;
      flex-direction: column;
-     justify-content: space-around;
      color: #5B220A;
      letter-spacing: 1px;
+      gap:0.6rem;
+       >p{
+          margin-bottom: 0.7rem;
+       }
 `;
 const Content = styled.li`
      width: 100%;
+     height:20px;
      font-size: var(--font-size-base);
      font-weight: 500;
      color: var(--color-brown);
      letter-spacing: 0;
+     /* flex:1; */
      :hover{
         color:  var(--color-grey);
      }
