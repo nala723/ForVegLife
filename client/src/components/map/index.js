@@ -1,16 +1,16 @@
 import react, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { mapCenter } from "../../actions/index";
+import { mapCenter, selectPlace } from "../../actions/index";
 const { kakao } = window;
 
 const API_KEY = "8ae459a51f5b018322fee10f7aa86f24";
 
-export default function MapIndex({ latlng }) {
-  const selectPlace = useSelector(state=> state.selectPlace)
-  const MapCenter = useSelector(state => state.MapCenter)
-  let lng = latlng.x !== 0 ? latlng.x : 127.10676860117488;
-  let lat = latlng.y !== 0 ? latlng.y : 37.365264512305174;
+export default function MapIndex({ data, latlng }) {
+  const selPlace = useSelector((state) => state.selectPlace);
+  const MapCenter = useSelector((state) => state.MapCenter);
+  let lng = MapCenter.x !== 0 ? MapCenter.x : 126.92512436231502;
+  let lat = MapCenter.y !== 0 ? MapCenter.y : 37.54994023025598;
   const dispatch = useDispatch();
   useEffect(() => {
     let address = "";
@@ -26,33 +26,60 @@ export default function MapIndex({ latlng }) {
       if (map.getCenter() > 4) {
         return;
       }
-
-      searchAddrFromCoords(map.getCenter(), displayCenterInfo);
-      let markerPosition = new kakao.maps.LatLng(selectPlace.y, selectPlace.x);
+      let markerPosition = new kakao.maps.LatLng(selPlace.y, selPlace.x);
       let marker = new kakao.maps.Marker({
         position: markerPosition,
       });
       marker.setMap(map);
+      searchAddrFromCoords(map.getCenter(), displayCenterInfo);
+      if (data.length !== 0) {
+        data.map((x) => {
+          let markerPosition = new kakao.maps.LatLng(x.latitude, x.longitude);
+          let marker = new kakao.maps.Marker({
+            position: markerPosition,
+          });
+          marker.setMap(map);
+          let iwContent = `<div>${x.title}</div>`,
+            iwRemoveable = true;
+
+          let infowindow = new kakao.maps.InfoWindow({
+            content: iwContent,
+            removable: iwRemoveable,
+          });
+          kakao.maps.event.addListener(marker, "click", function () {
+            dispatch(
+              selectPlace({
+                x: x.latitude,
+                y: x.longitude,
+                id: x.placeId,
+                name: x.title,
+              })
+            );
+            infowindow.open(map, marker);
+          });
+        });
+      }
     });
 
     function searchAddrFromCoords(coords, callback) {
       // 좌표로 행정동 주소 정보를 요청합니다
 
-      geocoder.coord2RegionCode(coords.getLng(), coords.getLat(), callback);
+      geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
     }
     function displayCenterInfo(result, status) {
       if (status === kakao.maps.services.Status.OK) {
-        for (let i = 0; i < result.length; i++) {
-          // 행정동의 region_type 값은 'H' 이므로
-          if (result[i].region_type === "B") {
-            dispatch(mapCenter({ x: result[i].x, y: result[i].y }));
-            address = result[i].address_name;
-            console.log(address);
-          }
-        }
+        const { region_1depth_name, region_2depth_name, region_3depth_name } =
+          result[0].address;
+        dispatch(
+          mapCenter({
+            x: map.getCenter().La,
+            y: map.getCenter().Ma,
+            address: `${region_1depth_name} ${region_2depth_name} ${region_3depth_name}`,
+          })
+        );
       }
     }
-  }, [selectPlace.x, selectPlace.y]);
+  }, [selPlace, data]);
   return (
     <>
       <Map id="map"></Map>

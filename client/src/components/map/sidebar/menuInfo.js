@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as fullHeart } from "@fortawesome/free-solid-svg-icons";
@@ -6,28 +6,48 @@ import { faHeart as EmptyHeart } from "@fortawesome/free-regular-svg-icons";
 import { useSelector, useDispatch } from "react-redux";
 import theme from "../../../styles/theme";
 const axios = require("axios");
-export default function MenuInfo({ place, menu, price }) {
-  const selPlace =useSelector(state=> state.selectPlace)
-  const user =useSelector(state=> state.isLogin)
+export default function MenuInfo({ place, menu, price, like }) {
+  const selPlace = useSelector((state) => state.selectPlace);
+  const user = useSelector((state) => state.userReducer);
   const [favirote, setFavirote] = useState(false);
-
+  useEffect(() => {
+    if (like) {
+      setFavirote(true);
+    } else {
+      setFavirote(false);
+    }
+  }, [like]);
   const onLike = () => {
-
-    axios.post(`http://localhost/restaurant/${selPlace.id}/like`,{},{headers:{
-      authorization: `Bearer ${user.acessToken}`}}
-      ).then(
-        res=> {console.log(res)
-          setFavirote(true);}
+    axios
+      .post(
+        `${process.env.REACT_APP_SERVER_URL}/restaurant/${selPlace.id}/like`,
+        {},
+        {
+          headers: {
+            authorization: `Bearer ${user.accessToken}`,
+          },
+        }
       )
+      .then((res) => {
+        console.log(res);
+        setFavirote(true);
+      });
   };
 
   const onDisLike = () => {
-    axios.delete(`http://localhost/restaurant/${selPlace.id}/dislike`,{headers:{
-      authorization: `Bearer ${user.acessToken}`}}
-      ).then(
-        res=> {console.log(res)
-          setFavirote(false);}
+    axios
+      .delete(
+        `${process.env.REACT_APP_SERVER_URL}/restaurant/${selPlace.id}/dislike`,
+        {
+          headers: {
+            authorization: `Bearer ${user.accessToken}`,
+          },
+        }
       )
+      .then((res) => {
+        console.log(res);
+        setFavirote(false);
+      });
   };
 
   return (
@@ -45,14 +65,16 @@ export default function MenuInfo({ place, menu, price }) {
         )}
       </Placename>
       <Menubar>
-        {menu=== [] ?menu.map((x, idx) => {
-          return (
-            <MenuPrice>
-              <Menu> {x}</Menu>
-              <Price> {price[idx]}</Price>
-            </MenuPrice>
-          );
-        }): ""}
+        {menu.length !== 0
+          ? menu.map((x, idx) => {
+              return (
+                <MenuPrice>
+                  <Menu> {x}</Menu>
+                  <Price> {price[idx]}</Price>
+                </MenuPrice>
+              );
+            })
+          : ""}
       </Menubar>
     </Temp>
   );
@@ -63,7 +85,7 @@ const Temp = styled.div`
   flex-direction: column;
   width: 80%;
   margin: 1rem;
-  border-bottom: 0.1rem solid rgba(187, 187, 187, 0.5);;
+  border-bottom: 0.1rem solid rgba(187, 187, 187, 0.5); ;
 `;
 const Placename = styled.div`
   display: flex;
@@ -80,7 +102,7 @@ const Picture = styled.img`
 `;
 const Name = styled.div`
   justify-content: flex-start;
-  color: ${theme.colors.brown}
+  color: ${theme.colors.brown};
 `;
 
 const Menubar = styled.div`
@@ -94,7 +116,7 @@ const MenuPrice = styled.div`
   justify-content: space-between;
   margin: 0.2rem;
   font-weight: 100;
-  color: ${theme.colors.mapgrey}
+  color: ${theme.colors.mapgrey};
 `;
 const Menu = styled.div``;
 const Price = styled.div``;

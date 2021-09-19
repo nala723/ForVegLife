@@ -8,7 +8,6 @@ module.exports = async (req, res) => {
    try { const category = req.params.category
     const address = req.params.address
     
-    console.log(address)
     let data = []
     const allData = await models.place.findAll({
       include: [
@@ -22,7 +21,7 @@ module.exports = async (req, res) => {
         [Op.like]: address +"%"
       }},raw:true
     })
-    console.log(allData)
+
 
     for(let i =0; i<allData.length; i++){
       data.push({

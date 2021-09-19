@@ -33,6 +33,6 @@ app.get('/',(req,res)=>{
     res.status(201).send('hello world');
 })
 
-app.listen(port,()=>{
+app.listen( port ,()=>{
     console.log('server running');
 })

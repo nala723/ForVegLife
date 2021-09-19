@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -298,28 +298,28 @@ const transform = keyframes`
 
 const Container = styled.div`
   width: calc(100%-7.313rem);
- height:100%;
- display: flex;
- flex-direction: column;
- margin-top:1rem;
- margin-left: 7.313rem;
- padding-right: 3.5rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+  margin-left: 7.313rem;
+  padding-right: 3.5rem;
 `;
 const Title = styled.div`
-  display:flex;
-  width:100%;
+  display: flex;
+  width: 100%;
   padding-top: 2.4rem;
-  padding-bottom:3rem;
+  padding-bottom: 3rem;
   font-size: var(--font-size-xl);
   font-style: var(--font-mypage);
   color: var(--color-darkgrey);
-`; 
+`;
 const Bottom = styled.div`
- height: 100%;
- margin-right: 3.5rem;
- flex-direction: column;
- align-items: flex-start;
-`; 
+  height: 100%;
+  margin-right: 3.5rem;
+  flex-direction: column;
+  align-items: flex-start;
+`;
 const SearchContainer = styled.div`
  width:100%;
  padding-bottom: 5rem;
@@ -356,7 +356,7 @@ const SearchContainer = styled.div`
   border: 1.5px solid var(--color-grey);
   border-radius: 0.5rem;
   background-image: url("/image/search.svg");
-  background-repeat: no-repeat; 
+  background-repeat: no-repeat;
   background-position: 96% 50%;
   box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
   :focus {
@@ -373,7 +373,7 @@ const SearchContainer = styled.div`
      border:2px solid var(--color-lightgreen);
       outline:none;
   }
- `;
+`;
 
 const DropDownContainer = styled.ul` 
 background-color: #ffffff;
@@ -409,17 +409,16 @@ outline:none; */
 `;
 
 const CardBox = styled.div`
-  display:grid;
-  width:100%;
-  min-height:40rem;
+  display: grid;
+  width: 100%;
+  min-height: 40rem;
   height: auto;
-  grid-template-columns: repeat(auto-fill,minmax(12.313rem,1fr)); 
-  grid-template-rows: repeat(auto-fill,minmax(14.313rem,1fr)); 
-  grid-auto-columns: minmax(12.313rem,12.313rem);
-  grid-auto-rows: minmax(14.313rem,14.313rem);
+  grid-template-columns: repeat(auto-fill, minmax(12.313rem, 1fr));
+  grid-template-rows: repeat(auto-fill, minmax(14.313rem, 1fr));
+  grid-auto-columns: minmax(12.313rem, 12.313rem);
+  grid-auto-rows: minmax(14.313rem, 14.313rem);
   gap: 30px 15px;
-
-`; 
+`;
 const Card = styled.div`
    width:12.313rem;  
    height: 14.313rem;
