@@ -1,6 +1,7 @@
 export const ISLOGIN = "ISLOGIN";
 export const MAPCENTER = "MAPCENTER";
 export const SELECTPLACE = "SELECTPLACE";
+export const GET_GOOGLE_TOKEN = "GET_GOOGLE_TOKEN";
 
 // my page
 export const USER_INFO = "USER_INFO";
@@ -24,6 +25,18 @@ export const mapCenter = (data) => {
 export const selectPlace = (data) => {
   return { type: SELECTPLACE, payload: {data} };
 };
+
+//get googletoken
+
+export const googleToken = (data) => {
+  return {
+    type: GET_GOOGLE_TOKEN,
+    payload:{
+      data
+    }
+  }
+}
+
 
 //new accessToken
 export const newAccessToken = (data) => {
@@ -86,3 +99,4 @@ export const deletemyfavorite = (id) => {
     }
   }
 } 
+

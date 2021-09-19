@@ -16,6 +16,8 @@ export default function Star() {
     const history = useHistory();
     const reviewState = useSelector((state)=> state.myPlaceReducer.myReviews);
     const userState = useSelector((state)=> state.userReducer);
+    const googleState = useSelector((state)=> state.googleReducer);
+    const {googleToken} = googleState;
     const placeId = reviewState.placeId;
     const accessToken = userState.accessToken;
     const dummyReivews = dummydatas.reviews;
@@ -44,6 +46,11 @@ export default function Star() {
     setIsActive(false)
    
   }, [inputValue,isActive]);
+  
+  if(googleToken){
+    accessToken = googleToken;
+  }
+ 
  
   // 카카오 
   const status = useScript("https://developers.kakao.com/sdk/js/kakao.min.js");

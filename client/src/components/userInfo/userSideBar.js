@@ -85,7 +85,6 @@ const Container =styled.div`
  height: 30.9rem;
  display: flex;
  flex-direction: column;
-
 `;
 const Top =styled.div`
   height: 15rem;
@@ -93,7 +92,6 @@ const Top =styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-
 `;
 const UserBox = styled.div`
    width: 7.063rem;

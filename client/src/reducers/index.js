@@ -5,6 +5,7 @@ import MapCenter from "./MapCenter";
 import selectPlace from "./selectPlace";
 import userReducer from './userReducer';
 import myPlaceReducer from "./myPlaceReducer";
+import googleReducer from './googleReducer';
 
 const persistConfig = {
 	key: "root",
@@ -13,6 +14,7 @@ const persistConfig = {
   
 	whitelist: [     //----->여러 reducer 중 이것만 저장
     "userReducer",
+    "googleReducer"
   ],
 	// blacklist -> 그것만 제외합니다
 };
@@ -21,7 +23,8 @@ const rootReducer = combineReducers({
   userReducer,
   MapCenter,
   selectPlace,
-  myPlaceReducer
+  myPlaceReducer,
+  googleReducer
 
 });
 

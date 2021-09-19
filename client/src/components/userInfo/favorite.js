@@ -1,13 +1,14 @@
-import React from "react";
+import React, {useState, useEffect }from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { getmyfavorite,newAccessToken,deletemyfavorite } from "../../actions";
+import { getmyfavorite,newAccessToken,deletemyfavorite} from "../../actions";
 import axios from "axios";
 import { dummydatas } from "./dummydatas";
 import theme from "../../styles/theme";
 import { keyframes } from "styled-components";
 import {useScript} from '../../hooks/useScript';
+
 require('dotenv').config();
 const { Kakao } = window;
 
@@ -17,6 +18,8 @@ export default function Favorite() {
   const history = useHistory();
   const myfavState = useSelector((state)=> state.myPlaceReducer.myFavPlaces);
   const userState = useSelector((state)=> state.userReducer);
+  const googleState = useSelector((state)=> state.googleReducer);
+  const {googleToken} = googleState;
   const placeId = myfavState.placeId;
   const accessToken = userState.accessToken;
   const dummyplace = dummydatas.favorites;
@@ -35,8 +38,8 @@ export default function Favorite() {
   useEffect(()=> {
     getFavList()
   },[])
-
-
+ 
+ 
   // 검색창 텍스트 유무확인
   useEffect(() => {
     if (inputValue === '' || isActive) {
@@ -46,6 +49,10 @@ export default function Favorite() {
     setIsActive(false)
    
   }, [inputValue,isActive]);
+
+  if(googleToken){
+    accessToken = googleToken;
+  }
  
   // 카카오 
   const status = useScript("https://developers.kakao.com/sdk/js/kakao.min.js");
@@ -66,6 +73,7 @@ export default function Favorite() {
   // 유저가 즐찾한 것 목록 받아오기  
   
   const getFavList= () => {
+  
       axios
           .get(`${process.env.REACT_APP_SERVER_URL}/mypage/like`,{ 
             headers: {
