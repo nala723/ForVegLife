@@ -10,7 +10,7 @@ import axios from 'axios';
 export default function SignOut() {
     const userState = useSelector((state) => state.userReducer)
     const {
-        user: { accessToken, email, nickName, vegType, password, profileblob, isLogin } 
+       accessToken, email, nickName, vegType, password, profileblob, isLogin 
     } = userState;
     const dispatch = useDispatch();
     const history = useHistory();
