@@ -604,7 +604,7 @@ const VegImgBox = styled.div`
 const VegImg = styled.img`
   height:50px;
   width:50px;
-  margin-bottom:0.6rem; 
+  margin-bottom:0.6rem;     
   transition: all 0.2s ease;
   :hover{
        cursor:pointer;
