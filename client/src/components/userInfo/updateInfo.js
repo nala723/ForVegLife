@@ -8,6 +8,8 @@ import { userInfo,userUpdateInfo,newAccessToken} from "../../actions/index";
 import {Buffer} from 'buffer';
 import axios from 'axios';
 import { dummydatas } from "./dummydatas";
+import dotenv from 'dotenv';
+dotenv.config();
 
 export default function UpdateInfo() {
     const userState = useSelector((state) => state.userReducer);
@@ -35,7 +37,6 @@ export default function UpdateInfo() {
     const refPasswordCheck = useRef(null);
     const photoInput = useRef(null);
     const veggieIcon = dummydatas.veggieIcon; // 임시 - 더미데이터, 추후 교체
-    console.log(`gkgkgk`,accessToken,userState)
 
     // 최초 렌더링시 유저정보 받아오기
     useEffect(()=>{
@@ -46,10 +47,11 @@ export default function UpdateInfo() {
         }
     },[])
 
-   // 유저 정보 요청 함수
+
+   // 유저 정보 요청 함수 - 통과
     const getUserInfo = (accessToken) => {
         axios
-          .get(`${process.env.REACT_APP_SERVER_URL}/mypage/user-info`,{
+          .get(process.env.REACT_APP_SERVER_URL + '/mypage/user-info',{
             headers: {
                 "Content-Type": "multipart/form-data",
                 authorization: `Bearer ` + accessToken
@@ -61,6 +63,7 @@ export default function UpdateInfo() {
               dispatch(newAccessToken({accessToken: res.headers.accessToken}));
               }
              if(res.status === 200){
+                 console.log(res.data)
                    dispatch(userInfo({nickName :res.data.nickname,vegType :res.data.vegType,profileblob:res.data.profileblob, email:res.data.email}))
                  // 상태전달 
              }
@@ -74,23 +77,26 @@ export default function UpdateInfo() {
         })
     }
     
-    // 프로필 이미지 설정
-    let profileIMG
-    if(typeof(profileblob)==='string'){
-        profileIMG = profileblob;
-    }else{
-        profileIMG =  'data:image/png;base64, '+ Buffer(profileblob,'binary').toString('base64');
-    } 
+    // // 프로필 이미지 설정
+   
+    let profileIMG 
+    if(Object.keys(profileblob).length === 0){
+        profileIMG = "/image/bros_blank.jpg"
+    }
+     else{ 
+        profileIMG = 'data:image/png;base64, '+ Buffer(profileblob,'binary').toString('base64')
+       };
 
    // 이미지 업로드
     const imageFileHandler = (key) => (e) => {
         e.preventDefault();
         let reader = new FileReader();
-        let file = e.target.files[0];
-        if(file.size>4000000){
-            setImageSizeError(true)
-        }else{
-            setImageSizeError(false)
+        let file = e.target.files[0];  
+         console.log('이미지업로드',file)
+        // if(file.size>4000000){
+        //     setImageSizeError(true)
+        // }else{
+        //     setImageSizeError(false)
             reader.onloadend = () => {
                 setCurrentInput({
                     ...currentInput,
@@ -99,24 +105,35 @@ export default function UpdateInfo() {
                 })
             }
             reader.readAsDataURL(file);
-            console.log('이미지업로드',currentInput)
+         
           
-        }
+        // }
     }
 
    // open모달 위한 상태변경함수
     const handleClick = () => {
+        
         // 아무것도 변경안했을때와 분기(다른모달)
-        if((currentInput.inputPassword && inValidEditMSG) || !currentInput.imgFile || !currentInput.inputVegtype){
-            setIsOpen(false)
+        // if((currentInput.inputPassword && inValidEditMSG) || !currentInput.imgFile || !currentInput.inputVegtype){
+        //     setIsOpen(false)
+        // }
+        // if((currentInput.inputPassword && !inValidEditMSG) || currentInput.imgFile || currentInput.inputVegtype ){
+        //     setIsOpen(true)
+        // }
+        setIsOpen(!isOpen)
+        if((isOpen===true) && changed){
+            console.log('마이페이지업뎃 안되냐')
+            setCurrentInput({
+                ...currentInput,
+                 inputPassword:'',
+                 inputPasswordCheck:'',
+                 inputVegtype:''
+
+            })
+            getUserInfo(accessToken) 
+            history.push('/mypage')
         }
-        if((currentInput.inputPassword && !inValidEditMSG) || currentInput.imgFile || currentInput.inputVegtype ){
-            setIsOpen(true)
-        }
-        if(!isOpen && changed){
-            history.push('/mypage/updateinfo') // or함수호출?
-        }
-      setIsOpen(!isOpen)
+        
     }
 
    // 카메라아이콘 커스텀
@@ -146,7 +163,11 @@ export default function UpdateInfo() {
     
      // 유효성 검사
     const checkValidPW = ()=>{
+
      let pw= currentInput.inputPassword
+     if(!pw && !currentInput.inputPasswordCheck){
+         return
+     }
      let num = pw.search(/[0-9]/g);
      let eng = pw.search(/[a-z]/ig);
      let spe = pw.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
@@ -187,13 +208,20 @@ export default function UpdateInfo() {
     //회원정보 수정 - 추후 퀄리티 업
 
     const onSubmitHandler = async (e) => { //현재 안먹힘
-        if((currentInput.inputPassword && inValidEditMSG) || !currentInput.imgFile || !currentInput.inputVegtype){
-            return;
-        }
+        console.log('왜안되나')
+
         e.preventDefault();
+        if(inValidEditMSG){
+            return
+        }
+         if((!currentInput.inputPassword || !currentInput.imgFile || !currentInput.inputVegtype || inValidEditMSG)){
+            setInvalidEditMSG('입력을 모두 완료해주세요') 
+            return
+         } 
+      
         const MAX_WIDTH = 320;
         const MAX_HEIGHT = 180;
-        const MIME_TYPE = "image/jpeg";
+        const MIME_TYPE = "image/*";
         const QUALITY = 0.7;
 
         let imgforaxios;
@@ -218,15 +246,15 @@ export default function UpdateInfo() {
             (blob) => {
                 imgforaxios=blob;
                 const formData = new FormData();
-                formData.append("profileblob",imgforaxios);
+                formData.append("profile",imgforaxios);
                 formData.append("password",currentInput.inputPassword);
                 formData.append("vegType",currentInput.inputVegtype);
                 for(let key of formData.entries()){ /* 데이터 체크 ,*/
-                    console.log(`${key}`)
+                    console.log(`${key}`,'왜안ㄴ와')
                    }
-               
+                   console.log(currentInput)
                     axios
-                    .patch(`${process.env.REACT_APP_SERVER_URL}/mypage/user-info`,formData,{
+                    .patch(process.env.REACT_APP_SERVER_URL + `/mypage/user-info`,formData,{
                            headers: {
                                 "Content-Type": "multipart/form-data",
                                 authorization: `Bearer ` + accessToken
@@ -238,15 +266,18 @@ export default function UpdateInfo() {
                                 dispatch(newAccessToken(res.headers.accessToken));
                                 }
                             if(res.status === 200){
-                                     dispatch(userUpdateInfo({vegType: res.data.vegType,profileblob: res.data.profile,password: res.data.password}))
+                                dispatch(userUpdateInfo({vegType: currentInput.inputVegtype,profileblob: currentInput.imgFile}))
+                                    
                                    // 그다음은 얻은 상태정보들을 전달
                                     // 모달 오픈 위한 콜
-                                    handleClick();
+                                   console.log('전송된건가')
                                      setIsChanged(true);
+                                     handleClick();
                              }
                              else{
                                  history.push('/notfound');
                              }
+                         
                             //  setIsLoding(false) 
                         })
                         .catch(error=>
@@ -311,7 +342,7 @@ export default function UpdateInfo() {
        )
    }
 
-
+  
 
     return (
         <Container>
@@ -323,8 +354,8 @@ export default function UpdateInfo() {
                <UserTop>     
                    <UserPhotoBox >
                        <UserPhoto>   
-                            <input type='file' accept='image/*' name='profileImage' ref={photoInput}
-                            onChange={imageFileHandler('profileblob')}  />
+                            <input type='file' accept='image/*' name='profile' ref={photoInput}
+                            onChange={imageFileHandler('profile')}  />
                              <Camera src="/image/camera.svg" onClick={handlePhotoClick} />
                                  <UserPic src={currentInput.imgFile?currentInput.previewUrl : profileIMG }/>   
                        </UserPhoto>
@@ -348,13 +379,13 @@ export default function UpdateInfo() {
                 </UserTop>
                  <UserBottom>
                  <UserBotBox className={inValidEditMSG ? 'msg' : ''}>
-                 <h5>{currentInput.inputPassword ? inValidEditMSG : null}</h5>
+                 <h5>{inValidEditMSG  ? inValidEditMSG : null}</h5>
                     <UserNm primary> 
                             <UserIcon src="/image/lock.svg" primary/>
                             <UserContent >
                                 <p>new PW</p> 
                               <PwContainer placeholder="새 비밀번호를 입력해주세요"  onChange={handleInputValue('inputPassword')}
-                                onKeyPress={handleMoveTopPW} ref={refPassword} onBlur={checkValidPW}/>
+                                onKeyPress={handleMoveTopPW} ref={refPassword} onBlur={checkValidPW} value={currentInput.inputPassword}/>
                            </UserContent>
                         </UserNm >
                        <UserNm >
@@ -362,7 +393,7 @@ export default function UpdateInfo() {
                            <UserContent>
                                <p>new PW</p>
                              <PwContainer placeholder="새 비밀번호를 재입력해주세요" onChange={handleInputValue('inputPasswordCheck')}
-                             onKeyPress={handleMoveTopPWCheck} ref={refPasswordCheck} onBlur={handleCompleteInput} />
+                             onKeyPress={handleMoveTopPWCheck} ref={refPasswordCheck} onBlur={handleCompleteInput} value={currentInput.inputPasswordCheck}/>
                            </UserContent>
                        </UserNm >
                     </UserBotBox>
@@ -615,8 +646,8 @@ const VegImg = styled.img`
    &.selected{
        border-radius:100%;
        transform: scale(1.1);
-       border: 2px solid ${theme.colors.lightgreen};
        transition: all 0.3s ease;
+       border: 2px solid #B4E943;
    }
 `;
 const ButtonBox = styled.div`
