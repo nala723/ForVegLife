@@ -21,8 +21,6 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const [loginModal, setLoginModal] = useState(false);
   const [registerModal, setRegisterModal] = useState(false);
-  const [Link, setLink] = useState("map");
-  localStorage.setItem("link", Link);
   const userLogin = () => {
     setLoginModal(true);
     console.log(loginModal);
@@ -40,51 +38,35 @@ const Navbar = () => {
     dispatch(isLogin({ isLogin: false, email: null, nickName: null }));
     setLoginModal(false);
     setRegisterModal(false);
+    window.location.href = "/";
   };
 
   return (
     <>
       <Router>
         {loginState.isLogin ? (
-          Link === "map" ? (
-            <Header>
-              <Logo>Logo</Logo>
-              <StyledLogin onClick={logout}>Logout</StyledLogin>
-              <StyledMypage to="/mypage" onClick={() => setLink("mypage")}>
-                Mypage
-              </StyledMypage>
-              <Image
-                src={
-                  typeof loginState.profile === "string"
-                    ? loginState.profile
-                    : "data:image/png;base64," +
-                      Buffer(loginState.profileblob, "binary").toString(
-                        "base64"
-                      )
-                }
-              />
-            </Header>
-          ) : (
-            <Header>
-              <Logo>Logo</Logo>
-              <StyledLogin to="/  " onClick={logout}>
-                Logout
-              </StyledLogin>
-              <StyledMypage to="/" onClick={() => setLink("map")}>
-                main
-              </StyledMypage>
-              <Image
-                src={
-                  typeof loginState.profile === "string"
-                    ? loginState.profile
-                    : "data:image/png;base64," +
-                      Buffer(loginState.profileblob, "binary").toString(
-                        "base64"
-                      )
-                }
-              />
-            </Header>
-          )
+          <Header>
+            <Logo>Logo</Logo>
+
+            <StyledLogin to="/" onClick={() => logout()}>
+              Logout
+            </StyledLogin>
+            <Route exact path="/">
+              <StyledMypage to="/mypage">Mypage</StyledMypage>
+            </Route>
+            <Route path="/mypage">
+              <StyledMypage to="/">map</StyledMypage>
+            </Route>
+
+            <Image
+              src={
+                typeof loginState.profile === "string"
+                  ? loginState.profile
+                  : "data:image/png;base64," +
+                    Buffer(loginState.profileblob, "binary").toString("base64")
+              }
+            />
+          </Header>
         ) : (
           <Header>
             <Logo>Logo</Logo>
@@ -94,7 +76,25 @@ const Navbar = () => {
         )}
 
         <Switch>
-          <Route exact path="/*">
+          <Route exact path="/">
+            <MapPage login={loginModal} register={registerModal}>
+              {loginState.isLogin ? (
+                ""
+              ) : loginModal ? (
+                <Login exit={userLoginExit} />
+              ) : (
+                ""
+              )}
+              {loginState.isLogin ? (
+                ""
+              ) : registerModal ? (
+                <SignUp exit={RegisterExit} />
+              ) : (
+                ""
+              )}
+            </MapPage>
+          </Route>
+          <Route exact path="/?">
             <MapPage login={loginModal} register={registerModal}>
               {loginState.isLogin ? (
                 ""

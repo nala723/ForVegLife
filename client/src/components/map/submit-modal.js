@@ -79,12 +79,19 @@ export default function EnrollPlace(props) {
           onChange={changePlace}
           placeholder="주소를 입력해 주세요"
         />
-        <InputForm
+        <TypeForm
           name="type"
           value={place.type}
           onChange={changePlace}
           placeholder="채식타입을 선택해 주세요"
-        />
+        >
+          <option value="">채식타입을 선택해 주세요</option>
+          <option value="비건">비건</option>
+          <option value="락토">락토</option>
+          <option value="오보">오보</option>
+          <option value="락토오보">락토오보</option>
+          <option value="페스코">페스코</option>
+        </TypeForm>
         <Keyword>
           {menu.map((x, idx) => {
             return (
@@ -154,6 +161,15 @@ const Message = styled.div`
   margin: 1rem;
 `;
 const InputForm = styled.input`
+  width: 80%;
+  height: 2.5rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  border: 0.5px solid #bbbbbb;
+  text-align: left;
+  text-indent: 2rem;
+`;
+const TypeForm = styled.select`
   width: 80%;
   height: 2.5rem;
   border-radius: 0.5rem;
