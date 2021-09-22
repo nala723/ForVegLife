@@ -35,7 +35,7 @@ export default function Login(props) {
           isLogin({
             isLogin: true,
             email: user.email,
-            nickName: res.data.nickName,
+            nickName: res.data.nickname,
             accessToken: res.data.accessToken,
             profileblob: res.data.profileblob,
           })

@@ -43,11 +43,9 @@ const Navbar = () => {
             <StyledLogin onClick={logout}>Logout</StyledLogin>
             <StyledMypage to="/mypage">Mypage</StyledMypage>
             <Image
-              src={
-                typeof loginState.profile === "string"
-                  ? loginState.profile
-                  : "data:image/png;base64," +
-                    Buffer(loginState.profileblob, "binary").toString("base64")
+              src={''
+                  // "data:image/png;base64," +
+                  //   Buffer(loginState.profileblob, "binary").toString("base64")
               }
             />
           </Header>

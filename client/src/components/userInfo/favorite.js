@@ -7,16 +7,17 @@ import axios from "axios";
 import { dummydatas } from "./dummydatas";
 import theme from "../../styles/theme";
 import { keyframes } from "styled-components";
-import {useScript} from '../../hooks/useScript';
+import { TraceSpinner } from "react-spinners-kit";
+import dotenv from 'dotenv';
+dotenv.config();
 
-require('dotenv').config();
-const { Kakao } = window;
+
 
 
 export default function Favorite() {
   const dispatch = useDispatch();
   const history = useHistory();
-  const myfavState = useSelector((state)=> state.myPlaceReducer.myFavPlaces);
+  const myfavState = useSelector((state)=> state.myPlaceReducer);
   const userState = useSelector((state)=> state.userReducer);
   const googleState = useSelector((state)=> state.googleReducer);
   const {googleToken} = googleState;
@@ -25,20 +26,26 @@ export default function Favorite() {
   const dummyplace = dummydatas.favorites;
   const dummyAdress = dummyplace.map(el => el.address);
 
-  const [hasText, setHasText] = useState(false);
+  const [hasText, setHasText] = useState(false);// -- 검색 후 필터링 가능
   const [inputValue, setInputValue] = useState('');
-  // const [options, setOptions] = useState(myFavState.address)
-  // const [places,setPlaces] = useState(myfavState); -- 검색 후 필터링 가능
-  const [options, setOptions] = useState(dummyAdress);
-  const [places, setPlaces] = useState(dummyplace);
+  const [options, setOptions] = useState([]) // 즐찾 없는 유저도 있을수 있으므로 초기값
+  const [places,setPlaces] = useState([]);
+  // const [options, setOptions] = useState(dummyAdress);
+  // const [places, setPlaces] = useState(dummyplace);
   const [selected, setSelected] = useState(-1);
   const [isActive, setIsActive] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+   let PlaceState = myfavState.myFavPlaces;
+   let PlaceAdress = (PlaceState !== undefined) ? PlaceState.map(el => el.address) : []
+
 
   //최초렌더링시- 
   useEffect(()=> {
     getFavList()
+    
   },[])
- 
+  console.log(myfavState,userState,'되라') //아무것도 저장 안했을시 처리
  
   // 검색창 텍스트 유무확인
   useEffect(() => {
@@ -50,35 +57,38 @@ export default function Favorite() {
    
   }, [inputValue,isActive]);
 
+
+  let token
   if(googleToken){
-    accessToken = googleToken;
+    token = googleToken;
+  }else{
+    token = accessToken;
   }
  
-  // 카카오 
-  const status = useScript("https://developers.kakao.com/sdk/js/kakao.min.js");
-  
-  // kakao sdk 초기화하기
-   // status가 변경될 때마다 실행되며, status가 ready일 때 초기화를 시도합니다.
-   useEffect(() => {
-     if (status === "ready" && Kakao) {
-         // 중복 initialization 방지
-         if (!Kakao.isInitialized()) {
-             // 두번째 step 에서 가져온 javascript key 를 이용하여 initialize
-             Kakao.init(process.env.REACT_APP_JAVASCRIPT_KEY);
-             console.log('되나이거')
-         }
-     }
- }, [status]);
+
+//카카오
+  useEffect(() => {
+    const script = document.createElement('script')
+    script.src = 'https://developers.kakao.com/sdk/js/kakao.min.js'
+    script.async = true
+    document.body.appendChild(script)
+    
+    return () => {
+      document.body.removeChild(script)
+    }
+  }, ['https://developers.kakao.com/sdk/js/kakao.min.js'])
+ 
+
 
   // 유저가 즐찾한 것 목록 받아오기  
   
   const getFavList= () => {
-  
+     setLoading(true)
       axios
-          .get(`${process.env.REACT_APP_SERVER_URL}/mypage/like`,{ 
+          .get(process.env.REACT_APP_SERVER_URL + '/mypage/like',{ 
             headers: {
                 "Content-Type": "application/json",
-                authorization: `Bearer ` + accessToken
+                authorization: `Bearer ` + token
                 },
             withCredentials: true
         })
@@ -87,26 +97,38 @@ export default function Favorite() {
                 dispatch(newAccessToken({accessToken: res.headers.accessToken}));
             } 
              if(res.status === 200){
-                   dispatch(getmyfavorite({placeId: res.data.place_Id, title: res.data.title, pictureUrl: res.data.picture_url,address: res.data.address}))
-                 // 상태전달 
+        
+                  if((res.data.place).length > 0){
+                   dispatch(getmyfavorite( res.data.place.place_Id, res.data.title,  res.data.picture_url, res.data.address))
+                      //정보 받았으면 상태전달 
+                  setPlaces(PlaceState)
+                  setOptions(PlaceAdress)
+                  }
+                  else{
+                   setPlaces(dummyplace) // 더미데이터로 임시세팅 *
+                  setOptions(dummyAdress) 
+                  }
              }
              else{
                   history.push('/notfound');
              }
-            //  setIsLoding(false) 
+             setLoading(false) 
          })
          .catch(err => {
                 console.log(err)
+                
         })
   }
 
   // 삭제
- const deleteFavList = (name) => {
+ const deleteFavList = (e,name) => {
+   e.preventDefault();
+   setLoading(true)
    axios.
-     delete(`${process.env.REACT_APP_SERVER_URL}/restaurant/${placeId}/dislike`,{ 
+     delete(process.env.REACT_APP_SERVER_URL + `/restaurant/${placeId}/dislike`,{ 
       headers: {
           "Content-Type": "application/json",
-          authorization: `Bearer ` + accessToken
+          authorization: `Bearer ` + token
           },
       withCredentials: true
   })
@@ -116,14 +138,14 @@ export default function Favorite() {
       } 
        if(res.status === 200){
             //갖고 있는 상태의 장소의 이름과 일치하는 것- 의 placeId
-            let id = myfavState.filter((el)=> el.title === name)[0].placeId;
+            let id = places.filter((el)=> el.title === name)[0].placeId;
             dispatch(deletemyfavorite(id)) // 추후 보고 수정 객체형으로?
             getFavList() // 다시 렌더링 호출
        }
        else{
             history.push('/notfound');
        }
-      //  setIsLoding(false) 
+       setLoading(false) 
    })
    .catch(err => {
           console.log(err)
@@ -132,8 +154,11 @@ export default function Favorite() {
 
   // 모두 조회 버튼
   const handleAllview = () => {
-    setPlaces(dummyplace);  
-    setInputValue('');         /*서버 통신시 수정*/
+    setLoading(true)
+    // setPlaces(PlaceState)   // 실제구현   
+     setPlaces(dummyplace);  //임시 더미
+    setInputValue('');
+    setLoading(false)          /*서버 통신시 수정*/
   }
   
  // 다른 곳 클릭시 검색창 없어지게
@@ -144,7 +169,6 @@ export default function Favorite() {
 
   // 장소 별 검색 - 동 기준
   // 클릭하면- 드롭박스 식으로 밑으로 펼쳐짐 
-  // 1. 정확한 주소 / 2. 동까지  /3. 시
   const handleInputChange = (event) => {
     const { value } = event.target;
     if (value.includes('\\')) return;
@@ -157,20 +181,40 @@ export default function Favorite() {
 
     // dropdown을 위한 기능
     const filterRegex = new RegExp(value, 'i');
+
+    // let resultOptions
+    // if(PlaceAdress) {
+    //   resultOptions = PlaceAdress.filter((option) =>
+    //   option.match(filterRegex)
+    // );
+    // }  // 실제구현
+  
     const resultOptions = dummyAdress.filter((option) =>
       option.match(filterRegex)
-    );
+    );                                     // 임시더미
     setOptions(resultOptions);
     
   };
 
   const handleDropDownClick = (clickedOption) => {
     setInputValue(clickedOption);
-    const resultOptions = dummyAdress.filter(
+    let resultOptions  
+
+    // 실제구현
+    // if(PlaceAdress) {
+    //   resultOptions  = PlaceAdress.filter(
+    //     (option) => option === clickedOption
+    //   );
+
+    // }  
+
+    // 임시더미 *
+    resultOptions  = dummyAdress.filter(
       (option) => option === clickedOption
-    );
+    );                                          
     setOptions(resultOptions);
-    const dum = dummyplace.filter(dum=> dum.address === clickedOption)// 검색하고 선택한 결과 조회
+    // const dum = PlaceState.filter(dum=> dum.address === clickedOption)// 검색하고 선택한 결과 조회
+    const dum = dummyplace.filter(dum=> dum.address === clickedOption)  //  임시더미 *
     setPlaces(dum);
     setIsActive(true);
  
@@ -203,41 +247,55 @@ export default function Favorite() {
 
   // sns 공유 핸들러
  
-  const shareKakao = () => {
-    // console.log('카카오되라 첫번쨰')
-    // Kakao.init(process.env.REACT_APP_JAVASCRIPT_KEY);  // 사용할 앱의 JavaScript 키 설정
+  const shareKakao = (el) => {
+    if (window.Kakao) {
+      const Kakao = window.Kakao
+         // 중복 initialization 방지
+         if (!Kakao.isInitialized()) {
+          // 두번째 step 에서 가져온 javascript key 를 이용하여 initialize
+          Kakao.init(process.env.REACT_APP_JAVASCRIPT_KEY)
+          console.log(Kakao.isInitialized())
+        }
+  
     console.log('카카오되라')
     Kakao.Link.createDefaultButton({
       container: '#btnKakao', // 카카오공유버튼ID
       objectType: 'feed',
       content: {
-        title: places.title, // 보여질 제목
-        description: places.address, // 보여질 설명
-        imageUrl: "devpad.tistory.com/", // 콘텐츠 URL
+        title: el.title, // 보여질 제목
+        description: el.address, // 보여질 설명
+        imageUrl: "www.naver.com", // 콘텐츠 URL
         link: {
           mobileWebUrl: "devpad.tistory.com/",
           webUrl: "devpad.tistory.com/"
         }
       }
     });
-}
+  }
 
+  }
 
-
-  const shareTwitter = () => {
-    let sendText = places.title; // 전달할 텍스트
-    let sendUrl = `http://localhost:4000/restaurant/${placeId}`; // 전달할 URL
+  const shareTwitter = (el) => {
+    let sendText = el.title; // 전달할 텍스트
+    let sendUrl = `http://localhost:3000/restaurant/${el.placeId}`; // 전달할 URL
     window.open("https://twitter.com/intent/tweet?text=" + sendText + "&url=" + sendUrl);
   }
 
-  const shareFacebook = () => {
-    let sendUrl = `http://localhost:4000/restaurant/${placeId}`; // 전달할 URL
+  const shareFacebook = (el) => {
+    let sendUrl = `http://localhost:3000/restaurant/${el.placeId}`; // 전달할 URL
     window.open("http://www.facebook.com/sharer/sharer.php?u=" + sendUrl);
   }
 
   // 아직 아무장소도 등록하지 않았을 때, 핫플레이스(추천) 몇개 배치해둘 수도 있겠음.
 
-  
+    if(loading){
+      return ( 
+        < Loadingbox>
+          <StyledSpinner primary size={80} frontColor="#E2E700" backColor="#E2832B" loading={loading} />
+           </ Loadingbox>
+          )
+    }
+     
     return (
            <Container onClick={handleDropVisible}>
                  <Title>
@@ -269,15 +327,16 @@ export default function Favorite() {
                       {places.map((dum,idx) => {
                         return (
                            <Card key={idx}>
-                            <CardImg src={dum.img}/>
-                                <CardContent>
+                            <img src="/image/close.svg" className='selectcard' onClick={(e)=>deleteFavList(e,dum.title)}/>
+                            <CardImg src={dum.img}/> 
+                                <CardContent> 
                                   <h4>{dum.title}</h4>
                                   <p>{dum.address}</p>
                                 </CardContent>
                                <CardSns>
-                                 <img src="/image/kakaotalk.png" onClick={shareKakao} id="btnKakao"/>
-                                 <img src="/image/facebook.png" onClick={shareFacebook}/>
-                                 <img src="/image/twitter.png" onClick={shareTwitter}/>
+                                 <img src="/image/kakaotalk.png" onClick={()=>shareKakao(dum)} id="btnKakao"/>
+                                 <img src="/image/facebook.png" onClick={()=>shareFacebook(dum)}/>
+                                 <img src="/image/twitter.png" onClick={()=>shareTwitter(dum)}/>
                               </CardSns>
                         </Card>
                         )
@@ -436,12 +495,38 @@ const Card = styled.div`
    flex-direction: column;
    align-items:center;
    cursor: pointer;
+   position:relative;
    transition: all 0.3s ease;
+  
     :hover{
       box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
       transform: translateY(-5%);
       transition: all 0.3s ease;
+        >img{
+    
+        &.selectcard{
+          position:absolute;
+         width:0.7rem;
+         height:0.7rem;
+         top:0.7rem;
+         right:0.7rem;
+          opacity:1;
+         }
+        }
     }
+    >img{
+    
+      &.selectcard{
+        position:absolute;
+        width:0.7rem;
+        height:0.7rem;
+        top:0.7rem;
+        right:0.7rem;
+        opacity:0;
+        
+        }
+    }
+  
  
 `;
 const CardImg = styled.img`
@@ -457,6 +542,7 @@ const CardImg = styled.img`
        box-shadow: none;
        transform: none;
      }
+
 `;
 const CardContent = styled(Card)`
    text-align: center;
@@ -508,3 +594,15 @@ const GotoCard = styled(Card)`
    cursor: pointer;
 `;
 
+const Loadingbox = styled.div`
+ width: calc(100%-7.313rem);
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items:center;
+
+`;
+const StyledSpinner = styled(TraceSpinner)`
+  
+  
+ `; 

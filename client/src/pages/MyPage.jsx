@@ -59,22 +59,4 @@ const Line= styled.div`
  height: 100%;
 `;
 
-// <Route path="/mypage/star">
-// <Star />
-// </Route>
-// <Route path="/mypage/updateinfo">
-// <UpdateInfo />
-// </Route>
-// <Route path="/mypage/sign-out">
-// <SignOut/>
-// </Route>
-{/* <Route path="/mypage/star">
-<Star />
-</Route>
-<Route path="/mypage/updateinfo">
-<UpdateInfo />
-</Route>
-<Route path="/mypage/sign-out">
-<SignOut/>
-</Route>
-import SignOut from "../components/userInfo/sign-Out"; */}
+

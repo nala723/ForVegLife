@@ -7,30 +7,32 @@ import axios from "axios";
 import { dummydatas } from "./dummydatas";
 import theme from "../../styles/theme";
 import { keyframes } from "styled-components";
-import {useScript} from '../../hooks/useScript';
-require('dotenv').config();
-const { Kakao } = window;
+import ReactTooltip from 'react-tooltip'
+import dotenv from 'dotenv';
+dotenv.config();
+
 
 export default function Star() {
     const dispatch = useDispatch();
     const history = useHistory();
-    const reviewState = useSelector((state)=> state.myPlaceReducer.myReviews);
+    const reviewState = useSelector((state)=> state.myPlaceReducer);
     const userState = useSelector((state)=> state.userReducer);
     const googleState = useSelector((state)=> state.googleReducer);
     const {googleToken} = googleState;
-    const placeId = reviewState.placeId;
+    const placeId = reviewState.placeId;// 다시
     const accessToken = userState.accessToken;
     const dummyReivews = dummydatas.reviews;
     const dummyStars = dummyReivews.filter((el,idx) => idx < 5 ).map(el => el.img);
 
     const [hasText, setHasText] = useState(false);
     const [inputValue, setInputValue] = useState(''); 
-   // const [options, setOptions] = useState(dummyStars) 서버접속시 검색창의 별점 클릭시 조회, id로 필터링- 트리거
-  // const [reivews, setReivews] = useState(reviewState); 
-    const [options, setOptions] = useState(dummyStars);
-    const [reivews, setReivews] = useState(dummyReivews);
+   const [options, setOptions] = useState(dummyStars) //서버접속시 검색창의 별점 클릭시 조회, id로 필터링- 트리거
+   const [reivews, setReivews] = useState([]); 
+    // const [options, setOptions] = useState(dummyStars);
+    // const [reivews, setReivews] = useState(dummyReivews);  // 더미
     const [selected, setSelected] = useState(-1);
     const [isActive, setIsActive] = useState(false);
+    let ReviewState = reviewState.myReviews ? reviewState.myReviews.map(el => el.content):[]
 
      //최초렌더링시- 
   useEffect(()=> {
@@ -47,35 +49,35 @@ export default function Star() {
    
   }, [inputValue,isActive]);
   
+ 
+
+  let token
   if(googleToken){
-    accessToken = googleToken;
+    token = googleToken;
+  }else{
+    token = accessToken;
   }
  
- 
-  // 카카오 
-  const status = useScript("https://developers.kakao.com/sdk/js/kakao.min.js");
+//카카오
+useEffect(() => {
+  const script = document.createElement('script')
+  script.src = 'https://developers.kakao.com/sdk/js/kakao.min.js'
+  script.async = true
+  document.body.appendChild(script)
   
-  // kakao sdk 초기화하기
-   // status가 변경될 때마다 실행되며, status가 ready일 때 초기화를 시도합니다.
-   useEffect(() => {
-     if (status === "ready" && Kakao) {
-         // 중복 initialization 방지
-         if (!Kakao.isInitialized()) {
-             // 두번째 step 에서 가져온 javascript key 를 이용하여 initialize
-             Kakao.init(process.env.REACT_APP_JAVASCRIPT_KEY);
-             console.log('되나이거')
-         }
-     }
- }, [status]);
+  return () => {
+    document.body.removeChild(script)
+  }
+}, ['https://developers.kakao.com/sdk/js/kakao.min.js'])
 
   // 유저가 즐찾한 것 목록 받아오기  
   
   const getReviewList= () => {
       axios
-          .get(`${process.env.REACT_APP_SERVER_URL}/mypage/review`,{ 
+          .get(process.env.REACT_APP_SERVER_URL + '/mypage/review',{ 
             headers: {
                 "Content-Type": "application/json",
-                authorization: `Bearer ` + accessToken
+                authorization: `Bearer ` + token
                 },
             withCredentials: true
         })
@@ -83,20 +85,23 @@ export default function Star() {
             if(res.headers.accessToken){
                 dispatch(newAccessToken({accessToken: res.headers.accessToken}));
             } 
-             if(res.status === 200){ // review_star이 res.data.review_star인지 확인할것!!
+             if(res.status === 200){ 
+                  
+                 if((res.data.review_star).length > 0){
                    dispatch(
                        getmyreview(  // 상태전달 
-                           {
-                               placeId: res.data.review_star.placeId,
-                               title: res.data.review_star.title,
-                               content: res.data.review_star.content,
-                               star: res.data.review_star.star,
-                               createdAt: res.data.review_star.createdAt,
-                               reviewId: res.data.review_star.reviewId,
-                            }
+                               res.data.review_star.placeId,
+                               res.data.review_star.title,
+                               res.data.review_star.content,
+                               res.data.review_star.star,
+                               res.data.review_star.createdAt,
+                               res.data.review_star.reviewId,
+                         )
                        )
-                    )
-               
+                    setReivews(ReviewState)
+               } else {
+               setReivews(dummyReivews) // 임시, 실제시 삭제
+               }
              }
              else{
                   history.push('/notfound');
@@ -110,8 +115,9 @@ export default function Star() {
 
   // 모두 조회 버튼
   const handleAllview = () => {
-    setReivews(dummyReivews);  
-    setInputValue('');         /*서버 통신시 수정*/
+    setReivews(dummyReivews);      //더미 *
+    // setReivews(ReviewState)  // 실제 
+    setInputValue('');        
     setOptions(dummyStars);
   }
   
@@ -141,7 +147,8 @@ export default function Star() {
       (option) => option === clickedOption
     );
     setOptions(resultOptions);
-    const dum = dummyReivews.filter(dum=> dum.img === clickedOption)// 검색하고 선택한 결과 조회
+    // const dum = ReviewState.filter(dum=> dum.img === clickedOption)// 검색하고 선택한 결과 조회
+    const dum = dummyReivews.filter(dum=> dum.img === clickedOption)    // 임시
     setReivews(dum);
     setIsActive(true);
  
@@ -176,35 +183,42 @@ export default function Star() {
 
   // sns 공유 핸들러
  
-  const shareKakao = () => {
-    // console.log('카카오되라 첫번쨰')
-    // Kakao.init(process.env.REACT_APP_JAVASCRIPT_KEY);  // 사용할 앱의 JavaScript 키 설정
+   const shareKakao = (el) => {
+    if (window.Kakao) {
+      const Kakao = window.Kakao
+         // 중복 initialization 방지
+         if (!Kakao.isInitialized()) {
+          // 두번째 step 에서 가져온 javascript key 를 이용하여 initialize
+          Kakao.init(process.env.REACT_APP_JAVASCRIPT_KEY)
+          console.log(Kakao.isInitialized())
+        }
+  
     console.log('카카오되라')
     Kakao.Link.createDefaultButton({
       container: '#btnKakao', // 카카오공유버튼ID
       objectType: 'feed',
       content: {
-        title: reivews.title, // 보여질 제목
-        description: reivews.content, // 보여질 설명
-        imageUrl: "devpad.tistory.com/", // 콘텐츠 URL
+        title: el.title, // 보여질 제목
+        description: el.content, // 보여질 설명
+        imageUrl: "www.naver.com", // 콘텐츠 URL
         link: {
           mobileWebUrl: "devpad.tistory.com/",
           webUrl: "devpad.tistory.com/"
         }
       }
     });
-}
+  }
 
+  }
 
-
-  const shareTwitter = () => {
-    let sendText = reivews.title; // 전달할 텍스트
-    let sendUrl = `http://localhost:4000/restaurant/${placeId}`; // 전달할 URL
+  const shareTwitter = (el) => {
+    let sendText = el.title; // 전달할 텍스트
+    let sendUrl = `http://localhost:3000/restaurant/${el.placeId}`; // 전달할 URL
     window.open("https://twitter.com/intent/tweet?text=" + sendText + "&url=" + sendUrl);
   }
 
-  const shareFacebook = () => {
-    let sendUrl = `http://localhost:4000/restaurant/${placeId}`; // 전달할 URL
+  const shareFacebook = (el) => {
+    let sendUrl = `http://localhost:3000/restaurant/${el.placeId}`; // 전달할 URL
     window.open("http://www.facebook.com/sharer/sharer.php?u=" + sendUrl);
   }
   
@@ -240,18 +254,25 @@ export default function Star() {
            <CardBox>
                  {reivews.map((dum,idx) => {
                         return (
-                           <Card key={idx}>
-                                <CardContent>
+                          <div key={idx}>
+                           <Card data-tip data-for={dum.content ?`${idx}` : null}>
+                                <CardContent >
                                   <h4>{dum.title}</h4>
                                   <img src={dum.img} className="star"/>
-                                  <div>{dum.content ? '...내 리뷰보기' : ""}</div>
+                                  <div>{dum.content ? '.....' : ""}</div>
                                 </CardContent>
                                <CardSns>
-                                 <img src="/image/kakaotalk.png" onClick={shareKakao} id="btnKakao"/>
-                                 <img src="/image/facebook.png" onClick={shareFacebook}/>
-                                 <img src="/image/twitter.png" onClick={shareTwitter}/>
+                                <img src="/image/kakaotalk.png" onClick={()=>shareKakao(dum)} id="btnKakao"/>
+                                 <img src="/image/facebook.png" onClick={()=>shareFacebook(dum)}/>
+                                 <img src="/image/twitter.png" onClick={()=>shareTwitter(dum)}/>
                               </CardSns>
                         </Card>
+                          {dum.content ? (
+                                <StyledTooltip id={`${idx}`} place="top"  type="success" effect="solid" className="toolTip">
+                                  {dum.content}
+                                </StyledTooltip>)
+                                :null}
+                        </div>
                         )
                       })}
                  <GotoCard onClick={(e)=>gotomap(e)}>+<p></p>나의 장소 만들러가기</GotoCard>
@@ -317,11 +338,11 @@ const SearchContainer = styled.div`
     background-color: transparent;
     color: ${theme.colors.mapgrey};
     cursor: pointer;
-    transition: all 0.5s ease;
+    transition: all 0.3s linear;
      :hover {
        background-color: ${theme.colors.lightgreen};
        /* border: 2px solid var(--color-lightgreen); */
-       transition: all 0.5s ease;
+       transition: all 0.3s linear;
      }
     }
 `;
@@ -409,7 +430,7 @@ const Card = styled.div`
    transition: all 0.3s ease;
     :hover{
       box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
-      transform: translateY(-5%);
+      /* transform: translateY(-5%); */
       transition: all 0.3s ease;
     }
 `;
@@ -437,6 +458,8 @@ const CardContent = styled(Card)`
     >div{
       color:${theme.colors.mapgrey};
       font-size: 13px;
+      letter-spacing: 3px;
+      font-weight: 900;
       :hover{
         border-bottom: 1px solid ${theme.colors.mapgrey};
       }
@@ -470,3 +493,19 @@ const GotoCard = styled(Card)`
     cursor: pointer;
 `;
 
+const StyledTooltip = styled(ReactTooltip)`
+   &.toolTip{
+      max-width: 12rem;
+      min-height:2rem;
+      line-height: 1rem;
+      /* text-align:center; */
+      background-color: ${theme.colors.darkgrey};
+      
+      &.toolTip::after{
+        border-top-color: ${theme.colors.darkgrey} !important;
+       
+  
+      }
+   
+   }
+ `; 

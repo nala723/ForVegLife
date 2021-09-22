@@ -4,26 +4,29 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {useHistory} from 'react-router-dom';
 import {Buffer} from 'buffer';
-import state from '../../reducers/userReducer'
+
 
 export default function UserSideBar() {
   const userState = useSelector((state)=> state)
-  const {    accessToken,email,nickName,vegType,password, profileblob,isLogin} = userState;
+  const {    accessToken,email,nickName,vegType,password, profileblob,isLogin} = userState.userReducer;
+    
+
+    // 프로필 이미지 설정 
+    let profileIMG 
+    if(Object.keys(profileblob).length === 0){
+        profileIMG = "/image/bros_blank.jpg"
+    }
+     else{ 
+        profileIMG = 'data:image/png;base64, '+ Buffer(profileblob,'binary').toString('base64')
+       };
   
-    // 프로필 이미지 설정
-    let profileIMG
-    // if(typeof(profileblob)==='string'){
-    //     profileIMG = profileblob;
-    // }else{
-    //     profileIMG =  'data:image/png;base64, '+ Buffer(profileblob,'binary').toString('base64');
-    // } 
 
  return(
      <Sidebar>
         <Container>
             <Top>
                 <UserBox>
-                    <Pic src={profileIMG ? profileIMG : null}></Pic>
+                    <Pic src={profileIMG}></Pic>
                 </UserBox>
                 <TextBox>
                    <UserName>
