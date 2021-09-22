@@ -1,4 +1,10 @@
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useHistory,
+} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 
@@ -32,6 +38,7 @@ const Navbar = () => {
     dispatch(isLogin({ isLogin: false, email: null, nickName: null }));
     setLoginModal(false);
     setRegisterModal(false);
+    window.location.href = "/";
   };
 
   return (
@@ -40,8 +47,17 @@ const Navbar = () => {
         {loginState.isLogin ? (
           <Header>
             <Logo>Logo</Logo>
-            <StyledLogin onClick={logout}>Logout</StyledLogin>
-            <StyledMypage to="/mypage">Mypage</StyledMypage>
+
+            <StyledLogin to="/" onClick={() => logout()}>
+              Logout
+            </StyledLogin>
+            <Route exact path="/">
+              <StyledMypage to="/mypage">Mypage</StyledMypage>
+            </Route>
+            <Route path="/mypage">
+              <StyledMypage to="/">map</StyledMypage>
+            </Route>
+
             <Image
               src={''
                   // "data:image/png;base64," +
@@ -76,7 +92,26 @@ const Navbar = () => {
               )}
             </MapPage>
           </Route>
+          <Route exact path="/?">
+            <MapPage login={loginModal} register={registerModal}>
+              {loginState.isLogin ? (
+                ""
+              ) : loginModal ? (
+                <Login exit={userLoginExit} />
+              ) : (
+                ""
+              )}
+              {loginState.isLogin ? (
+                ""
+              ) : registerModal ? (
+                <SignUp exit={RegisterExit} />
+              ) : (
+                ""
+              )}
+            </MapPage>
+          </Route>
           <Route path="/mypage" component={Mypage} />
+
           <Route path="*">
             <NotFound />
           </Route>

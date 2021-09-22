@@ -5,8 +5,29 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectPlace } from "../../actions";
 import axios from "axios";
 const { kakao } = window;
-
-export default function SearchPlace({ selData }) {
+const veggieIcon = [
+  {
+    img: "/image/abocado-icon.png",
+    name: "비건",
+  },
+  {
+    img: "/image/cheese-icon.png",
+    name: "오보",
+  },
+  {
+    img: "/image/egg-icon.png",
+    name: "락토",
+  },
+  {
+    img: "/image/eggcheese-icon.png",
+    name: "락토오보",
+  },
+  {
+    img: "/image/fish-icon.png",
+    name: "페스코",
+  },
+];
+export default function SearchPlace({ selData, setCategory }) {
   const mapCenter = useSelector((state) => state.MapCenter);
   const dispatch = useDispatch();
   const [latlng, setLatlng] = useState({
@@ -15,9 +36,9 @@ export default function SearchPlace({ selData }) {
   });
   const [inputText, setInputText] = useState("");
   const [place, setPlace] = useState("");
-  const [serachData, setSearchData] = useState([]);
   // const ps = new kakao.maps.services.Places();
   const [data, setData] = useState([]);
+
   const onChange = (e) => {
     setInputText(e.target.value);
   };
@@ -52,45 +73,63 @@ export default function SearchPlace({ selData }) {
 
   return (
     <>
-      <Map>
-        <SearchForm className="inputForm" onSubmit={handleSubmit}>
-          <div>
-            {" "}
-            <PlaceInput
-              placeholder="Search Place..."
-              onChange={onChange}
-              value={inputText}
-            />
-            <SearchButton type="submit">검색</SearchButton>
-          </div>
-          <Keyword>
-            {data.map((x) => {
-              return (
-                <PlaceData
-                  onClick={() =>
-                    onClick(x.x, x.y, x.address_name, x.place_name)
-                  }
-                >
-                  <PlaceName>{x.place_name}</PlaceName>
-                  <PlaceAddress>{x.address_name}</PlaceAddress>
-                </PlaceData>
-              );
-            })}
-          </Keyword>
-        </SearchForm>
-        <MapIndex data={selData} latlng={latlng} />
-      </Map>
+      <SearchForm className="inputForm" onSubmit={handleSubmit}>
+        <div>
+          {" "}
+          <PlaceInput
+            placeholder="Search Place..."
+            onChange={onChange}
+            value={inputText}
+          />
+          <SearchButton type="submit">검색</SearchButton>
+        </div>
+        <Keyword>
+          {data.map((x) => {
+            return (
+              <PlaceData
+                onClick={() => onClick(x.x, x.y, x.address_name, x.place_name)}
+              >
+                <PlaceName>{x.place_name}</PlaceName>
+                <PlaceAddress>{x.address_name}</PlaceAddress>
+              </PlaceData>
+            );
+          })}
+        </Keyword>
+      </SearchForm>
+      <Category>
+        {veggieIcon.map((x) => {
+          return (
+            <Type src={x.img} onClick={() => setCategory(x.name)}>
+              {" "}
+              {x.name}
+            </Type>
+          );
+        })}
+      </Category>
+      <MapIndex data={selData} latlng={latlng} />
     </>
   );
 }
-const Map = styled.div``;
 
 const SearchForm = styled.form`
   position: absolute;
   display: flex;
   flex-direction: column;
   top: 3rem;
-  right: 10%;
+  right: 4rem;
+`;
+const Category = styled.div`
+  position: absolute;
+  flex-direction: column;
+  display: flex;
+  top: 3rem;
+  right: 1rem;
+  display: flex;
+`;
+
+const Type = styled.image`
+  width: 3rem;
+  height: 3rem;
 `;
 const SearchButton = styled.button`
   background-color: rgba(0, 0, 0, 0);

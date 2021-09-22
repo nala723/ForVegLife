@@ -53,7 +53,10 @@ export default function Login(props) {
         email,
         nickName,
       })
-      .then((res) => dispatch(isLogin({ isLogin: true, email, nickName })));
+      .then((res) => {
+        dispatch(isLogin({ isLogin: true, email, nickName }));
+        window.location.href = "/mypage";
+      });
     // axios 요청
     // 중복 되는 것이 있을때는 에러를 리턴
   };
