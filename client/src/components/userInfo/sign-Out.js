@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import DefaultModal from "./defaultmodal";
 import theme from '../../styles/theme';
@@ -6,12 +6,14 @@ import { useSelector, useDispatch } from "react-redux";
 import {useHistory} from 'react-router-dom';
 import { withdraw} from "../../actions";
 import axios from 'axios';
+import dotenv from 'dotenv';
+dotenv.config();
 
 export default function SignOut() {
     const userState = useSelector((state) => state.userReducer)
     const {
        accessToken, email, nickName, vegType, password, profileblob, isLogin 
-    } = userState;
+    } = userState.user;
     const googleState = useSelector((state)=> state.googleReducer);
     const {googleToken} = googleState;
     const dispatch = useDispatch();
@@ -20,37 +22,42 @@ export default function SignOut() {
     const [userwithDraw,setUserWithDraw] = useState(false);
     const [checked,setIsChecked] = useState(false);
 
+    useEffect(()=>{
+        if(userwithDraw && (isOpen === false)){
+            dispatch(withdraw())// 모달까지 완료 후 map페이지로 푸쉬하게 수정
+            history.push('/')
+          }
 
+    },[isOpen])
+
+    let token
     if(googleToken){
-        accessToken = googleToken;
-      }
-   
+      token = googleToken;
+    }else{
+      token = accessToken;
+    }
 
       //체크박스 체크여부
     const handleChecked = (e) => {
         e.preventDefault()
         setIsChecked(!checked);
+       
     }
-  
+   
 
     const Handlewithdraw = (e) => {
-        if(!checked){
-            return;
-        }
-        e.preventDefault()
         axios
-          .delete(`${process.env.REACT_APP_SERVER_URL}/sign/withdrawal`,{
+          .delete(process.env.REACT_APP_SERVER_URL + `/sign/withdrawal`,{
             headers: {
                 "Content-Type": "application/json",
-                authorization: `Bearer ` + accessToken
+                authorization: `Bearer ` + token
                 },
             withCredentials: true
         })
         .then((res)=> {
              if(res.status === 200){
-                   dispatch(withdraw())// 모달까지 완료 후 map페이지로 푸쉬하게 수정
                   setUserWithDraw(true);
-                  handleClick()
+                  handleClick(e)
              }
              else{
                   history.push('/notfound');
@@ -62,14 +69,15 @@ export default function SignOut() {
         })
     }
 
-   const handleClick = () => {
+   const handleClick = (e) => {
+    if(!checked){
+        return;
+    }
+    e.preventDefault()
        setIsOpen(!isOpen)
    }
+
   
-   //withdraw가 true라면 map 페이지로 푸쉬 (모달에서 확인 눌렀을 때)
-   if(userwithDraw && !isOpen){
-       history.push('/')
-   }
   return(
     <Container>
     <Title>
@@ -105,9 +113,9 @@ export default function SignOut() {
                         </VegAnswer>
                     </UserAlertBox>
                     <ButtonBox>
-                        <button onClick={(e)=>Handlewithdraw(e)}>탈퇴</button>
+                        <button onClick={(e)=>handleClick(e)}>탈퇴</button>
                     </ButtonBox>
-                     {isOpen && userwithDraw ? <DefaultModal isOpen={isOpen} handleClick={handleClick} header="회원 탈퇴가 완료되었습니다.">그동안 forVegLife서비스를 이용해 주셔서 감사합니다.<br></br>
+                     {isOpen ? <DefaultModal isOpen={isOpen} handleClick={(e)=>Handlewithdraw(e)} header="회원 탈퇴가 완료되었습니다.">그동안 forVegLife서비스를 이용해 주셔서 감사합니다.<br></br>
                                 더욱더 노력하고 발전하는 forVegLife가 되겠습니다.</DefaultModal> : null}
                  </UserBottom>
            </UserContainer>

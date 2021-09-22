@@ -61,7 +61,7 @@ export default function SignUp(props) {
     // axios 요청 성공 시2
     axios
       .post(`${process.env.REACT_APP_SERVER_URL}/sign/signup`, {
-        nickName: data.nickName,
+        nickname: data.nickName,
         email: data.email,
         password: data.password,
       })
