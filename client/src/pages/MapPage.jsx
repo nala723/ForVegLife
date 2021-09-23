@@ -78,6 +78,8 @@ export default function MapPage(props) {
 }
 const Temp = styled.div`
   position: relative;
+  width: 100%;
+  height: 100%;
 `;
 const Enroll = styled.div`
   position: absolute;
@@ -89,6 +91,7 @@ const Enroll = styled.div`
   top: 5rem;
   left: 5rem;
   color: white;
+  z-index: 2;
   border-radius: 0.2rem;
   background-color: ${theme.colors.green};
 `;

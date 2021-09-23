@@ -102,5 +102,5 @@ const Map = styled.div`
   position: absolute;
   width: 100vw;
   height: 95vh;
-  z-index: -1;
+  z-index: 1;
 `;
