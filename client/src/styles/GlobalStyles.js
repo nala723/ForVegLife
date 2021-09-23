@@ -16,7 +16,11 @@ const GlobalStyles = createGlobalStyle`
         padding: 0;
         margin: 0;
 <<<<<<< HEAD
+<<<<<<< HEAD
         width:100vw;
+=======
+        width: 100vw;
+>>>>>>> Upstream/dev
 =======
         width: 100vw;
 >>>>>>> Upstream/dev

@@ -24,6 +24,6 @@ exports.crawling = async(placeUrl,placeData)=>{
         await driver.quit();
         process.exit(0);
     }, 5000);
-    placeData.picture_url = imgString || null
+    placeData.picture_url = imgString.slice(5,-2) || "https://t1.daumcdn.net/localimg/localimages/07/2017/pc/bg_nodata.png"
     await placeData.save();
 }
