@@ -2,6 +2,12 @@ const { place, review, vegCategory} = require('../../models');
 const { isAuthorized } = require("../tokenFunctions");
 const { Op } = require("sequelize");
 
+function getRandomIntInclusive(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min; //최댓값도 포함, 최솟값도 포함
+}
+
 module.exports = async (req, res) => {
     
     let sendArr = [];
@@ -44,28 +50,21 @@ module.exports = async (req, res) => {
                     category : type
                 }
             })
-            //console.log(placeList)
-            console.log(placeList[0].dataValues.place.dataValues.id);
-            console.log(placeList[0].dataValues.place.dataValues.title);
-            console.log(placeList[0].dataValues.place.dataValues.picture_url);
-            console.log(placeList[0].dataValues.place.dataValues.address);
-            //console.log(placeList[0].dataValues.place.dataValues.reviews);
-            //console.log(placeList[0].dataValues.place.dataValues.reviews.length);
-            // console.log(placeList[0].dataValues.place.dataValues.reviews[0].dataValues.stars);
-            console.log(placeList[0].dataValues.place.dataValues.reviews[placeList[0].dataValues.place.dataValues.reviews.length-1].dataValues.review);
-            console.log(placeList[0].dataValues.place.dataValues.reviews[placeList[0].dataValues.place.dataValues.reviews.length-1].dataValues.stars);
 
-            console.log(placeList[1].dataValues.place.dataValues.id);
-            console.log(placeList[1].dataValues.place.dataValues.title);
-            console.log(placeList[1].dataValues.place.dataValues.picture_url);
-            console.log(placeList[1].dataValues.place.dataValues.address);
-            //console.log(placeList[0].dataValues.place.dataValues.reviews);
-            //console.log(placeList[0].dataValues.place.dataValues.reviews.length);
-            // console.log(placeList[0].dataValues.place.dataValues.reviews[0].dataValues.stars);
-            console.log(placeList[1].dataValues.place.dataValues.reviews[placeList[1].dataValues.place.dataValues.reviews.length-1].dataValues.review);
-            console.log(placeList[1].dataValues.place.dataValues.reviews[placeList[1].dataValues.place.dataValues.reviews.length-1].dataValues.stars);
+            let firstIndex = getRandomIntInclusive(0, placeList.length-4);
 
-            res.status(200).send("전송")
+            for(let i=firstIndex; i<firstIndex+4; i++){
+                obj['placeId'] = placeList[i].dataValues.place.dataValues.id
+                obj['title'] = placeList[i].dataValues.place.dataValues.title
+                obj['pictureUrl'] = placeList[i].dataValues.place.dataValues.picture_url
+                obj['address'] = placeList[i].dataValues.place.dataValues.address
+                obj['star'] = placeList[i].dataValues.place.dataValues.reviews[placeList[i].dataValues.place.dataValues.reviews.length-1].dataValues.stars
+                obj['content'] = placeList[i].dataValues.place.dataValues.reviews[placeList[i].dataValues.place.dataValues.reviews.length-1].dataValues.review
+                sendArr.push(obj);
+                obj = {};
+            }
+
+            res.status(200).send(sendArr);
        }
 
         
