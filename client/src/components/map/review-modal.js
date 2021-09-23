@@ -82,9 +82,11 @@ function DrawStar({ star }) {
   return <FontAwesomeIcon icon={EmptyStar}></FontAwesomeIcon>;
 }
 const Temp = styled.div`
+  background-color: rgba(0, 0, 0, 0.4);
+  position: absolute;
   width: 100vw;
   height: 95vh;
-  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 3;
 `;
 const Exit = styled.div`
   position: absolute;

@@ -117,6 +117,8 @@ export default function EnrollPlace(props) {
 const Temp = styled.div`
   width: 100vw;
   height: 95vh;
+  position: absolute;
+  z-index: 3;
   background-color: rgba(0, 0, 0, 0.4);
 `;
 const Exit = styled.div`

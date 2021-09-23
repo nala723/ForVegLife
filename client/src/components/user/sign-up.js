@@ -203,7 +203,8 @@ const Temp = styled.div`
   width: 100vw;
   height: 95vh;
   background-color: rgba(0, 0, 0, 0.4);
-  z-index: 2;
+  z-index: 3;
+  position: absolute;
 `;
 const Exit = styled.div`
   position: absolute;

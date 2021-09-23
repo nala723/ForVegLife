@@ -105,6 +105,7 @@ const Side = styled.div`
   max-width: 80%;
   height: 90vh;
   overflow: auto;
+  z-index: 2;
   -ms-overflow-style: none;
   ::-webkit-scrollbar {
     display: none;
