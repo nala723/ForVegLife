@@ -2,7 +2,7 @@ import react, { useState } from "react";
 import { useHistory } from "react-router";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { getgoogleToken, userLogin} from "../../actions/index";
+import { getgoogleToken, userLogin } from "../../actions/index";
 import { GoogleLogin } from "react-google-login";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
@@ -44,26 +44,26 @@ export default function Login(props) {
             profileblob: res.data.profileblob,
           })
         );
-        history.push("/mypage")
+        history.push("/mypage");
       })
       .catch((err) => {
         console.log(err);
       });
   };
   const responseGoogle = (res) => {
-    console.log(res.profileObj.imageUrl)
+    console.log(res.profileObj.imageUrl);
     const email = res.profileObj.email;
     const nickName = res.profileObj.name;
-    // profileblob: res.profileObj.imageUrl 
+    const profileblob = res.profileObj.imageUrl;
     axios
       .post(`${process.env.REACT_APP_SERVER_URL}/google/signin`, {
         email,
         nickName,
       })
       .then((res) => {
-        dispatch(userLogin({ isLogin: true, email, nickName, }));
-        dispatch(getgoogleToken({googleToken: res.accessToken}));
-        history.push("/mypage")
+        dispatch(userLogin({ isLogin: true, email, nickName, profileblob }));
+        dispatch(getgoogleToken({ googleToken: res.accessToken }));
+        history.push("/mypage");
       });
     // axios 요청
     // 중복 되는 것이 있을때는 에러를 리턴
@@ -74,26 +74,28 @@ export default function Login(props) {
         <FontAwesomeIcon color={"white"} icon={faTimes} />
       </Exit>
       <LoginForm onSubmit={handleSubmit}>
-        <Logo><img src="/image/logo.svg"/></Logo>
+        <Logo>
+          <img src="/image/logo.svg" />
+        </Logo>
         <InputBox>
-            <LoginInput
-              name="email"
-              value={user.email}
-              placeholder="email"
-              onChange={handleChange}
-              className="email"
-            />
-            <LoginInput
-              name="password"
-              type="password"
-              value={user.password}
-              placeholder="password"
-              onChange={handleChange}
-            />
-            <LoginButton type="submit">로그인</LoginButton>
-            <Message>아직 회원이 아니신가요? 회원가입</Message>
+          <LoginInput
+            name="email"
+            value={user.email}
+            placeholder="email"
+            onChange={handleChange}
+            className="email"
+          />
+          <LoginInput
+            name="password"
+            type="password"
+            value={user.password}
+            placeholder="password"
+            onChange={handleChange}
+          />
+          <LoginButton type="submit">로그인</LoginButton>
+          <Message>아직 회원이 아니신가요? 회원가입</Message>
         </InputBox>
-        <StyledGoogle 
+        <StyledGoogle
           clientId={process.env.REACT_APP_GOOGLE_OAUTH_ID}
           buttonText="Sign in with Google"
           onSuccess={responseGoogle}
@@ -136,25 +138,25 @@ const Logo = styled.div`
   align-items: center;
   width: 100%;
   margin-top: 1rem;
-  height:2.188rem;
-   >img{
-     width:100%;
-     height:100%;
-   }
+  height: 2.188rem;
+  > img {
+    width: 100%;
+    height: 100%;
+  }
 `;
 const InputBox = styled.div`
-   display: flex;
-   flex-direction: column;
-   margin-top:0.6rem;
-   justify-content: center;
-   align-items: center;
-   width:100%;
-   height: 20.563rem;
-   gap:0.5rem;
+  display: flex;
+  flex-direction: column;
+  margin-top: 0.6rem;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 20.563rem;
+  gap: 0.5rem;
 `;
 
 const LoginInput = styled.input`
-  display:flex;
+  display: flex;
   width: 100%;
   height: 3.063rem;
   border-radius: 0.5rem;
@@ -162,26 +164,25 @@ const LoginInput = styled.input`
   border: 0.5px solid #bbbbbb;
   text-align: left;
   text-indent: 1rem;
-  background-image: url('/image/lock.svg');
+  background-image: url("/image/lock.svg");
   background-repeat: no-repeat;
   background-position: 96% 50%;
-  background-size:25px;
-   &.email{
-    background-image: url('/image/email.svg');
-   }
-   font-size: ${theme.fonts.size.base};
-   color: ${theme.colors.darkgrey};
-  ::placeholder{
+  background-size: 25px;
+  &.email {
+    background-image: url("/image/email.svg");
+  }
+  font-size: ${theme.fonts.size.base};
+  color: ${theme.colors.darkgrey};
+  ::placeholder {
     color: #989898;
-  } 
+  }
 
   :focus {
-      outline:none;
+    outline: none;
   }
-  
 `;
 const LoginButton = styled.button`
-  display:flex;
+  display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
@@ -192,15 +193,15 @@ const LoginButton = styled.button`
   border: 0px;
   font-style: ${theme.fonts.family.button};
   font-size: ${theme.fonts.size.lg};
-  cursor:pointer;
-  transition: all 0.3s ease-in-out;  
-       :hover{
-        transition: all 0.3s ease-in-out;   
-        background-color:white;
-        color: ${({theme})=>theme.colors.green}; 
-        border: 1px solid ${({theme})=>theme.colors.green}; 
-        cursor: pointer;
-       }
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  :hover {
+    transition: all 0.3s ease-in-out;
+    background-color: white;
+    color: ${({ theme }) => theme.colors.green};
+    border: 1px solid ${({ theme }) => theme.colors.green};
+    cursor: pointer;
+  }
 `;
 const Message = styled.div`
   display: flex;
@@ -211,8 +212,8 @@ const Message = styled.div`
 `;
 
 const StyledGoogle = styled(GoogleLogin)`
-  display:flex;
-  width:100%;
-  align-items:center;
+  display: flex;
+  width: 100%;
+  align-items: center;
   justify-content: center;
 `;
