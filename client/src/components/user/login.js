@@ -2,7 +2,7 @@ import react, { useState } from "react";
 import { useHistory } from "react-router";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { userLogin} from "../../actions/index";
+import { userLogin } from "../../actions/index";
 import { GoogleLogin } from "react-google-login";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
@@ -42,7 +42,7 @@ export default function Login(props) {
             profileblob: res.data.profileblob,
           })
         );
-        history.push("/mypage")
+        history.push("/mypage");
       })
       .catch((err) => {
         console.log(err);
@@ -51,14 +51,15 @@ export default function Login(props) {
   const responseGoogle = (res) => {
     const email = res.profileObj.email;
     const nickName = res.profileObj.name;
+    const profileblob = res.profileObj.imageUrl;
     axios
       .post(`${process.env.REACT_APP_SERVER_URL}/google/signin`, {
         email,
         nickName,
       })
       .then((res) => {
-        dispatch(userLogin({ isLogin: true, email, nickName }));
-        history.push("/mypage")
+        dispatch(userLogin({ isLogin: true, email, nickName, profileblob }));
+        history.push("/mypage");
       });
     // axios 요청
     // 중복 되는 것이 있을때는 에러를 리턴
@@ -97,7 +98,7 @@ export default function Login(props) {
 
 const Temp = styled.div`
   width: 100vw;
-  height: 95vh;
+  height: 93vh;
   z-index: 3;
   position: absolute;
   background-color: rgba(0, 0, 0, 0.4);

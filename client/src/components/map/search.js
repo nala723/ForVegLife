@@ -3,7 +3,10 @@ import MapIndex from "./index";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { selectPlace } from "../../actions";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
+import theme from "../../styles/theme";
 const { kakao } = window;
 const veggieIcon = [
   {
@@ -81,7 +84,9 @@ export default function SearchPlace({ selData, setCategory }) {
             onChange={onChange}
             value={inputText}
           />
-          <SearchButton type="submit">검색</SearchButton>
+          <SubmitButton type="submit">
+            <FontAwesomeIcon icon={faSearch} />
+          </SubmitButton>
         </div>
         <Keyword>
           {data.map((x) => {
@@ -115,16 +120,16 @@ const SearchForm = styled.form`
   position: absolute;
   display: flex;
   flex-direction: column;
-  top: 3rem;
-  right: 4rem;
+  top: 3%;
+  right: 30%;
   z-index: 2;
 `;
 const Category = styled.div`
   position: absolute;
-  flex-direction: column;
+  flex-direction: row;
   display: flex;
-  top: 3rem;
-  right: 1rem;
+  top: 3%;
+  right: 1%;
   display: flex;
   z-index: 2;
 `;
@@ -133,37 +138,48 @@ const Type = styled.image`
   width: 3rem;
   height: 3rem;
 `;
-const SearchButton = styled.button`
-  background-color: rgba(0, 0, 0, 0);
-`;
+
 const PlaceInput = styled.input`
-  background-color: rgba(0, 0, 0, 0);
-  width: 10rem;
+  background-color: rgba(255, 255, 255, 0.6);
+  border: none;
+  width: 20rem;
   height: 2rem;
-  border-radius: 2rem;
+  border-radius: 0.2rem;
+  color: ${theme.colors.mapgrey};
+`;
+const SubmitButton = styled.button`
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0);
+  border: none;
+  right: 0;
+  top: 0;
+  font-size: 1.8rem;
 `;
 const PlaceData = styled.div`
+  background-color: rgba(255, 255, 255, 0.6);
+
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: rgba(0, 0, 0, 0);
-  border-radius: 0.5rem;
-  height: 3rem;
+  width: 20rem;
+  height: 6rem;
   color: black;
-  font-size: 0.4rem;
-  margin: 0.4rem;
 `;
 const PlaceName = styled.div`
-  font-size: 0.2rem;
+  font-size: 1rem;
+  margin: 0.2rem;
+  color: ${theme.colors.mapgrey};
 `;
 const PlaceAddress = styled.div`
-  font-size: 0.2rem;
+  font-size: 0.3rem;
+  margin: 0.2rem;
+  color: ${theme.colors.darkgrey};
 `;
 const Keyword = styled.div`
   display: flex;
   flex-direction: column;
   height: 7rem;
-  background-color: rgba(0, 0, 0, 0);
+  width: 20rem;
   overflow: auto;
   -ms-overflow-style: none;
   ::-webkit-scrollbar {
