@@ -11,6 +11,9 @@ module.exports = async (req, res) => {
     }
     else{
       const accessToken = authorization.split(' ')[1];
+      if(isAuthorized(accessToken) === 'jwt expired'){
+        res.set('accessToken', remakeToken(req));
+      }
       const userData = isAuthorized(accessToken);
       const userId = userData.id;
       if(!userId){
