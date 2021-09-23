@@ -1,4 +1,4 @@
-export const ISLOGIN = "ISLOGIN";
+export const USERLOGIN = "USERLOGIN";
 export const MAPCENTER = "MAPCENTER";
 export const SELECTPLACE = "SELECTPLACE";
 export const GET_GOOGLE_TOKEN = "GET_GOOGLE_TOKEN";
@@ -16,8 +16,8 @@ export const GET_NEW_ACCESSTOKEN = "GET_NEW_ACCESSTOKEN";
 
 /* 액션 생성함수 만들기 */
 // 액션 생성함수를 만들고 export 키워드를 사용해서 내보내주세요.
-export const isLogin = (data) => {
-  return { type: ISLOGIN, payload: { data } };
+export const userLogin = (data) => {
+  return { type: USERLOGIN , payload: { data } };
 };
 export const mapCenter = (data) => {
   return { type: MAPCENTER, payload: { data } };
@@ -28,7 +28,7 @@ export const selectPlace = (data) => {
 
 //get googletoken
 
-export const googleToken = (data) => {
+export const getgoogleToken = (data) => {
   return {
     type: GET_GOOGLE_TOKEN,
     payload:{

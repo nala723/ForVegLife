@@ -92,6 +92,7 @@ export default function MapIndex({ data, latlng }) {
   }, [selPlace, data]);
   return (
     <>
+     
       <Map id="map"></Map>
     </>
   );

@@ -158,7 +158,7 @@ export default function Favorite() {
     // setPlaces(PlaceState)   // 실제구현   
      setPlaces(dummyplace);  //임시 더미
     setInputValue('');
-    setLoading(false)          /*서버 통신시 수정*/
+    setLoading(false)         
   }
   
  // 다른 곳 클릭시 검색창 없어지게

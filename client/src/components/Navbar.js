@@ -7,23 +7,43 @@ import {
 } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
-
+import theme from "../styles/theme";
 import Mypage from "../pages/MyPage";
 import MapPage from "../pages/MapPage";
 import { useEffect, useState } from "react";
-import { isLogin } from "../actions/index";
+import { userLogin, getgoogleToken } from "../actions/index";
 import Login from "./user/login";
 import SignUp from "./user/sign-up";
 import NotFound from "../pages/NotFoundPage";
+import {Buffer} from 'buffer';
+import axios from "axios";
 
 const Navbar = () => {
   const loginState = useSelector((state) => state.userReducer);
+  const googleState = useSelector((state) => state.googleReducer);
   const dispatch = useDispatch();
+  const history = useHistory();
   const [loginModal, setLoginModal] = useState(false);
   const [registerModal, setRegisterModal] = useState(false);
-  const userLogin = () => {
+  const {accessToken,profileblob,isLogin} = loginState;
+  const {googleToken} = googleState;
+
+  let token
+  if(googleToken){
+    token = googleToken;
+  }else{
+    token = accessToken;
+  }
+  
+  useEffect(()=>{
+    if(isLogin){
+      setLoginModal(false)
+      setRegisterModal(false);
+    }
+  },[])
+
+  const userSignin = () => {
     setLoginModal(true);
-    console.log(loginModal);
   };
   const userLoginExit = () => {
     setLoginModal(false);
@@ -35,79 +55,85 @@ const Navbar = () => {
     setRegisterModal(false);
   };
   const logout = () => {
-    dispatch(isLogin({ isLogin: false, email: null, nickName: null }));
     setLoginModal(false);
     setRegisterModal(false);
-    window.location.href = "/";
+        axios
+          .get(`${process.env.REACT_APP_SERVER_URL}` + `/sign/signout`,{
+            headers: {
+                "Content-Type": "application/json",
+                authorization: `Bearer ` + token
+                },
+            withCredentials: true
+        })
+        .then((res)=> {
+             if(res.status === 200){
+                 dispatch(userLogin({ isLogin: false, email: null, nickName: null,accessToken: '',profileblob:"", vegType: "vegetarian"}));
+                 dispatch(getgoogleToken({ googleToken: ""})); 
+                 history.push('/');
+                 console.log(isLogin)
+             }
+             else{
+                  history.push('/notfound');
+             }
+            //  setIsLoding(false) 
+         })
+         .catch(err => {
+                console.log(err)
+        })
   };
+
+  let profileIMG 
+  if(profileblob === null || Object.keys(profileblob).length ===0){
+      profileIMG = "/image/bros_blank.jpg"
+  }
+   else{ 
+      profileIMG = 'data:image/png;base64, '+ Buffer(profileblob,'binary').toString('base64')
+     };
 
   return (
     <>
       <Router>
-        {loginState.isLogin ? (
+        {isLogin ? (
           <Header>
-            <Logo>Logo</Logo>
-
-            <StyledLogin to="/" onClick={() => logout()}>
-              Logout
-            </StyledLogin>
-            <Route exact path="/">
-              <StyledMypage to="/mypage">Mypage</StyledMypage>
-            </Route>
-            <Route path="/mypage">
-              <StyledMypage to="/">map</StyledMypage>
-            </Route>
-
-            <Image
-              src={''
-                  // "data:image/png;base64," +
-                  //   Buffer(loginState.profileblob, "binary").toString("base64")
-              }
-            />
-          </Header>
-        ) : (
-          <Header>
-            <Logo>Logo</Logo>
-            <StyledLogin onClick={userLogin}>Login</StyledLogin>
-            <StyledRegister onClick={Register}>Register</StyledRegister>
-          </Header>
-        )}
+             <Logo to="/"><img src="/image/logo.svg"/></Logo>  
+              <ButtonBox primary>
+                <Link to="/">
+                  <StyledLogin onClick={() => logout()} >
+                    Logout
+                  </StyledLogin>
+                </Link>
+                  <Route exact path="/">
+                    <Link to="/mypage">
+                       <StyledMypage >Mypage</StyledMypage>  
+                    </Link>
+                  </Route>
+                  <Route path="/mypage">
+                      <Link to="/">
+                        <StyledMypage >map</StyledMypage>
+                    </Link>
+                  </Route>
+                    <ImageBox>
+                      <Image
+                        src={profileIMG}
+                      />
+                    </ImageBox>
+                  </ ButtonBox >
+                </Header>
+              ) : (
+                <Header>
+                  <Logo to="/"><img src="/image/logo.svg"/></Logo>
+                  <ButtonBox >
+                    <StyledLogin onClick={userSignin}>Login</StyledLogin>
+                    <StyledRegister onClick={Register}>Register</StyledRegister>
+                  </ ButtonBox >
+                </Header>
+              )}
 
         <Switch>
           <Route exact path="/">
             <MapPage login={loginModal} register={registerModal}>
-              {loginState.isLogin ? (
-                ""
-              ) : loginModal ? (
-                <Login exit={userLoginExit} />
-              ) : (
-                ""
-              )}
-              {loginState.isLogin ? (
-                ""
-              ) : registerModal ? (
-                <SignUp exit={RegisterExit} />
-              ) : (
-                ""
-              )}
-            </MapPage>
-          </Route>
-          <Route exact path="/?">
-            <MapPage login={loginModal} register={registerModal}>
-              {loginState.isLogin ? (
-                ""
-              ) : loginModal ? (
-                <Login exit={userLoginExit} />
-              ) : (
-                ""
-              )}
-              {loginState.isLogin ? (
-                ""
-              ) : registerModal ? (
-                <SignUp exit={RegisterExit} />
-              ) : (
-                ""
-              )}
+              {(!isLogin && loginModal) ? <Login exit={userLoginExit} /> : null}
+              {(!isLogin && registerModal) ?   <SignUp exit={RegisterExit} />: null}
             </MapPage>
           </Route>
           <Route path="/mypage" component={Mypage} />
@@ -122,59 +148,73 @@ const Navbar = () => {
 };
 
 const Header = styled.header`
-  justify-content: center;
   align-items: center;
   background-color: none;
-  color: black;
-
   width: 100%;
-  height: 5vh;
+  height: 3.125rem;
+  padding:  1.688rem;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
 `;
-const Image = styled.image`
-  width: 5rem;
-  height: 5vh;
-`;
-const Logo = styled.div`
-  width: 60%;
-  margin-left: 1rem;
-`;
-const StyledLogin = styled.div`
+const ImageBox = styled.div`
+  margin-left:0.5rem;
+  width: 2.3rem;
+  height: 2.3rem;
+  border-radius: 100%;
   display: flex;
-  width: 12%;
-  font-size: 0.2rem;
+  overflow: hidden;
+`;
+const Image = styled.img`
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+  background-color: white;
+`;
+const Logo = styled(Link)`
+  display: flex;
+  cursor:pointer;
+`;
+
+const ButtonBox = styled.div`
+  display: flex;
+  width: ${props=> props.primary ? '20rem' :'16.563rem'};
+  height: inherit;
   justify-content: center;
   align-items: center;
-  height: 3.5vh;
+  gap:1rem;
+  margin-right: 1rem;
+`;
+const StyledLogin = styled.button`
+  display: flex;
+  width: 7.375rem;
+  font-size:${theme.fonts.size.base};
+  font-family: ${theme.fonts.button};
+  font-weight: 500;
+  justify-content: center;
+  align-items: center;
+  height: 2.063rem;
   border-radius: 0.5rem;
   border: 1px solid #bbbbbb;
   background-color: white;
-  color: #7cb700;
+  color: ${theme.colors.green};
+  cursor:pointer;
+  :hover {
+       background-color: ${theme.colors.green};
+       color:white;
+       transition: all 0.5s ease;
+     }
 `;
-const StyledRegister = styled.div`
-  display: flex;
-  width: 12%;
-  justify-content: center;
-  font-size: 0.2rem;
-  align-items: center;
-  height: 3.5vh;
-  border: 1px solid #bbbbbb;
-  background-color: #7cb700;
-  border-radius: 0.5rem;
+const StyledRegister = styled(StyledLogin)`
+  background-color: ${theme.colors.green};
   color: white;
+  cursor:pointer;
+  :hover {
+       background-color: white;
+       color: ${theme.colors.green};
+     }
 `;
-const StyledMypage = styled(Link)`
-  display: flex;
-  width: 12%;
-  justify-content: center;
-  font-size: 0.2rem;
-  align-items: center;
-  height: 3.5vh;
-  border: 1px solid #bbbbbb;
-  background-color: #7cb700;
-  border-radius: 0.5rem;
-  color: white;
+const StyledMypage = styled(StyledRegister)`
+
 `;
 
 export default Navbar;

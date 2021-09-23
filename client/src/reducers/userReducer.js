@@ -1,5 +1,5 @@
 import {
-    ISLOGIN,
+    USERLOGIN,
     USER_INFO,
     USER_UPDATE_INFO,
     WITHDRAW,
@@ -18,7 +18,7 @@ import {
   
   const userReducer = (state = initialState, action) => {
     switch (action.type) {
-      case ISLOGIN:
+      case USERLOGIN:
         return Object.assign({}, state, {
           ...state,
           ...action.payload.data,
