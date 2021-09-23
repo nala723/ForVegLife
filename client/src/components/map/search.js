@@ -117,6 +117,7 @@ const SearchForm = styled.form`
   flex-direction: column;
   top: 3rem;
   right: 4rem;
+  z-index: 2;
 `;
 const Category = styled.div`
   position: absolute;
@@ -125,6 +126,7 @@ const Category = styled.div`
   top: 3rem;
   right: 1rem;
   display: flex;
+  z-index: 2;
 `;
 
 const Type = styled.image`
