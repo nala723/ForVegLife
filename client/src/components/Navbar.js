@@ -86,6 +86,9 @@ const Navbar = () => {
   if(profileblob === null || Object.keys(profileblob).length ===0){
       profileIMG = "/image/bros_blank.jpg"
   }
+  else if(typeof(profileblob)==="string"){
+      profileIMG = profileblob;
+  }
    else{ 
       profileIMG = 'data:image/png;base64, '+ Buffer(profileblob,'binary').toString('base64')
      };
