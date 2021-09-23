@@ -95,7 +95,8 @@ export default function Login(props) {
 const Temp = styled.div`
   width: 100vw;
   height: 95vh;
-  z-index: 2;
+  z-index: 3;
+  position: absolute;
   background-color: rgba(0, 0, 0, 0.4);
 `;
 const Exit = styled.div`
