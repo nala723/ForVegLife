@@ -1,11 +1,11 @@
-const models = require("../../models")
+const models = require("../../models");
 const { isAuthorized } = require("../tokenFunctions");
 
 module.exports = async (req, res) => {
-    // res.send('즐겨찾기 해제')
-    try {const authorization = req.headers['authorization'];
+   try {
     const placeId = req.params.placeId
-    console.log(authorization)
+    const authorization = req.headers['authorization'];
+
     if(!authorization){
       res.status(401).json('invalid token')
     }
@@ -17,17 +17,16 @@ module.exports = async (req, res) => {
       const userData = isAuthorized(accessToken);
       const userId = userData.id;
       if(!userId){
-          res.status(401).json('invalid user')
+      res.status(401).json('invalid user')
       }
       else{
-        models.users_places_like.destroy({
-        where:{user_id:userId,place_id:placeId}}
-        )
-    res.send({ message : `dislike ${req.params.placeId} restaurant` })
+      await models.place.destroy({
+        where:{id:placeId}
+      })
+        res.send({message : "bye bye restaurant"})
+      }
+  };}
+  catch (error) {
+    res.status(500).send(error);
+ }
 }
-    }}
-    catch (error) {
-        res.status(500).send(error);
-     }
-}
-  

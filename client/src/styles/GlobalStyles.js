@@ -15,7 +15,15 @@ const GlobalStyles = createGlobalStyle`
     body {
         padding: 0;
         margin: 0;
+<<<<<<< HEAD
+<<<<<<< HEAD
+        width:100vw;
+=======
         width: 100vw;
+>>>>>>> Upstream/dev
+=======
+        width: 100vw;
+>>>>>>> Upstream/dev
         height: 100vh;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     }

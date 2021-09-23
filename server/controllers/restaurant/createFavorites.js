@@ -10,6 +10,9 @@ module.exports = async (req, res) => {
       res.status(401).json("invalid token");
     } else {
       const accessToken = authorization.split(" ")[1];
+      if(isAuthorized(accessToken) === 'jwt expired'){
+        res.set('accessToken', remakeToken(req));
+      }
       const userData = isAuthorized(accessToken);
       const userId = userData.id;
       console.log(userData);
