@@ -15,6 +15,9 @@ module.exports = async (req, res) => {
         where: { latitude: latitude, longitude: longitude },
       });
       const accessToken = authorization.split(" ")[1];
+      if(isAuthorized(accessToken) === 'jwt expired'){
+        res.set('accessToken', remakeToken(req));
+      }
       console.log(accessToken);
       const userData = isAuthorized(accessToken);
       console.log(userData);
