@@ -5,9 +5,10 @@ import { userLogin} from "../../actions/index";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
+import theme from "../../styles/theme";
 
 export default function SignUp(props) {
-  let userdata = useSelector((state) => state);
+  let userdata = useSelector((state) => state.userReducer);
 
   const dispatch = useDispatch();
   const [verifyCode, setVerifyCode] = useState(null);
@@ -95,6 +96,7 @@ export default function SignUp(props) {
         nickName: "",
       });
       setIsVerify(false);
+      props.exit();
     } else {
       setMessage("비번이나 이메일 인증을 확인해주세요");
     }
@@ -104,15 +106,17 @@ export default function SignUp(props) {
     let eng = pw.search(/[a-z]/gi);
     let spe = pw.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
 
-    if (pw.length < 8 || pw.length > 20) {
-      return "8자리 ~ 20자리 이내로 입력해주세요.";
-    } else if (pw.search(/\s/) != -1) {
-      return "비밀번호는 공백 없이 입력해주세요.";
-    } else if (num < 0 || eng < 0 || spe < 0) {
-      return "영문,숫자, 특수문자를 혼합하여 입력해주세요.";
-    } else {
-      return "통과";
-    }
+   if(user.password){
+        if (pw.length < 8 || pw.length > 20) {
+          return "8자리 ~ 20자리 이내로 입력해주세요.";
+        } else if (pw.search(/\s/) != -1) {
+          return "비밀번호는 공백 없이 입력해주세요.";
+        } else if (num < 0 || eng < 0 || spe < 0) {
+          return "영문,숫자, 특수문자를 혼합하여 입력해주세요.";
+        } else {
+          return "통과";
+        }
+      }
   }
   return (
     <Temp>
@@ -120,81 +124,83 @@ export default function SignUp(props) {
         <FontAwesomeIcon color={"white"} icon={faTimes} />
       </Exit>
       <SignUpForm onSubmit={handleSubmit}>
-        <Logo>LoGo</Logo>
-        <EmailIcon>
-          <Align>
-            <EmailInput
-              name="email"
-              value={user.email}
-              placeholder="email"
-              onChange={handleChange}
-            />
+        <Logo><img src="/image/logo.svg"/></Logo>
+        <InputBox>
+              <EmailIcon>
+                <Align>
+                  <EmailInput
+                    name="email"
+                    value={user.email}
+                    placeholder="email"
+                    onChange={handleChange}
+                  />
 
-            <EmailButton type="button" onClick={() => send(user.email)}>
-              인증번호 받기
-            </EmailButton>
-          </Align>
-          <Message>
-            {isSend ? "이메일 인증 코드가 발송되었습니다." : ""}
-          </Message>
-        </EmailIcon>
-        <EmailIcon>
-          <Align>
-            <EmailInput
-              name="verifyEmail"
-              value={user.verifyEmail}
-              placeholder="email code"
-              onChange={handleChange}
-            />
-            <VerifyButton
-              type="button"
-              onClick={() => verify(user.verifyEmail)}
-            >
-              확인
-            </VerifyButton>
-          </Align>
-          <Message>
-            {isVerify
-              ? "인증 되었습니다"
-              : isSend
-              ? "인증 되지 않았습니다"
-              : ""}
-          </Message>
-        </EmailIcon>
-        <Repassword>
-          <RepasswordInput
-            name="password"
-            value={user.password}
-            type="password"
-            placeholder="password"
-            onChange={handleChange}
-          />
-          <Message>{chkPW(user.password)}</Message>
-        </Repassword>
-        <Repassword>
-          <RepasswordInput
-            name="rePassword"
-            type="password"
-            value={user.repassword}
-            placeholder="password confirm"
-            onChange={handleChange}
-          />
-          <Message>
-            {user.repassword !== ""
-              ? user.password === user.rePassword
-                ? "비밀번호가 일치합니다"
-                : "비밀번호가 일치 하지 않습니다"
-              : ""}
-          </Message>
-        </Repassword>
-        <Message>{message}</Message>
-        <LoginInput
-          name="nickName"
-          value={user.nickName}
-          placeholder="nickname"
-          onChange={handleChange}
-        />
-        <SignupButton type="submit">회원가입</SignupButton>
+                  <EmailButton type="button" onClick={() => send(user.email)}>
+                    인증
+                  </EmailButton>
+                </Align>
+                <Message>
+                  {(isSend&&!isVerify) ? "이메일 인증 코드가 발송되었습니다." : ""}
+                </Message>
+              </EmailIcon>
+              <EmailIcon>
+                <Align>
+                  <EmailInput
+                    name="verifyEmail"
+                    value={user.verifyEmail}
+                    placeholder="email code"
+                    onChange={handleChange}
+                  />
+                  <VerifyButton
+                    type="button"
+                    onClick={() => verify(user.verifyEmail)}
+                  >
+                    확인
+                  </VerifyButton>
+                </Align>
+                <Message>
+                  {isVerify
+                    ? "인증 되었습니다"
+                    : (isSend &&user.verifyEmail)
+                    ? "인증 되지 않았습니다"
+                    : ""}
+                </Message>
+              </EmailIcon>
+              <Repassword>
+                <RepasswordInput
+                  name="password"
+                  value={user.password}
+                  type="password"
+                  placeholder="password"
+                  onChange={handleChange}
+                />
+                <Message>{chkPW(user.password)}</Message>
+              </Repassword>
+              <Repassword>
+                <RepasswordInput
+                  name="rePassword"
+                  type="password"
+                  value={user.repassword}
+                  placeholder="password confirm"
+                  onChange={handleChange}
+                />
+                <Message>
+                  {(user.repassword !== "" && user.password)
+                    ? user.password === user.rePassword
+                      ? "비밀번호가 일치합니다"
+                      : "비밀번호가 일치 하지 않습니다"
+                    : ""}
+                </Message>
+              </Repassword>
+              <Message>{message}</Message>
+              <LoginInput
+                name="nickName"
+                value={user.nickName}
+                placeholder="nickname"
+                onChange={handleChange}
+              />
+           </InputBox>   
+        <SignupButton type="submit" >회원가입</SignupButton>
       </SignUpForm>
     </Temp>
   );
@@ -212,102 +218,184 @@ const Exit = styled.div`
   right: 1rem;
   font-size: 2rem;
 `;
-const Logo = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 80%;
-  height: 3rem;
-  border-radius: 0.5rem;
-`;
 const SignUpForm = styled.form`
   position: absolute;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   top: 50vh;
   left: 50vw;
-  min-width: 18rem;
-  width: 21vw;
-  min-height: 24rem;
-  height: 27vw;
+  width: 26.25rem;
+  height: 35.563rem;
   background-color: white;
-  border-radius: 0.2rem;
+  border-radius: 1rem;
   transform: translate(-50%, -50%);
+  padding: 0 3.688rem;
 `;
+
+const Logo = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height:2.188rem;
+  margin-top: 1rem;
+   >img{
+     width:100%;
+     height:100%;
+   }
+`;
+const InputBox = styled.div`
+  margin-top: 2.8rem;
+  width: 100%;
+  height:20rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+`;
+
 const Repassword = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  height: 4.375rem;
   align-items: center;
 `;
 const RepasswordInput = styled.input`
-  width: 80%;
-  height: 2.5rem;
+  width: 100%;
+  height: 3.063rem;
   border-radius: 0.5rem;
   border: 0.5px solid #bbbbbb;
   text-align: left;
-  text-indent: 2rem;
+  text-indent: 1rem;
+  background-image: url('/image/lock.svg');
+  background-repeat: no-repeat;
+  background-position: 96% 50%;
+  background-size:25px;
+  font-size: ${theme.fonts.size.base};
+  color: ${theme.colors.darkgrey};
+  ::placeholder{
+    color: #989898;
+  } 
+  :focus {
+      outline:none;
+  }
+   
 `;
 const EmailIcon = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 80%;
-  height: 2.5rem;
-  margin-bottom: 1rem;
+  width: 100%;
+  height: 4.375rem;
 `;
 const Align = styled.div`
   display: flex;
-  justify-content: space-between;
+  gap:0.625rem;
 `;
 
 const EmailInput = styled.input`
-  width: 75%;
-  height: 2.5rem;
+  width: 100%;
+  height: 3.063rem;
   border-radius: 0.5rem;
   border: 0.5px solid #bbbbbb;
   text-align: left;
-  text-indent: 2rem;
+  text-indent: 1rem;
+  background-image: url('/image/email.svg');
+  background-repeat: no-repeat;
+  background-position: 96% 50%;
+  background-size:25px;
+  font-size: ${theme.fonts.size.base};
+  color: ${theme.colors.darkgrey};
+  ::placeholder{
+    color: #989898;;
+  } 
+
+  :focus {
+      outline:none;
+  }
 `;
 const EmailButton = styled.button`
-  width: 20%;
+  width: 5.2rem;
   height: 100%;
-  font-size: 0.1rem;
+  font-size: 10px;
+  border-radius: 0.3rem;
   background-color: #7cb700;
   color: white;
   border: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor:pointer;
+  font-size:12px;
+  font-weight: 500;
+  font-style: ${theme.fonts.family.button};
+ 
 `;
 const VerifyButton = styled.button`
-  width: 20%;
+  width: 5.2rem;
   background-color: rgba(0, 0, 0, 0);
   height: 100%;
-  font-size: 0.1rem;
+  border-radius: 0.3rem;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: #7cb700;
   border: 0.01rem solid #7cb700;
+  cursor:pointer;
+  font-size:12px;
+  font-weight: 500;
+  font-style: ${theme.fonts.family.button};
 `;
 const Message = styled.div`
-  width: 75%;
+  width: 100%;
+  height:1.438rem;
+  align-items: center;
   display: flex;
   justify-content: center;
   font-size: 0.1rem;
+  color: ${theme.colors.red};
 `;
 const LoginInput = styled.input`
-  width: 80%;
-  height: 2.5rem;
+  width: 100%;
+  min-height: 3.063rem;
   border-radius: 0.5rem;
-  margin-bottom: 1rem;
   border: 0.5px solid #bbbbbb;
   text-align: left;
-  text-indent: 2rem;
+  text-indent: 1rem;
+  background-image: url('/image/userIcon.svg');
+  background-repeat: no-repeat;
+  background-position: 96% 50%;
+  background-size:25px;
+  font-size: ${theme.fonts.size.base};
+  color: ${theme.colors.darkgrey};
+  ::placeholder{
+    color: #989898;;
+  } 
+  :focus {
+      outline:none;
+  }
 `;
 const SignupButton = styled.button`
+  margin-top:2.3rem;
   background-color: #7cb700;
   border-radius: 0.5rem;
-  width: 80%;
-  height: 2.5rem;
+  width: 100%;
+  height: 3.063rem;
   font-size: 1rem;
   color: white;
   border: 0;
+  font-style: ${theme.fonts.family.button};
+  font-size: ${theme.fonts.size.lg};
+  cursor:pointer;
+  transition: all 0.3s ease-in-out;  
+       :hover{
+        transition: all 0.3s ease-in-out;   
+        background-color:white;
+        color: ${({theme})=>theme.colors.green}; 
+        border: 1px solid ${({theme})=>theme.colors.green}; 
+        cursor: pointer;
+       }
 `;
