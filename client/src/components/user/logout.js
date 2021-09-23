@@ -1,13 +1,13 @@
 import react, { useState } from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { isLogin } from "../../actions/index";
+import { userLogin } from "../../actions/index";
 
 export default function Logout() {
   let userData = useSelector((state) => state);
   const dispatch = useDispatch();
   const logout = (e) => {
-    dispatch(isLogin({ accessToken: "", email: null, nickName: null,  profileblob: "", isLogin: false }));
+    dispatch(userLogin({ accessToken: "", email: null, nickName: null,  profileblob: "", isLogin: false }));
   };
   return (
     <>

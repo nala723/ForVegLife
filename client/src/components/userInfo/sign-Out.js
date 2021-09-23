@@ -4,7 +4,7 @@ import DefaultModal from "./defaultmodal";
 import theme from '../../styles/theme';
 import { useSelector, useDispatch } from "react-redux";
 import {useHistory} from 'react-router-dom';
-import { withdraw} from "../../actions";
+import { withdraw,getgoogleToken} from "../../actions";
 import axios from 'axios';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -25,6 +25,7 @@ export default function SignOut() {
     useEffect(()=>{
         if(userwithDraw && (isOpen === false)){
             dispatch(withdraw())// 모달까지 완료 후 map페이지로 푸쉬하게 수정
+            dispatch(getgoogleToken({googleToken : ""}))
             history.push('/')
           }
 

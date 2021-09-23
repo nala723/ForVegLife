@@ -1,7 +1,7 @@
 import react, { useState } from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { isLogin } from "../../actions/index";
+import { userLogin} from "../../actions/index";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
@@ -67,7 +67,7 @@ export default function SignUp(props) {
       })
       .then((res) => {
         const { email, nickName } = data;
-        dispatch(isLogin({ isLogin: true, email, nickName }));
+        dispatch(userLogin({ isLogin: true, email, nickName }));
       })
       .catch((err) => {
         console.log(err);

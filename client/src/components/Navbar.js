@@ -11,22 +11,39 @@ import theme from "../styles/theme";
 import Mypage from "../pages/MyPage";
 import MapPage from "../pages/MapPage";
 import { useEffect, useState } from "react";
-import { isLogin } from "../actions/index";
+import { userLogin, getgoogleToken } from "../actions/index";
 import Login from "./user/login";
 import SignUp from "./user/sign-up";
 import NotFound from "../pages/NotFoundPage";
 import {Buffer} from 'buffer';
+import axios from "axios";
 
 const Navbar = () => {
   const loginState = useSelector((state) => state.userReducer);
+  const googleState = useSelector((state) => state.googleReducer);
   const dispatch = useDispatch();
+  const history = useHistory();
   const [loginModal, setLoginModal] = useState(false);
   const [registerModal, setRegisterModal] = useState(false);
-  const userState = useSelector((state)=> state)
-  const {accessToken,profileblob} = loginState;
-  const userLogin = () => {
+  const {accessToken,profileblob,isLogin} = loginState;
+  const {googleToken} = googleState;
+
+  let token
+  if(googleToken){
+    token = googleToken;
+  }else{
+    token = accessToken;
+  }
+  
+  useEffect(()=>{
+    if(isLogin){
+      setLoginModal(false)
+      setRegisterModal(false);
+    }
+  },[])
+
+  const userSignin = () => {
     setLoginModal(true);
-    console.log(loginModal);
   };
   const userLoginExit = () => {
     setLoginModal(false);
@@ -38,10 +55,31 @@ const Navbar = () => {
     setRegisterModal(false);
   };
   const logout = () => {
-    dispatch(isLogin({ isLogin: false, email: null, nickName: null,accessToken: '',profileblob:""}));
     setLoginModal(false);
     setRegisterModal(false);
-    window.location.href = "/";
+        axios
+          .get(`${process.env.REACT_APP_SERVER_URL}` + `/sign/signout`,{
+            headers: {
+                "Content-Type": "application/json",
+                authorization: `Bearer ` + token
+                },
+            withCredentials: true
+        })
+        .then((res)=> {
+             if(res.status === 200){
+                 dispatch(userLogin({ isLogin: false, email: null, nickName: null,accessToken: '',profileblob:"", vegType: "vegetarian"}));
+                 dispatch(getgoogleToken({ googleToken: ""})); 
+                 history.push('/');
+                 console.log(isLogin)
+             }
+             else{
+                  history.push('/notfound');
+             }
+            //  setIsLoding(false) 
+         })
+         .catch(err => {
+                console.log(err)
+        })
   };
 
   let profileIMG 
@@ -55,71 +93,47 @@ const Navbar = () => {
   return (
     <>
       <Router>
-        {loginState.isLogin ? (
+        {isLogin ? (
           <Header>
-             <Logo><img src="/image/logo.svg"/></Logo>  
+             <Logo to="/"><img src="/image/logo.svg"/></Logo>  
               <ButtonBox primary>
-            <StyledLogin to="/" onClick={() => logout()} >
-              Logout
-            </StyledLogin>
-            <Route exact path="/">
-              <StyledMypage to="/mypage">Mypage</StyledMypage>
-            </Route>
-            <Route path="/mypage">
-              <StyledMypage to="/">map</StyledMypage>
-            </Route>
-              <ImageBox>
-                <Image
-                  src={profileIMG}
-                />
-              </ImageBox>
-             </ ButtonBox >
-          </Header>
-        ) : (
-          <Header>
-            <Logo><img src="/image/logo.svg"/></Logo>
-            <ButtonBox >
-            <StyledLogin onClick={userLogin}>Login</StyledLogin>
-            <StyledRegister onClick={Register}>Register</StyledRegister>
-            </ ButtonBox >
-          </Header>
-        )}
+                <Link to="/">
+                  <StyledLogin onClick={() => logout()} >
+                    Logout
+                  </StyledLogin>
+                </Link>
+                  <Route exact path="/">
+                    <Link to="/mypage">
+                       <StyledMypage >Mypage</StyledMypage>  
+                    </Link>
+                  </Route>
+                  <Route path="/mypage">
+                      <Link to="/">
+                        <StyledMypage >map</StyledMypage>
+                    </Link>
+                  </Route>
+                    <ImageBox>
+                      <Image
+                        src={profileIMG}
+                      />
+                    </ImageBox>
+                  </ ButtonBox >
+                </Header>
+              ) : (
+                <Header>
+                  <Logo to="/"><img src="/image/logo.svg"/></Logo>
+                  <ButtonBox >
+                    <StyledLogin onClick={userSignin}>Login</StyledLogin>
+                    <StyledRegister onClick={Register}>Register</StyledRegister>
+                  </ ButtonBox >
+                </Header>
+              )}
 
         <Switch>
           <Route exact path="/">
             <MapPage login={loginModal} register={registerModal}>
-              {loginState.isLogin ? (
-                ""
-              ) : loginModal ? (
-                <Login exit={userLoginExit} />
-              ) : (
-                ""
-              )}
-              {loginState.isLogin ? (
-                ""
-              ) : registerModal ? (
-                <SignUp exit={RegisterExit} />
-              ) : (
-                ""
-              )}
-            </MapPage>
-          </Route>
-          <Route exact path="/?">
-            <MapPage login={loginModal} register={registerModal}>
-              {loginState.isLogin ? (
-                ""
-              ) : loginModal ? (
-                <Login exit={userLoginExit} />
-              ) : (
-                ""
-              )}
-              {loginState.isLogin ? (
-                ""
-              ) : registerModal ? (
-                <SignUp exit={RegisterExit} />
-              ) : (
-                ""
-              )}
+              {(!isLogin && loginModal) ? <Login exit={userLoginExit} /> : null}
+              {(!isLogin && registerModal) ?   <SignUp exit={RegisterExit} />: null}
             </MapPage>
           </Route>
           <Route path="/mypage" component={Mypage} />
@@ -154,10 +168,11 @@ const Image = styled.img`
    width: 100%;
    height: 100%;
    object-fit: cover;
-  background-color: grey;
+  background-color: white;
 `;
-const Logo = styled.div`
+const Logo = styled(Link)`
   display: flex;
+  cursor:pointer;
 `;
 
 const ButtonBox = styled.div`
@@ -169,7 +184,7 @@ const ButtonBox = styled.div`
   gap:1rem;
   margin-right: 1rem;
 `;
-const StyledLogin = styled(Link)`
+const StyledLogin = styled.button`
   display: flex;
   width: 7.375rem;
   font-size:${theme.fonts.size.base};

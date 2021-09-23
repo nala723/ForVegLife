@@ -1,7 +1,8 @@
 import react, { useState } from "react";
+import { useHistory } from "react-router";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { isLogin } from "../../actions/index";
+import { userLogin} from "../../actions/index";
 import { GoogleLogin } from "react-google-login";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
@@ -9,6 +10,7 @@ import axios from "axios";
 
 export default function Login(props) {
   let userdata = useSelector((state) => state);
+  const history = useHistory();
 
   const dispatch = useDispatch();
   const [user, setUser] = useState({
@@ -32,7 +34,7 @@ export default function Login(props) {
       .then((res) => {
         console.log(res.data);
         dispatch(
-          isLogin({
+          userLogin({
             isLogin: true,
             email: user.email,
             nickName: res.data.nickname,
@@ -40,6 +42,7 @@ export default function Login(props) {
             profileblob: res.data.profileblob,
           })
         );
+        history.push("/mypage")
       })
       .catch((err) => {
         console.log(err);
@@ -54,8 +57,8 @@ export default function Login(props) {
         nickName,
       })
       .then((res) => {
-        dispatch(isLogin({ isLogin: true, email, nickName }));
-        window.location.href = "/mypage";
+        dispatch(userLogin({ isLogin: true, email, nickName }));
+        history.push("/mypage")
       });
     // axios 요청
     // 중복 되는 것이 있을때는 에러를 리턴
