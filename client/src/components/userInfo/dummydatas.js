@@ -73,6 +73,7 @@ export const dummydatas = {
          title : `어느 Vegan 카페`,
          content : "그럭저럭 먹을 만 해요",
         },
+        
         {   
          placeId:3,
          img :  '/image/three-star.png',
