@@ -25,4 +25,5 @@ module.exports = {
   getUserInfo: require("./mypage/getUserInfo"),
   getFavorites: require("./mypage/getFavorites"),
   getReview: require("./mypage/getReview"),
+  recommendation: require("./restaurant/recommendation"),
 };  
