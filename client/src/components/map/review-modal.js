@@ -93,6 +93,7 @@ const Temp = styled.div`
   justify-content: center;
   align-items: center;
   width: 100vw;
+  max-width: 100%;
   height: calc(100vh - 3.35rem);
   z-index: 3;
 `;
