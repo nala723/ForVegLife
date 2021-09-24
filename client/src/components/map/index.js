@@ -90,17 +90,13 @@ export default function MapIndex({ data, latlng }) {
       }
     }
   }, [selPlace, data]);
-  return (
-    <>
-     
-      <Map id="map"></Map>
-    </>
-  );
+  return <Map id="map" />;
 }
 
 const Map = styled.div`
   position: absolute;
+  max-width: 100%;
   width: 100vw;
-  height: 95vh;
+  height: calc(100vh - 3.35rem);
   z-index: 1;
 `;

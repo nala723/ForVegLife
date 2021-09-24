@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
@@ -7,6 +7,7 @@ import { faStar as EmptyStar } from "@fortawesome/free-regular-svg-icons";
 import { useSelector, useDispatch } from "react-redux";
 import theme from "../../styles/theme";
 import axios from "axios";
+import gsap from "gsap";
 
 export default function ReviewModal(props) {
   const selPlace = useSelector((state) => state.selectPlace);
@@ -15,6 +16,10 @@ export default function ReviewModal(props) {
     array: [0, 0, 0, 0, 0],
   });
   const [content, setContent] = useState("");
+  const size = useRef();
+  useEffect(() => {
+    gsap.to(size.current, { scale: 1, duration: 0.5, ease: "back" });
+  });
   const handleSubmit = (e) => {
     e.preventDefault();
     const Star = star.array.reduce((acc, cur) => acc + cur);
@@ -52,7 +57,7 @@ export default function ReviewModal(props) {
   };
   return (
     <Temp>
-      <ReviewModalForm onSubmit={handleSubmit}>
+      <ReviewModalForm ref={size} onSubmit={handleSubmit}>
         <Exit onClick={() => props.exit()}>
           <FontAwesomeIcon color={"green"} icon={faTimes} />
         </Exit>
@@ -84,8 +89,11 @@ function DrawStar({ star }) {
 const Temp = styled.div`
   background-color: rgba(0, 0, 0, 0.4);
   position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100vw;
-  height: 95vh;
+  height: calc(100vh - 3.35rem);
   z-index: 3;
 `;
 const Exit = styled.div`
@@ -119,15 +127,13 @@ const ReviewModalForm = styled.form`
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-  top: 50vh;
-  left: 50vw;
   min-width: 24rem;
   width: 27vw;
   min-height: 18rem;
   height: 21vw;
   background-color: white;
   border-radius: 1rem;
-  transform: translate(-50%, -50%);
+  transform: scale(0);
 `;
 
 const ReviewContent = styled.textarea`

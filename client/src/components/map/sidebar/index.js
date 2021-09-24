@@ -8,12 +8,15 @@ import { selectPlace } from "../../../actions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
+import gsap from "gsap";
+import { useRef } from "react";
 
 export default function SideBar({ select, inReview, exitReview }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.userReducer);
   const selPlace = useSelector((state) => state.selectPlace);
   const [tempdata, setTempData] = useState([]);
+  const sideRef = useRef();
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_SERVER_URL}/restaurant/${selPlace.id}`, {
@@ -26,6 +29,12 @@ export default function SideBar({ select, inReview, exitReview }) {
         setTempData(...res.data);
       });
   }, [selPlace.id]);
+
+  useEffect(() => {
+    if (selPlace.id !== 0) {
+      gsap.to(sideRef.current, { left: 0, height: "90vh", width: "30%" });
+    }
+  });
   let data = tempdata;
   console.log(data);
   // axios 요청으로 받아오기
@@ -63,7 +72,7 @@ export default function SideBar({ select, inReview, exitReview }) {
   return (
     <>
       {!(Array.isArray(data) && data.length === 0) ? (
-        <Side>
+        <Side ref={sideRef}>
           <Exit onClick={() => dispatch(selectPlace({ x: 0, y: 0, id: 0 }))}>
             <FontAwesomeIcon icon={faTimes} />
           </Exit>
@@ -101,9 +110,8 @@ const Side = styled.div`
   position: absolute;
   margin: 0;
   top: 5vh;
-  min-width: 20%;
-  max-width: 80%;
-  height: 90vh;
+  width: 0%;
+  height: 0;
   overflow: auto;
   z-index: 2;
   -ms-overflow-style: none;

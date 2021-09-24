@@ -1,4 +1,4 @@
-import react, { useState } from "react";
+import react, { useState, useRef, useEffect } from "react";
 import { useHistory } from "react-router";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
@@ -8,12 +8,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import theme from "../../styles/theme";
+import gsap from "gsap";
 
 export default function Login(props) {
   let userdata = useSelector((state) => state.userReducer);
   let googleState = useSelector((state) => state.googleReducer);
   const history = useHistory();
-
+  const size = useRef();
+  useEffect(() => {
+    gsap.to(size.current, { scale: 1, duration: 0.5, ease: "back" });
+  });
   const dispatch = useDispatch();
   const [user, setUser] = useState({
     email: "",
@@ -73,7 +77,7 @@ export default function Login(props) {
       <Exit onClick={props.exit}>
         <FontAwesomeIcon color={"white"} icon={faTimes} />
       </Exit>
-      <LoginForm onSubmit={handleSubmit}>
+      <LoginForm ref={size} onSubmit={handleSubmit}>
         <Logo>
           <img src="/image/logo.svg" />
         </Logo>
@@ -107,9 +111,13 @@ export default function Login(props) {
 
 const Temp = styled.div`
   width: 100vw;
-  height: 95vh;
+  height: calc(100vh - 3.35rem);
+  max-width: 100%;
   z-index: 3;
   position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: rgba(0, 0, 0, 0.4);
 `;
 const Exit = styled.div`
@@ -119,18 +127,15 @@ const Exit = styled.div`
   font-size: 2rem;
 `;
 const LoginForm = styled.form`
-  position: absolute;
   display: flex;
   flex-direction: column;
   align-items: center;
-  top: 50vh;
-  left: 50vw;
   width: 26.25rem;
   height: 30.433rem;
   background-color: white;
   border-radius: 1rem;
-  transform: translate(-50%, -50%);
   padding: 0 3.5rem;
+  transform: scale(0);
 `;
 const Logo = styled.div`
   display: flex;

@@ -94,7 +94,10 @@ const Navbar = () => {
   if (profileblob === null || Object.keys(profileblob).length === 0) {
     profileIMG = "/image/bros_blank.jpg";
   } else {
-    if (Array.isArray(profileblob) && profileblob.slice(0, 5) === "https") {
+    if (
+      typeof profileblob === "string" &&
+      profileblob.slice(0, 5) === "https"
+    ) {
       profileIMG = profileblob;
     } else {
       profileIMG =
