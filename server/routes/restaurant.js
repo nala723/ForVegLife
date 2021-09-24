@@ -3,6 +3,7 @@ const router = require("express").Router();
 const controllers = require("../controllers");
 
 router.post("/", controllers.registration);
+router.get("/recommendation", controllers.recommendation);
 router.get("/category/:category/:address", controllers.category);
 router.get("/:placeId", controllers.select);
 router.post("/:placeId/like", controllers.createFavorites);

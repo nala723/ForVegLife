@@ -4,7 +4,7 @@ const { generateAccessToken, generateRefreshToken } = require('../tokenFunctions
 
 module.exports = async (req, res) => {
   try {
-    const userInfo = await user.findOne({attributes: ['id', 'nickname', 'email', 'password', 'profile'], where : {email: req.body.email}});
+    const userInfo = await user.findOne({attributes: ['id', 'nickname', 'email', 'vegtype', 'password', 'profile'], where : {email: req.body.email}});
     const userProfile = userInfo.dataValues.profile;
     
     if(!userInfo){
