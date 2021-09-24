@@ -13,6 +13,7 @@ module.exports = {
   registration: require("./restaurant/registration"),
   category: require("./restaurant/category"),
   select: require("./restaurant/select"),
+  recommendation: require("./restaurant/recommendation"),
   createFavorites: require("./restaurant/createFavorites"),
   cancelFavorites: require("./restaurant/cancelFavorites"),
   createReview: require("./restaurant/createReview"),
@@ -25,4 +26,4 @@ module.exports = {
   getUserInfo: require("./mypage/getUserInfo"),
   getFavorites: require("./mypage/getFavorites"),
   getReview: require("./mypage/getReview"),
-};  
+};
