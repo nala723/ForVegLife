@@ -2,7 +2,7 @@ import React, {useState, useEffect }from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { getmyfavorite,newAccessToken,deletemyfavorite} from "../../actions";
+import { getmyfavorite,newAccessToken,deletemyfavorite,getgoogleToken} from "../../actions";
 import axios from "axios";
 import { dummydatas } from "./dummydatas";
 import theme from "../../styles/theme";
@@ -11,9 +11,6 @@ import { TraceSpinner } from "react-spinners-kit";
 import dotenv from 'dotenv';
 dotenv.config();
 
-
-
-
 export default function Favorite() {
   const dispatch = useDispatch();
   const history = useHistory();
@@ -21,31 +18,30 @@ export default function Favorite() {
   const userState = useSelector((state)=> state.userReducer);
   const googleState = useSelector((state)=> state.googleReducer);
   const {googleToken} = googleState;
-  const placeId = myfavState.placeId;
+  // const placeId = myfavState.placeId;
   const accessToken = userState.accessToken;
-  const dummyplace = dummydatas.favorites;
+  const dummyplace = dummydatas.favorites; //더미용
   const dummyAdress = dummyplace.map(el => el.address);
-
-  const [hasText, setHasText] = useState(false);// -- 검색 후 필터링 가능
+  let PlaceState = myfavState.myFavPlaces.length !== 0 ? myfavState.myFavPlaces : [];
+  let PlaceAdress = (PlaceState !== undefined) ? PlaceState.map(el => el.address) : [];
+  const [hasText, setHasText] = useState(false);
   const [inputValue, setInputValue] = useState('');
-  const [options, setOptions] = useState([]) // 즐찾 없는 유저도 있을수 있으므로 초기값
-  const [places,setPlaces] = useState([]);
-  // const [options, setOptions] = useState(dummyAdress);
-  // const [places, setPlaces] = useState(dummyplace);
+  const [options, setOptions] = useState(PlaceAdress) // 즐찾 없는 유저도 있을수 있으므로 초기값
+  const [places,setPlaces] = useState(PlaceState);
   const [selected, setSelected] = useState(-1);
   const [isActive, setIsActive] = useState(false);
   const [loading, setLoading] = useState(true);
-
-   let PlaceState = myfavState.myFavPlaces;
-   let PlaceAdress = (PlaceState !== undefined) ? PlaceState.map(el => el.address) : []
+  const [recommend,setRecommend] = useState(dummyplace.slice(0,4));// 추후수정
+  const {nickName} = userState;
+  
 
 
   //최초렌더링시- 
   useEffect(()=> {
-    getFavList()
-    
+    // getRecommendation()
+     getFavList()
   },[])
-  console.log(myfavState,userState,'되라') //아무것도 저장 안했을시 처리
+  console.log(myfavState,myfavState.myFavPlaces,'되라') //아무것도 저장 안했을시 처리
  
   // 검색창 텍스트 유무확인
   useEffect(() => {
@@ -78,6 +74,47 @@ export default function Favorite() {
     }
   }, ['https://developers.kakao.com/sdk/js/kakao.min.js'])
  
+ // 추천 식당 받기
+
+ const getRecommendation = () => {
+   setLoading(true)
+        axios
+        .get(process.env.REACT_APP_SERVER_URL + '/restaurant/recommendation',{ 
+          headers: {
+              "Content-Type": "application/json",
+              authorization: `Bearer ` + token
+              },
+          withCredentials: true
+      })
+      .then((res)=> {
+          if(res.headers.accessToken){
+              if(googleToken){
+                dispatch(getgoogleToken({accessToken: res.headers.accessToken}));
+              }else{
+              dispatch(newAccessToken({accessToken: res.headers.accessToken}))
+              }
+          } 
+            if(res.status === 200){
+              
+                if((res.data.data).length === 4){
+                let recommendAr = res.data.data   
+                setRecommend(recommendAr)  //--상태값 알아서 변경되는지 확인
+                getFavList()
+                }
+                
+            }
+            else{
+                history.push('/notfound');
+            }
+      
+            setLoading(false) 
+        })
+        .catch(err => {
+              console.log(err)
+              
+      })
+
+ }
 
 
   // 유저가 즐찾한 것 목록 받아오기  
@@ -94,24 +131,23 @@ export default function Favorite() {
         })
         .then((res)=> {
             if(res.headers.accessToken){
-                dispatch(newAccessToken({accessToken: res.headers.accessToken}));
+                if(googleToken){
+                  dispatch(getgoogleToken({accessToken: res.headers.accessToken}));
+                }else{
+                dispatch(newAccessToken({accessToken: res.headers.accessToken}))
+                }
             } 
              if(res.status === 200){
-        
+                
                   if((res.data.place).length > 0){
-                   dispatch(getmyfavorite( res.data.place.place_Id, res.data.title,  res.data.picture_url, res.data.address))
-                      //정보 받았으면 상태전달 
-                  setPlaces(PlaceState)
-                  setOptions(PlaceAdress)
-                  }
-                  else{
-                   setPlaces(dummyplace) // 더미데이터로 임시세팅 *
-                  setOptions(dummyAdress) 
+                   dispatch(getmyfavorite(res.data.place))
+                   history.push('/mypage');
                   }
              }
              else{
                   history.push('/notfound');
              }
+        
              setLoading(false) 
          })
          .catch(err => {
@@ -121,11 +157,11 @@ export default function Favorite() {
   }
 
   // 삭제
- const deleteFavList = (e,name) => {
+ const deleteFavList = (e,place_id) => {
    e.preventDefault();
    setLoading(true)
    axios.
-     delete(process.env.REACT_APP_SERVER_URL + `/restaurant/${placeId}/dislike`,{ 
+     delete(process.env.REACT_APP_SERVER_URL + `/restaurant/${place_id}/dislike`,{ 
       headers: {
           "Content-Type": "application/json",
           authorization: `Bearer ` + token
@@ -134,11 +170,15 @@ export default function Favorite() {
   })
   .then((res)=> {
       if(res.headers.accessToken){
-          dispatch(newAccessToken({accessToken: res.headers.accessToken}));
+        if(googleToken){
+          dispatch(getgoogleToken({accessToken: res.headers.accessToken}));
+        }else{
+        dispatch(newAccessToken({accessToken: res.headers.accessToken}))
+        }
       } 
        if(res.status === 200){
             //갖고 있는 상태의 장소의 이름과 일치하는 것- 의 placeId
-            let id = places.filter((el)=> el.title === name)[0].placeId;
+            let id = places.filter((el)=> el.place_id === place_id)[0]
             dispatch(deletemyfavorite(id)) // 추후 보고 수정 객체형으로?
             getFavList() // 다시 렌더링 호출
        }
@@ -155,8 +195,8 @@ export default function Favorite() {
   // 모두 조회 버튼
   const handleAllview = () => {
     setLoading(true)
-    // setPlaces(PlaceState)   // 실제구현   
-     setPlaces(dummyplace);  //임시 더미
+    setPlaces(PlaceState)   // 실제구현   
+    //  setPlaces(dummyplace);  //임시 더미
     setInputValue('');
     setLoading(false)         
   }
@@ -182,16 +222,16 @@ export default function Favorite() {
     // dropdown을 위한 기능
     const filterRegex = new RegExp(value, 'i');
 
-    // let resultOptions
-    // if(PlaceAdress) {
-    //   resultOptions = PlaceAdress.filter((option) =>
-    //   option.match(filterRegex)
-    // );
-    // }  // 실제구현
-  
-    const resultOptions = dummyAdress.filter((option) =>
+    let resultOptions
+    if(PlaceAdress) {
+      resultOptions = PlaceAdress.filter((option) =>
       option.match(filterRegex)
-    );                                     // 임시더미
+    );
+    }  // 실제구현
+  
+    // const resultOptions = dummyAdress.filter((option) =>
+    //   option.match(filterRegex)
+    // );                                     // 임시더미
     setOptions(resultOptions);
     
   };
@@ -201,20 +241,20 @@ export default function Favorite() {
     let resultOptions  
 
     // 실제구현
-    // if(PlaceAdress) {
-    //   resultOptions  = PlaceAdress.filter(
-    //     (option) => option === clickedOption
-    //   );
+    if(PlaceAdress) {
+      resultOptions  = PlaceAdress.filter(
+        (option) => option === clickedOption
+      );
 
-    // }  
+    }  
 
     // 임시더미 *
-    resultOptions  = dummyAdress.filter(
-      (option) => option === clickedOption
-    );                                          
+    // resultOptions  = dummyAdress.filter(
+    //   (option) => option === clickedOption
+    // );                                          
     setOptions(resultOptions);
-    // const dum = PlaceState.filter(dum=> dum.address === clickedOption)// 검색하고 선택한 결과 조회
-    const dum = dummyplace.filter(dum=> dum.address === clickedOption)  //  임시더미 *
+    const dum = PlaceState.filter(dum=> dum.address === clickedOption)// 검색하고 선택한 결과 조회
+    // const dum = dummyplace.filter(dum=> dum.address === clickedOption)  //  임시더미 *
     setPlaces(dum);
     setIsActive(true);
  
@@ -264,7 +304,7 @@ export default function Favorite() {
       content: {
         title: el.title, // 보여질 제목
         description: el.address, // 보여질 설명
-        imageUrl: "www.naver.com", // 콘텐츠 URL
+        imageUrl: `http://localhost:3000/restaurant/${el.placeId}`, // 콘텐츠 URL
         link: {
           mobileWebUrl: "devpad.tistory.com/",
           webUrl: "devpad.tistory.com/"
@@ -323,12 +363,31 @@ export default function Favorite() {
                         </DropDownContainer>
                             ): null}
                   </SearchContainer>
+                     <Recommend>{`${nickName} 님만을 위한 hot 4`}</Recommend>
                     <CardBox>
+                   
+                    {recommend.map((dum,idx) => {
+                        return (
+                           <Card key={idx}>
+                            <img src="/image/hot.png" className='selectcard hot' onClick={(e)=>deleteFavList(e,dum.placeId)}/>
+                            <CardImg src={dum.pictureUr? dum.pictureUrl : dum.img}/> 
+                                <CardContent> 
+                                  <h4>{dum.title}</h4>
+                                  <p>{dum.address}</p>
+                                </CardContent>
+                               <CardSns>
+                                 <img src="/image/kakaotalk.png" onClick={()=>shareKakao(dum)} id="btnKakao"/>
+                                 <img src="/image/facebook.png" onClick={()=>shareFacebook(dum)}/>
+                                 <img src="/image/twitter.png" onClick={()=>shareTwitter(dum)}/>
+                              </CardSns>
+                        </Card>
+                        )
+                      })}
                       {places.map((dum,idx) => {
                         return (
                            <Card key={idx}>
-                            <img src="/image/close.svg" className='selectcard' onClick={(e)=>deleteFavList(e,dum.title)}/>
-                            <CardImg src={dum.img}/> 
+                            <img src="/image/close.svg" className='selectcard' onClick={(e)=>deleteFavList(e,dum.place_id)}/>
+                            <CardImg src={dum.picture_url? dum.picture_url : dum.img}/> 
                                 <CardContent> 
                                   <h4>{dum.title}</h4>
                                   <p>{dum.address}</p>
@@ -387,9 +446,19 @@ const Bottom = styled.div`
   flex-direction: column;
   align-items: flex-start;
 `;
+
+const Recommend = styled.div`
+ width:100%;
+ height:2rem;
+ display:flex;
+ color: ${theme.colors.green};
+ font-style: ${theme.fonts.family.mypage};
+ font-weight:600;
+  
+`;
 const SearchContainer = styled.div`
  width:100%;
- padding-bottom: 5rem;
+ padding-bottom: 4.5rem;
  display: flex;
  justify-content: flex-end;
  flex-direction: row;
@@ -497,11 +566,10 @@ const Card = styled.div`
    cursor: pointer;
    position:relative;
    transition: all 0.3s ease;
-  
     :hover{
       box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
-      transform: translateY(-5%);
       transition: all 0.3s ease;
+    
         >img{
     
         &.selectcard{
@@ -512,8 +580,17 @@ const Card = styled.div`
          right:0.7rem;
           opacity:1;
          }
-        }
+         &.hot{
+          position:absolute;
+         width:2rem;
+         height:2rem;
+         top:0.5rem;
+         right:0.5rem;
+         opacity:1;
+        } 
+        
     }
+  }
     >img{
     
       &.selectcard{
@@ -525,9 +602,17 @@ const Card = styled.div`
         opacity:0;
         
         }
-    }
+        &.hot{
+          position:absolute;
+         width:2rem;
+         height:2rem;
+         top:0.5rem;
+         right:0.5rem;
+         opacity:1;
+        } 
+  } 
   
- 
+  
 `;
 const CardImg = styled.img`
    display:flex;

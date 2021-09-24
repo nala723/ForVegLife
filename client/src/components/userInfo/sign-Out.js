@@ -13,7 +13,7 @@ export default function SignOut() {
     const userState = useSelector((state) => state.userReducer)
     const {
        accessToken, email, nickName, vegType, password, profileblob, isLogin 
-    } = userState.user;
+    } = userState;
     const googleState = useSelector((state)=> state.googleReducer);
     const {googleToken} = googleState;
     const dispatch = useDispatch();
@@ -21,14 +21,15 @@ export default function SignOut() {
     const [isOpen,setIsOpen] = useState(false);
     const [userwithDraw,setUserWithDraw] = useState(false);
     const [checked,setIsChecked] = useState(false);
+    
 
     useEffect(()=>{
         if(userwithDraw && (isOpen === false)){
+            
             dispatch(withdraw())// 모달까지 완료 후 map페이지로 푸쉬하게 수정
             dispatch(getgoogleToken({googleToken : ""}))
             history.push('/')
           }
-
     },[isOpen])
 
     let token
@@ -54,16 +55,21 @@ export default function SignOut() {
                 authorization: `Bearer ` + token
                 },
             withCredentials: true
+        },{
+            email: email
         })
         .then((res)=> {
              if(res.status === 200){
                   setUserWithDraw(true);
                   handleClick(e)
+    
              }
              else{
                   history.push('/notfound');
              }
             //  setIsLoding(false) 
+        console.log(res,userwithDraw,email)
+
          })
          .catch(err => {
                 console.log(err)
@@ -116,7 +122,7 @@ export default function SignOut() {
                     <ButtonBox>
                         <button onClick={(e)=>handleClick(e)}>탈퇴</button>
                     </ButtonBox>
-                     {isOpen ? <DefaultModal isOpen={isOpen} handleClick={(e)=>Handlewithdraw(e)} header="회원 탈퇴가 완료되었습니다.">그동안 forVegLife서비스를 이용해 주셔서 감사합니다.<br></br>
+                     {(isOpen&&checked) ? <DefaultModal isOpen={isOpen} handleClick={(e)=>Handlewithdraw(e)} header="회원 탈퇴가 완료되었습니다.">그동안 forVegLife서비스를 이용해 주셔서 감사합니다.<br></br>
                                 더욱더 노력하고 발전하는 forVegLife가 되겠습니다.</DefaultModal> : null}
                  </UserBottom>
            </UserContainer>
