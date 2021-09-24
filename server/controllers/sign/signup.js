@@ -1,6 +1,7 @@
 const model = require('../../models');
 const fs = require('fs');
 const bcrypt = require('bcrypt');
+const { generateAccessToken, generateRefreshToken } = require('../tokenFunctions');
 
 module.exports = async (req, res) => {
     let {nickname, email, password} = req.body;
@@ -20,7 +21,7 @@ module.exports = async (req, res) => {
             if(err){
               throw err;
             }else{
-              model.user.create({
+              const users = model.user.create({
                  nickname : nickname,
                  password : hash,
                  email : email,
@@ -28,7 +29,18 @@ module.exports = async (req, res) => {
                  social : 0
               })
               .then((result) => {
-                res.status(200).json({message : 'ok'})
+                const userInfo = {id: users.id, email: email, nickName: nickname, vegtype:users.vegtype}
+                const access_token = generateAccessToken(userInfo);
+                const refresh_token = generateRefreshToken(userInfo);
+
+                res.cookie('RefreshToken', refresh_token, {httpOnly: true, sameSite: 'none', secure: true});
+                res.status(200).json({
+                  message : 'ok',
+                  accessToken : access_token,
+                  profileblob : profile,
+                  nickname : nickname,
+                  email : email
+                })
               })
             }
           })
