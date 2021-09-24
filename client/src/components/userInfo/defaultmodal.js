@@ -85,6 +85,7 @@ const Background = styled.div`
     background-color: rgba(0, 0, 0, 0.6);
     visibility: visible;
     opacity: 1;
+    z-index:500;
   }
 `;
 
@@ -105,6 +106,7 @@ const ModalSection = styled.div`
     transform: scale(1);
     /* transition: all 0.3s ease-in-out; */
     animation: ${Modalshow} 0.3s ease-out;
+    z-index:999;
   }
 `;
 const ModalTitle = styled.div`

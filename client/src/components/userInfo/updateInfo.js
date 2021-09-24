@@ -8,6 +8,7 @@ import { userInfo,userUpdateInfo,newAccessToken} from "../../actions/index";
 import {Buffer} from 'buffer';
 import axios from 'axios';
 import { dummydatas } from "./dummydatas";
+import { TraceSpinner } from "react-spinners-kit";
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -37,6 +38,7 @@ export default function UpdateInfo() {
     const refPasswordCheck = useRef(null);
     const photoInput = useRef(null);
     const veggieIcon = dummydatas.veggieIcon; // 임시 - 더미데이터, 추후 교체
+    const [loading, setLoading] = useState(true);
 
     // 최초 렌더링시 유저정보 받아오기
     useEffect(()=>{
@@ -50,6 +52,7 @@ export default function UpdateInfo() {
 
    // 유저 정보 요청 함수 - 통과
     const getUserInfo = (accessToken) => {
+        setLoading(true)
         axios
           .get(process.env.REACT_APP_SERVER_URL + '/mypage/user-info',{
             headers: {
@@ -70,7 +73,7 @@ export default function UpdateInfo() {
              else{
                   history.push('/notfound');
              }
-            //  setIsLoding(false) 
+             setLoading(false) 
          })
          .catch(err => {
                 console.log(err)
@@ -79,13 +82,18 @@ export default function UpdateInfo() {
     
     // // 프로필 이미지 설정
    
-    let profileIMG 
-    if(Object.keys(profileblob).length === 0){
-        profileIMG = "/image/bros_blank.jpg"
+    let profileIMG;
+    if (profileblob === null || Object.keys(profileblob).length === 0) {
+      profileIMG = "/image/bros_blank.jpg";
+    } else {
+      if (typeof(profileblob) === "string") {
+        profileIMG = profileblob;
+      } else {
+        profileIMG =
+          "data:image/png;base64, " +
+          Buffer(profileblob, "binary").toString("base64");
+      }
     }
-     else{ 
-        profileIMG = 'data:image/png;base64, '+ Buffer(profileblob,'binary').toString('base64')
-       };
 
    // 이미지 업로드
     const imageFileHandler = (key) => (e) => {
@@ -208,9 +216,12 @@ export default function UpdateInfo() {
     //회원정보 수정 - 추후 퀄리티 업
 
     const onSubmitHandler = async (e) => { //현재 안먹힘
-        console.log('왜안되나')
-
         e.preventDefault();
+        if(isGoogleUser){
+            handleBack()
+            return;
+        }
+        setLoading(true)
         if(inValidEditMSG){
             return
         }
@@ -278,7 +289,7 @@ export default function UpdateInfo() {
                                  history.push('/notfound');
                              }
                          
-                            //  setIsLoding(false) 
+                             setLoading(false) 
                         })
                         .catch(error=>
                             console.log(error)
@@ -324,31 +335,32 @@ export default function UpdateInfo() {
     }
   console.log(currentInput, `하하하하`)// 안먹힘???
 
-   if(isGoogleUser){
-    
-        setIsOpen(!isOpen)
-        const handleBack = (e) => {
-          e.preventDefault();
-          if(!isOpen){
-           history.push('/mypage');
-          }
-        }
-
-      
-       return(
-        <DefaultModal isOpen={isOpen} handleClick={handleBack} header="경고">
-        소셜 로그인 유저는 회원정보수정을 할 수 없습니다</DefaultModal>
-
-       )
-   }
-
   
+    
+   // 구글유저 아웃     
+     const handleBack = (e) => {
+        e.preventDefault()
+          if(isGoogleUser){
+          setIsOpen(!isOpen)
+           if(isOpen === true){
+           history.push('/'); // 후에 마이페이지로 수정 
+         }
+      } 
+     }
+     if(loading){
+        return ( 
+          < Loadingbox>
+            <StyledSpinner primary size={80} frontColor="#E2E700" backColor="#E2832B" loading={loading} />
+             </ Loadingbox>
+            )
+      }
 
     return (
-        <Container>
+        <Container >
         <Title>
            나의 정보 수정
         </Title>
+     
        <Bottom>
            <UserContainer>
                <UserTop>     
@@ -419,17 +431,18 @@ export default function UpdateInfo() {
                     </ButtonBox>
                          {(isOpen && changed) ? <DefaultModal isOpen={isOpen} handleClick={handleClick} header="회원정보 수정이 완료되었습니다.">
                      앞으로도 계속 forVegLife 안에서 건강한 life 누리세요</DefaultModal> : null}
-                    
+                     {(isGoogleUser && isOpen) ? <DefaultModal isOpen={isOpen} handleClick={handleBack} header="경고">
+                     소셜 로그인 유저는 회원정보수정을 할 수 없습니다</DefaultModal> : null}
                  </UserBottom>
            </UserContainer>
        </Bottom>
   </Container>
 )
-
+                     
 }    
 
  const Container = styled.div`
-    width: calc(100%-7.313rem);
+    width: calc(100% - 7.313rem);
     height:100%;
     display: flex;
     flex-direction: column;
@@ -675,3 +688,16 @@ const ButtonBox = styled.div`
        }
    }
 `;
+
+const Loadingbox = styled.div`
+ width: calc(100%-7.313rem);
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items:center;
+
+`;
+const StyledSpinner = styled(TraceSpinner)`
+  
+  
+ `; 

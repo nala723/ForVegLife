@@ -51,7 +51,8 @@ export default function Login(props) {
       });
   };
   const responseGoogle = (res) => {
-    console.log(res.profileObj.imageUrl);
+    console.log(res,res.accessToken);
+    const accessToken = res.accessToken;
     const email = res.profileObj.email;
     const nickName = res.profileObj.name;
     const profileblob = res.profileObj.imageUrl;
@@ -61,8 +62,9 @@ export default function Login(props) {
         nickName,
       })
       .then((res) => {
-        dispatch(userLogin({ isLogin: true, email, nickName, profileblob }));
-        dispatch(getgoogleToken({ googleToken: res.accessToken }));
+        dispatch(userLogin({ isLogin: true, email, nickName, profileblob}));
+        dispatch(getgoogleToken({ googleToken: accessToken }));
+        console.log(res,'되는건가이거')
         history.push("/mypage");
       });
     // axios 요청
@@ -107,9 +109,13 @@ export default function Login(props) {
 
 const Temp = styled.div`
   width: 100vw;
-  height: 95vh;
+  height: calc(100vh - 3.35rem);
+  max-width: 100%;
   z-index: 3;
   position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: rgba(0, 0, 0, 0.4);
 `;
 const Exit = styled.div`

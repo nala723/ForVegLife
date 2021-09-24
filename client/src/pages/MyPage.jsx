@@ -30,20 +30,21 @@ export default function MyPage() {
 
 
 const Container = styled.div`
- width:100vw;
+ width:100%;
+ max-width:100%;
  height:auto;
  min-height: 100vh;
  display: flex;
 `;
 
 const Box = styled(Container)`
- width: calc(100%- 4.188rem);
+ width: calc(100% - 4.188rem);
  flex-direction: column;
  
 `;
 const Top = styled.div`
  direction: flex;
- width: calc(100%-7.313rem);
+ width: calc(100% - 7.313rem);
  height: 5rem;
  margin-left: 7.313rem;
  :after{
@@ -55,7 +56,7 @@ const Top = styled.div`
  }
 `;
 const Line= styled.div`
- width: calc(100%-7.313rem);
+ width: calc(100% - 7.313rem);
  height: 100%;
 `;
 

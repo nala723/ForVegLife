@@ -15,6 +15,7 @@ import { userLogin, getgoogleToken } from "../actions/index";
 import Login from "./user/login";
 import SignUp from "./user/sign-up";
 import NotFound from "../pages/NotFoundPage";
+import Tutorial from "../pages/Tutorial";
 import { Buffer } from "buffer";
 import axios from "axios";
 
@@ -94,7 +95,7 @@ const Navbar = () => {
   if (profileblob === null || Object.keys(profileblob).length === 0) {
     profileIMG = "/image/bros_blank.jpg";
   } else {
-    if (profileblob.slice(0, 5) === "https") {
+    if (typeof(profileblob) === "string") {
       profileIMG = profileblob;
     } else {
       profileIMG =
@@ -106,6 +107,7 @@ const Navbar = () => {
   return (
     <>
       <Router>
+
         {isLogin ? (
           <Header>
             <Logo to="/">
@@ -142,6 +144,7 @@ const Navbar = () => {
           </Header>
         )}
 
+  
         <Switch>
           <Route exact path="/">
             <MapPage login={loginModal} register={registerModal}>
@@ -152,7 +155,9 @@ const Navbar = () => {
             </MapPage>
           </Route>
           <Route path="/mypage" component={Mypage} />
-
+          <Route path="/tutorial">
+            <Tutorial />
+          </Route>
           <Route path="*">
             <NotFound />
           </Route>
@@ -165,10 +170,11 @@ const Navbar = () => {
 const Header = styled.header`
   align-items: center;
   background-color: none;
-  width: 100%;
+  width: 100vw;
+  max-width: 100%;
   height: 3.125rem;
-  padding: 1.688rem;
   display: flex;
+  padding: 1.688rem;
   justify-content: space-between;
 `;
 const ImageBox = styled.div`

@@ -1,26 +1,47 @@
-import React from "react";
+import React, { useEffect,useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {useHistory} from 'react-router-dom';
 import {Buffer} from 'buffer';
+import { TraceSpinner } from "react-spinners-kit";
 
 
 export default function UserSideBar() {
   const userState = useSelector((state)=> state)
-  const {    accessToken,email,nickName,vegType,password, profileblob,isLogin} = userState.userReducer;
+  const { accessToken,email,nickName,vegType,password, profileblob,isLogin} = userState.userReducer;
+  const [loading, setLoading] = useState(true);
     
+   
+  useEffect(()=>{
+    setLoading(true);
+    if(profileblob !== null){
+      setLoading(false);
+    }
+  },[])
+
 
     // 프로필 이미지 설정 
-    let profileIMG 
-    if(Object.keys(profileblob).length === 0){
-        profileIMG = "/image/bros_blank.jpg"
+    let profileIMG;
+    if (profileblob === null || Object.keys(profileblob).length === 0) {
+      profileIMG = "/image/bros_blank.jpg";
+    } else {
+      if (typeof(profileblob) === "string") {
+        profileIMG = profileblob;
+      } else {
+        profileIMG =
+          "data:image/png;base64, " +
+          Buffer(profileblob, "binary").toString("base64");
+      }
     }
-     else{ 
-        profileIMG = 'data:image/png;base64, '+ Buffer(profileblob,'binary').toString('base64')
-       };
   
-
+    if(loading){
+      return ( 
+        < Loadingbox>
+          <StyledSpinner primary size={80} frontColor="#E2E700" backColor="#E2832B" loading={loading} />
+           </ Loadingbox>
+          )
+    }
  return(
      <Sidebar>
         <Container>
@@ -182,3 +203,16 @@ const Content = styled.li`
         color:  var(--color-grey);
      }
 `;
+
+const Loadingbox = styled.div`
+  width:19.125rem; 
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items:center;
+
+`;
+const StyledSpinner = styled(TraceSpinner)`
+  
+  
+ `; 
