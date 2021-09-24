@@ -94,7 +94,7 @@ const Navbar = () => {
   if (profileblob === null || Object.keys(profileblob).length === 0) {
     profileIMG = "/image/bros_blank.jpg";
   } else {
-    if (profileblob.slice(0, 5) === "https") {
+    if (Array.isArray(profileblob) && profileblob.slice(0, 5) === "https") {
       profileIMG = profileblob;
     } else {
       profileIMG =
@@ -151,7 +151,9 @@ const Navbar = () => {
               ) : null}
             </MapPage>
           </Route>
-          <Route path="/mypage" component={Mypage} />
+          <Route path="/mypage">
+            <Mypage />
+          </Route>
 
           <Route path="*">
             <NotFound />
@@ -165,10 +167,11 @@ const Navbar = () => {
 const Header = styled.header`
   align-items: center;
   background-color: none;
-  width: 100%;
+  width: 100vw;
+  max-width: 100%;
   height: 3.125rem;
-  padding: 1.688rem;
   display: flex;
+  padding: 1.688rem;
   justify-content: space-between;
 `;
 const ImageBox = styled.div`
