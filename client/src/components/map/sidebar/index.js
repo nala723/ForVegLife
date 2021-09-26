@@ -32,7 +32,11 @@ export default function SideBar({ select, inReview, exitReview }) {
 
   useEffect(() => {
     if (selPlace.id !== 0) {
-      gsap.to(sideRef.current, { left: 0, height: "90vh", width: "30%" });
+      gsap.to(sideRef.current, {
+        left: 0,
+        height: "calc(100vh - 3.35rem - 5vh)",
+        width: "30%",
+      });
     }
   });
   let data = tempdata;
