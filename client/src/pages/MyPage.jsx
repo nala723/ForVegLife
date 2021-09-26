@@ -28,31 +28,32 @@ export default function MyPage() {
 }
 
 const Container = styled.div`
-  width: 100vw;
-  max-width: 100%;
-  height: auto;
-  min-height: 100vh;
-  display: flex;
+ width:100%;
+ max-width:100%;
+ height:auto;
+ min-height: 100vh;
+ display: flex;
 `;
 
 const Box = styled(Container)`
-  width: calc(100%- 4.188rem);
-  flex-direction: column;
+ width: calc(100% - 4.188rem);
+ flex-direction: column;
+ 
 `;
 const Top = styled.div`
-  direction: flex;
-  width: calc(100%-7.313rem);
-  height: 5rem;
-  margin-left: 7.313rem;
-  :after {
-    content: "";
-    display: block;
-    height: 0.938rem;
-    background: var(--color-lightgreen);
-    border-radius: 1rem;
-  }
+ direction: flex;
+ width: calc(100% - 7.313rem);
+ height: 5rem;
+ margin-left: 7.313rem;
+ :after{
+   content:"";
+   display:block;
+   height:0.938rem;
+   background: var(--color-lightgreen);
+   border-radius: 1rem;
+ }
 `;
-const Line = styled.div`
-  width: calc(100%-7.313rem);
-  height: 100%;
+const Line= styled.div`
+ width: calc(100% - 7.313rem);
+ height: 100%;
 `;

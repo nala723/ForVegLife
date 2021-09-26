@@ -2,12 +2,13 @@ import React, {useEffect, useState}from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { getmyreview,newAccessToken } from "../../actions";
+import { getmyreview,newAccessToken,getgoogleToken } from "../../actions";
 import axios from "axios";
 import { dummydatas } from "./dummydatas";
 import theme from "../../styles/theme";
 import { keyframes } from "styled-components";
 import ReactTooltip from 'react-tooltip'
+import { TraceSpinner } from "react-spinners-kit";
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -19,21 +20,20 @@ export default function Star() {
     const userState = useSelector((state)=> state.userReducer);
     const googleState = useSelector((state)=> state.googleReducer);
     const {googleToken} = googleState;
-    const placeId = reviewState.placeId;// 다시
+    // const placeId = reviewState.placeId;// 다시
     const accessToken = userState.accessToken;
     const dummyReivews = dummydatas.reviews;
     const dummyStars = dummyReivews.filter((el,idx) => idx < 5 ).map(el => el.img);
-
+  
     const [hasText, setHasText] = useState(false);
     const [inputValue, setInputValue] = useState(''); 
    const [options, setOptions] = useState(dummyStars) //서버접속시 검색창의 별점 클릭시 조회, id로 필터링- 트리거
-   const [reivews, setReivews] = useState([]); 
-    // const [options, setOptions] = useState(dummyStars);
-    // const [reivews, setReivews] = useState(dummyReivews);  // 더미
+   const [reivews, setReivews] = useState(reviewState.myReviews); 
     const [selected, setSelected] = useState(-1);
     const [isActive, setIsActive] = useState(false);
-    let ReviewState = reviewState.myReviews ? reviewState.myReviews.map(el => el.content):[]
-
+    const [loading, setLoading] = useState(true);
+    let ReviewState = (reviewState.myReviews).length > 0 ? reviewState.myReviews: dummyReivews // 더미세팅
+     
      //최초렌더링시- 
   useEffect(()=> {
     getReviewList()
@@ -73,6 +73,7 @@ useEffect(() => {
   // 유저가 즐찾한 것 목록 받아오기  
   
   const getReviewList= () => {
+    setLoading(true)
       axios
           .get(process.env.REACT_APP_SERVER_URL + '/mypage/review',{ 
             headers: {
@@ -83,22 +84,20 @@ useEffect(() => {
         })
         .then((res)=> {
             if(res.headers.accessToken){
-                dispatch(newAccessToken({accessToken: res.headers.accessToken}));
+              if(googleToken){
+                dispatch(getgoogleToken({accessToken: res.headers.accessToken}));
+              }else{
+              dispatch(newAccessToken({accessToken: res.headers.accessToken}))
+              }
             } 
              if(res.status === 200){ 
                   
                  if((res.data.review_star).length > 0){
                    dispatch(
                        getmyreview(  // 상태전달 
-                               res.data.review_star.placeId,
-                               res.data.review_star.title,
-                               res.data.review_star.content,
-                               res.data.review_star.star,
-                               res.data.review_star.createdAt,
-                               res.data.review_star.reviewId,
+                               res.data.review_star
                          )
                        )
-                    setReivews(ReviewState)
                } else {
                setReivews(dummyReivews) // 임시, 실제시 삭제
                }
@@ -106,7 +105,7 @@ useEffect(() => {
              else{
                   history.push('/notfound');
              }
-            //  setIsLoding(false) 
+             setLoading(false) 
          })
          .catch(err => {
                 console.log(err)
@@ -115,8 +114,7 @@ useEffect(() => {
 
   // 모두 조회 버튼
   const handleAllview = () => {
-    setReivews(dummyReivews);      //더미 *
-    // setReivews(ReviewState)  // 실제 
+    setReivews(ReviewState)  // 실제 
     setInputValue('');        
     setOptions(dummyStars);
   }
@@ -147,8 +145,7 @@ useEffect(() => {
       (option) => option === clickedOption
     );
     setOptions(resultOptions);
-    // const dum = ReviewState.filter(dum=> dum.img === clickedOption)// 검색하고 선택한 결과 조회
-    const dum = dummyReivews.filter(dum=> dum.img === clickedOption)    // 임시
+    const dum = ReviewState.filter(dum=> dum.img === clickedOption)// 검색하고 선택한 결과 조회
     setReivews(dum);
     setIsActive(true);
  
@@ -222,6 +219,15 @@ useEffect(() => {
     window.open("http://www.facebook.com/sharer/sharer.php?u=" + sendUrl);
   }
   
+  if(loading){
+    return ( 
+      < Loadingbox>
+        <StyledSpinner primary size={80} frontColor="#E2E700" backColor="#E2832B" loading={loading} />
+         </ Loadingbox>
+        )
+  }
+
+
     return (
         <Container onClick={handleDropVisible} >
         <Title>
@@ -258,7 +264,7 @@ useEffect(() => {
                            <Card data-tip data-for={dum.content ?`${idx}` : null}>
                                 <CardContent >
                                   <h4>{dum.title}</h4>
-                                  <img src={dum.img} className="star"/>
+                                  <img src={dum.img ? dum.img : options.filter((o,index)=> index === dum.star-1)} className="star"/>
                                   <div>{dum.content ? '.....' : ""}</div>
                                 </CardContent>
                                <CardSns>
@@ -275,7 +281,14 @@ useEffect(() => {
                         </div>
                         )
                       })}
-                 <GotoCard onClick={(e)=>gotomap(e)}>+<p></p>나의 장소 만들러가기</GotoCard>
+                 <GotoCard data-tip data-for="go" onClick={(e)=>gotomap(e)}>
+                      <p>+</p>
+                      <img src='/image/five-star.png'/>
+                      <div>.....</div>
+                   </GotoCard>
+                    <StyledTooltip id="go" place="top"  type="success" effect="solid" className="toolTip">
+                      별점을 등록해주세요
+                    </StyledTooltip>
            </CardBox>
        </Bottom>
   </Container>
@@ -298,7 +311,7 @@ const transform = keyframes`
 `;
 
 const Container = styled.div`
-    width: calc(100%-7.313rem);
+    width: calc(100% - 7.313rem);
     height:100%;
     display: flex;
     flex-direction: column;
@@ -430,7 +443,6 @@ const Card = styled.div`
    transition: all 0.3s ease;
     :hover{
       box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
-      /* transform: translateY(-5%); */
       transition: all 0.3s ease;
     }
 `;
@@ -486,11 +498,24 @@ const CardSns = styled(CardContent)`
     }
 `;
 const GotoCard = styled(Card)`
-    justify-content: center;
-    gap:5px;
+    justify-content: flex-start;
     font-size: var(--font-size-lg);
     color: var(--color-darkgrey);
     cursor: pointer;
+    padding-top:2.2rem;
+    gap:1.6rem;
+    flex:5;
+     >p{
+       color: var(--color-brown);
+       font-weight:900;
+     }
+     >div{
+       margin-top:1rem;
+      color:${theme.colors.mapgrey};
+      font-size: 13px;
+      letter-spacing: 3px;
+      font-weight: 900;
+     }
 `;
 
 const StyledTooltip = styled(ReactTooltip)`
@@ -498,7 +523,6 @@ const StyledTooltip = styled(ReactTooltip)`
       max-width: 12rem;
       min-height:2rem;
       line-height: 1rem;
-      /* text-align:center; */
       background-color: ${theme.colors.darkgrey};
       
       &.toolTip::after{
@@ -508,4 +532,16 @@ const StyledTooltip = styled(ReactTooltip)`
       }
    
    }
+ `; 
+ const Loadingbox = styled.div`
+ width: calc(100%-7.313rem);
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items:center;
+
+`;
+const StyledSpinner = styled(TraceSpinner)`
+  
+  
  `; 

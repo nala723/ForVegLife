@@ -21,6 +21,7 @@ module.exports = {
   deleteRestaurant: require("./restaurant/deleteRestaurant"),
   updateReview: require("./restaurant/updateReview"),
   updateRestaurant: require("./restaurant/updateRestaurant"),
+  recommendation: require("./restaurant/recommendation"),
   /*-----------------------------------------------------------------*/
   updateUserInfo: require("./mypage/updateUserInfo"),
   getUserInfo: require("./mypage/getUserInfo"),

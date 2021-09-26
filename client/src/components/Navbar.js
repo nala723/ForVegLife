@@ -15,6 +15,7 @@ import { userLogin, getgoogleToken } from "../actions/index";
 import Login from "./user/login";
 import SignUp from "./user/sign-up";
 import NotFound from "../pages/NotFoundPage";
+import Tutorial from "../pages/Tutorial";
 import { Buffer } from "buffer";
 import axios from "axios";
 
@@ -109,6 +110,7 @@ const Navbar = () => {
   return (
     <>
       <Router>
+
         {isLogin ? (
           <Header>
             <Logo to="/">
@@ -145,6 +147,7 @@ const Navbar = () => {
           </Header>
         )}
 
+  
         <Switch>
           <Route exact path="/">
             <MapPage login={loginModal} register={registerModal}>
@@ -154,10 +157,10 @@ const Navbar = () => {
               ) : null}
             </MapPage>
           </Route>
-          <Route path="/mypage">
-            <Mypage />
+          <Route path="/mypage" component={Mypage} />
+          <Route path="/tutorial">
+            <Tutorial />
           </Route>
-
           <Route path="*">
             <NotFound />
           </Route>

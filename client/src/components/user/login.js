@@ -55,7 +55,8 @@ export default function Login(props) {
       });
   };
   const responseGoogle = (res) => {
-    console.log(res.profileObj.imageUrl);
+    console.log(res,res.accessToken);
+    const accessToken = res.accessToken;
     const email = res.profileObj.email;
     const nickName = res.profileObj.name;
     const profileblob = res.profileObj.imageUrl;
@@ -65,8 +66,9 @@ export default function Login(props) {
         nickName,
       })
       .then((res) => {
-        dispatch(userLogin({ isLogin: true, email, nickName, profileblob }));
-        dispatch(getgoogleToken({ googleToken: res.accessToken }));
+        dispatch(userLogin({ isLogin: true, email, nickName, profileblob}));
+        dispatch(getgoogleToken({ googleToken: accessToken }));
+        console.log(res,'되는건가이거')
         history.push("/mypage");
       });
     // axios 요청

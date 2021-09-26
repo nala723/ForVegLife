@@ -6,21 +6,21 @@ import {
 const initialState = {
    myFavPlaces : [],
    myReviews : []
-    // placeId: null,
+    // place_id: null,
     // title : "",
     // content: "",
     // star: null,
     // createdAt: null,
     // reviewId: null,
     // address:"",
-    // pictureUrl: ""   
+    // picture_url: ""   
 
 }
 
 
 const myPlaceReducer = (state = initialState, action) => {
   switch (action.type) {
-    case GET_MY_REVIEW:
+    case GET_MY_FAVORITE:
       return Object.assign({}, state, {
         myFavPlaces : action.payload.data
        
@@ -29,7 +29,7 @@ const myPlaceReducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         myFavPlaces : state.myFavPlaces.filter((el)=> el.placeId !== action.payload.id)
       })
-    case GET_MY_FAVORITE:
+    case GET_MY_REVIEW:
     return Object.assign({}, state, {
        myReviews : action.payload.data
       });

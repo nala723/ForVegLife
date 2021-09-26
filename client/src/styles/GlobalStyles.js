@@ -13,6 +13,7 @@ const GlobalStyles = createGlobalStyle`
         -webkit-box-sizing: border-box;
     }
     body {
+        /* overflow-x:hidden; */
         padding: 0;
         margin: 0;
         width:100vw;
