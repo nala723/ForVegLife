@@ -30,7 +30,7 @@ export default function MapIndex({ data, latlng }) {
       level: 4,
     };
     const map = new kakao.maps.Map(container, options);
-    
+
     const geocoder = new kakao.maps.services.Geocoder();
     map.setDraggable(true);
     kakao.maps.event.addListener(map, "tilesloaded", function () {
@@ -100,6 +100,7 @@ export default function MapIndex({ data, latlng }) {
 
 const Map = styled.div`
   position: absolute;
+  max-width: 100%;
   width: 100vw;
-  height: 94vh;
+  height: calc(100vh - 3.35rem);
 `;

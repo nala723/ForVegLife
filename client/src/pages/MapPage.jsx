@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import SearchPlace from "../components/map/search";
 import SideBar from "../components/map/sidebar/index";
 import styled from "styled-components";
@@ -11,6 +11,7 @@ import axios from "axios";
 
 export default function MapPage(props) {
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.userReducer);
   let link = window.location.href.split("?")[1];
   useEffect(() => {
     if (link) {
@@ -61,7 +62,15 @@ export default function MapPage(props) {
   return (
     <Temp>
       <SearchPlace selData={data} setCategory={changeCategory} />
-      {review || enroll ? "" : <Enroll onClick={inEnroll}> 장소 추가</Enroll>}
+      {user.isLogin ? (
+        review || enroll ? (
+          ""
+        ) : (
+          <Enroll onClick={inEnroll}> 장소 추가</Enroll>
+        )
+      ) : (
+        ""
+      )}
       {props.children}
       {selPlace.id !== 0 ? (
         !review ? (
@@ -79,7 +88,7 @@ export default function MapPage(props) {
 const Temp = styled.div`
   position: relative;
   width: 100%;
-  height: 100%;
+  height: calc(100% - 3.125rem);
 `;
 const Enroll = styled.div`
   position: absolute;

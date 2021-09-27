@@ -1,33 +1,31 @@
 import axios from "axios";
-import React from "react"
-import { Route } from 'react-router-dom';
-import UserSideBar from '../components/userInfo/userSideBar';
-import Favorite from '../components/userInfo/favorite';
-import Star from '../components/userInfo/star';
-import UpdateInfo from '../components/userInfo/updateInfo';
-import SignOut from '../components/userInfo/sign-Out';
+import React from "react";
+import { Route } from "react-router-dom";
+import UserSideBar from "../components/userInfo/userSideBar";
+import Favorite from "../components/userInfo/favorite";
+import Star from "../components/userInfo/star";
+import UpdateInfo from "../components/userInfo/updateInfo";
+import SignOut from "../components/userInfo/sign-Out";
 import styled from "styled-components";
 
 export default function MyPage() {
- 
   return (
     <>
-      <Container >
+      <Container>
         <UserSideBar />
         <Box>
-         <Top>
-           <Line></Line>
-         </Top>
-         <Route exact path="/mypage" render={()=> <Favorite />}/>
-         <Route path="/mypage/star" component={Star} />
-         <Route path="/mypage/updateinfo" component={UpdateInfo} />
-         <Route path="/mypage/signout" component={SignOut} />
+          <Top>
+            <Line></Line>
+          </Top>
+          <Route exact path="/mypage" render={() => <Favorite />} />
+          <Route path="/mypage/star" component={Star} />
+          <Route path="/mypage/updateinfo" component={UpdateInfo} />
+          <Route path="/mypage/signout" component={SignOut} />
         </Box>
-      </ Container> 
+      </Container>
     </>
   );
 }
-
 
 const Container = styled.div`
  width:100%;
@@ -59,5 +57,3 @@ const Line= styled.div`
  width: calc(100% - 7.313rem);
  height: 100%;
 `;
-
-
