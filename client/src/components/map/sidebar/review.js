@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 export default function Review({ review, inReview }) {
   const user = useSelector((state) => state.userReducer);
   let avearge = 0;
+  const [Review, setReview] = useState(review.slice(0, 3));
   let star = [0, 0, 0, 0, 0];
   const fillStar = (avearge) => {
     let CeilStar = Math.round(avearge);
@@ -43,8 +44,8 @@ export default function Review({ review, inReview }) {
         })}
       </Avearge>
       <ReviewForm>
-        {review.length !== 0
-          ? review.map((x) => {
+        {Review.length !== 0
+          ? Review.map((x) => {
               return (
                 <ReviewData>
                   <Review_1>
@@ -65,7 +66,12 @@ export default function Review({ review, inReview }) {
               );
             })
           : ""}
-        <More> ...더보기</More>
+
+        {Review.length <= 3 ? (
+          <More onClick={() => setReview(review)}> ...더보기</More>
+        ) : (
+          <More onClick={() => setReview(review.slice(0, 3))}> 닫기</More>
+        )}
       </ReviewForm>
     </Temp>
   );

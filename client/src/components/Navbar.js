@@ -24,8 +24,7 @@ const Navbar = () => {
   const googleState = useSelector((state) => state.googleReducer);
   const dispatch = useDispatch();
   const history = useHistory();
-  const [loginModal, setLoginModal] = useState(false);
-  const [registerModal, setRegisterModal] = useState(false);
+  const [modal, setModal] = useState("");
   const { accessToken, profileblob, isLogin } = loginState;
   const { googleToken } = googleState;
 
@@ -38,26 +37,24 @@ const Navbar = () => {
 
   useEffect(() => {
     if (isLogin) {
-      setLoginModal(false);
-      setRegisterModal(false);
+      setModal("");
     }
   }, []);
 
   const userSignin = () => {
-    setLoginModal(true);
+    setModal("signin");
   };
   const userLoginExit = () => {
-    setLoginModal(false);
+    setModal("");
   };
   const Register = () => {
-    setRegisterModal(true);
+    setModal("signup");
   };
   const RegisterExit = () => {
-    setRegisterModal(false);
+    setModal("");
   };
   const logout = () => {
-    setLoginModal(false);
-    setRegisterModal(false);
+    setModal("");
     axios
       .get(`${process.env.REACT_APP_SERVER_URL}` + `/sign/signout`, {
         headers: {
@@ -110,7 +107,6 @@ const Navbar = () => {
   return (
     <>
       <Router>
-
         {isLogin ? (
           <Header>
             <Logo to="/">
@@ -121,6 +117,11 @@ const Navbar = () => {
                 <StyledLogin onClick={() => logout()}>Logout</StyledLogin>
               </Link>
               <Route exact path="/">
+                <Link to="/mypage">
+                  <StyledMypage>Mypage</StyledMypage>
+                </Link>
+              </Route>
+              <Route exact path="/resturant/:placeId">
                 <Link to="/mypage">
                   <StyledMypage>Mypage</StyledMypage>
                 </Link>
@@ -147,12 +148,23 @@ const Navbar = () => {
           </Header>
         )}
 
-  
         <Switch>
           <Route exact path="/">
-            <MapPage login={loginModal} register={registerModal}>
-              {!isLogin && loginModal ? <Login exit={userLoginExit} /> : null}
-              {!isLogin && registerModal ? (
+            <MapPage>
+              {!isLogin && modal === "signin" ? (
+                <Login exit={userLoginExit} />
+              ) : null}
+              {!isLogin && modal === "signup" ? (
+                <SignUp exit={RegisterExit} />
+              ) : null}
+            </MapPage>
+          </Route>
+          <Route path="/resturant/:placeId">
+            <MapPage>
+              {!isLogin && modal === "signin" ? (
+                <Login exit={userLoginExit} />
+              ) : null}
+              {!isLogin && modal === "signup" ? (
                 <SignUp exit={RegisterExit} />
               ) : null}
             </MapPage>

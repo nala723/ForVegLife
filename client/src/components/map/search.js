@@ -77,8 +77,7 @@ export default function SearchPlace({ selData, setCategory }) {
   return (
     <>
       <SearchForm className="inputForm" onSubmit={handleSubmit}>
-        <div>
-          {" "}
+        <InputStyle>
           <PlaceInput
             placeholder="Search Place..."
             onChange={onChange}
@@ -87,7 +86,7 @@ export default function SearchPlace({ selData, setCategory }) {
           <SubmitButton type="submit">
             <FontAwesomeIcon icon={faSearch} />
           </SubmitButton>
-        </div>
+        </InputStyle>
         <Keyword>
           {data.map((x) => {
             return (
@@ -102,13 +101,9 @@ export default function SearchPlace({ selData, setCategory }) {
         </Keyword>
       </SearchForm>
       <Category>
+        <VegeType>채식 타입</VegeType>
         {veggieIcon.map((x) => {
-          return (
-            <Type src={x.img} onClick={() => setCategory(x.name)}>
-              {" "}
-              {x.name}
-            </Type>
-          );
+          return <Type src={x.img} onClick={() => setCategory(x.name)}></Type>;
         })}
       </Category>
       <MapIndex data={selData} latlng={latlng} />
@@ -124,12 +119,16 @@ const SearchForm = styled.form`
   right: 30%;
   z-index: 2;
 `;
+const InputStyle = styled.div`
+  width: 15rem;
+  position: relative;
+`;
 const Category = styled.div`
   position: absolute;
   flex-direction: row;
   display: flex;
   top: 3rem;
-  right: 10%;
+  right: 1rem;
   display: flex;
   z-index: 2;
 `;
@@ -137,13 +136,14 @@ const Category = styled.div`
 const Type = styled.image`
   width: 3rem;
   height: 3rem;
+  z-index: 6;
 `;
 
 const PlaceInput = styled.input`
   background-color: rgba(255, 255, 255, 0.6);
   border: none;
-  width: 20rem;
-  height: 2rem;
+  width: 15rem;
+  height: 3rem;
   border-radius: 0.2rem;
   color: ${theme.colors.mapgrey};
 `;
@@ -151,8 +151,12 @@ const SubmitButton = styled.button`
   position: absolute;
   background-color: rgba(0, 0, 0, 0);
   border: none;
-  right: 0;
-  top: 0;
+  right: 0%;
+  height: 3rem;
+  top: 0%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 1.8rem;
 `;
 const PlaceData = styled.div`
@@ -161,7 +165,7 @@ const PlaceData = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 20rem;
+  width: 15rem;
   height: 6rem;
   color: black;
 `;
@@ -185,4 +189,15 @@ const Keyword = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
+`;
+const VegeType = styled.div`
+  width: 5rem;
+  height: 2rem;
+  background-color: #b96619;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 1.5rem;
+  color: white;
+  margin: 1rem;
 `;
