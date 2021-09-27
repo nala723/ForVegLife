@@ -16,6 +16,7 @@ import Login from "./user/login";
 import SignUp from "./user/sign-up";
 import NotFound from "../pages/NotFoundPage";
 import Tutorial from "../pages/Tutorial";
+import Content from "../pages/Content";
 import { Buffer } from "buffer";
 import axios from "axios";
 
@@ -157,9 +158,14 @@ const Navbar = () => {
               ) : null}
             </MapPage>
           </Route>
-          <Route path="/mypage" component={Mypage} />
+          <Route path="/mypage">
+            <Mypage />
+          </Route>
           <Route path="/tutorial">
             <Tutorial />
+          </Route>
+          <Route path="/content">
+            <Content />
           </Route>
           <Route path="*">
             <NotFound />
@@ -179,6 +185,7 @@ const Header = styled.header`
   display: flex;
   padding: 1.688rem;
   justify-content: space-between;
+  border-bottom: 0.1rem solid #DEDEDE;
 `;
 const ImageBox = styled.div`
   margin-left: 0.5rem;

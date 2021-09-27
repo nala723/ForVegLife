@@ -32,7 +32,7 @@ export default function Star() {
     const [selected, setSelected] = useState(-1);
     const [isActive, setIsActive] = useState(false);
     const [loading, setLoading] = useState(true);
-    let ReviewState = (reviewState.myReviews).length > 0 ? reviewState.myReviews: dummyReivews // 더미세팅
+    let ReviewState = (reviewState.myReviews).length > 0 ? reviewState.myReviews: []
      
      //최초렌더링시- 
   useEffect(()=> {
@@ -98,9 +98,8 @@ useEffect(() => {
                                res.data.review_star
                          )
                        )
-               } else {
-               setReivews(dummyReivews) // 임시, 실제시 삭제
-               }
+                     setReivews(res.data.review_star)
+               } 
              }
              else{
                   history.push('/notfound');
@@ -145,7 +144,8 @@ useEffect(() => {
       (option) => option === clickedOption
     );
     setOptions(resultOptions);
-    const dum = ReviewState.filter(dum=> dum.img === clickedOption)// 검색하고 선택한 결과 조회
+    const reviewFilter = dummyReivews.filter((r)=>r.img === clickedOption).map((r)=> r.placeId)[0]
+    const dum = ReviewState.filter(dum=> dum.star === reviewFilter)// 검색하고 선택한 결과 조회
     setReivews(dum);
     setIsActive(true);
  
@@ -264,7 +264,7 @@ useEffect(() => {
                            <Card data-tip data-for={dum.content ?`${idx}` : null}>
                                 <CardContent >
                                   <h4>{dum.title}</h4>
-                                  <img src={dum.img ? dum.img : options.filter((o,index)=> index === dum.star-1)} className="star"/>
+                                  <img src={dum.star ? dummyReivews.filter((o)=> o.placeId === dum.star)[0].img: null} className="star"/>
                                   <div>{dum.content ? '.....' : ""}</div>
                                 </CardContent>
                                <CardSns>

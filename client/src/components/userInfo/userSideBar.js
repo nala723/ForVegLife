@@ -1,15 +1,14 @@
 import React, { useEffect,useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import {useHistory} from 'react-router-dom';
+import { useSelector } from "react-redux";
 import {Buffer} from 'buffer';
 import { TraceSpinner } from "react-spinners-kit";
 
 
 export default function UserSideBar() {
   const userState = useSelector((state)=> state)
-  const { accessToken,email,nickName,vegType,password, profileblob,isLogin} = userState.userReducer;
+  const { email,nickName,profileblob} = userState.userReducer;
   const [loading, setLoading] = useState(true);
     
    
