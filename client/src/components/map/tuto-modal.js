@@ -26,7 +26,6 @@ export default function TutoModal(props) {
     );
   }
 }
-// 애니메이션이 안먹힘 슬라이드같은거 줘야겠다
 
 /* 버튼 */
 const ButtonBox = styled.div`

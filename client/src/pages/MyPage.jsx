@@ -1,21 +1,10 @@
-<<<<<<< HEAD
-import React from "react"
+import React from "react";
 import { Route } from 'react-router-dom';
 import UserSideBar from '../components/userInfo/userSideBar';
 import Favorite from '../components/userInfo/favorite';
 import Star from '../components/userInfo/star';
 import UpdateInfo from '../components/userInfo/updateInfo';
 import SignOut from '../components/userInfo/sign-Out';
-=======
-import axios from "axios";
-import React from "react";
-import { Route } from "react-router-dom";
-import UserSideBar from "../components/userInfo/userSideBar";
-import Favorite from "../components/userInfo/favorite";
-import Star from "../components/userInfo/star";
-import UpdateInfo from "../components/userInfo/updateInfo";
-import SignOut from "../components/userInfo/sign-Out";
->>>>>>> Upstream/dev
 import styled from "styled-components";
 
 export default function MyPage() {

@@ -135,7 +135,7 @@ export default function Content() {
                                       <div>
                                          <div>
                                             <h5>{ar.name}</h5>
-                                            <p>{ar.follower}</p>
+                                            <p>구독자 수 : {ar.follower}</p>
                                           </div>
                                          <h4>{ar.title}</h4>
                                          <span>바로가기</span>
@@ -146,14 +146,51 @@ export default function Content() {
                     </ul>
                 <img src="/image/smallanker.svg" alt="image" className="right"/>
                 </div>
-                
             </Firth>
             <Final className="final">
-                <p>ForVegLife에게 피드백을 남겨주세요</p>
+                <div>
+                    <div className="feedBox">
+                         <img src="/image/message.png" />
+                         <h1><p>ForVegLife</p>에게 피드백을 남겨주세요</h1>
+                    </div> 
+                     <div>
+                         <p>아직 계정이 없으신가요?<span>→</span> </p>
+                         <button>Resister</button>
+                     </div>               
+                </div>
             </Final>
             <Footer>
                 <div>
+                    <ul>Contact
+                        <li>조우빈</li>
+                        <li>심지현</li>
+                        <li>윤현섭</li>
+                        <li>이빛나라</li>
+                    </ul>
+                    <ul>About
+                        <li>wiki</li>
+                        <li>repository</li>
+                    </ul>
+                    <div>
+                        <img src="/image/logo.svg" />
+                        <p>
+                        @Copyright 2021 team ForVegLife.
+                        </p>
+                        <p>
+                        All right reserved.
+                        </p>
                     </div>
+                    <ul>Codestates
+                        <li>codestates.com</li>
+                        <li>urclass</li>
+                    </ul>
+                    <ul>Sitemap
+                        <li>mypage</li>
+                        <li>mappage</li>
+                        <li>content</li>
+                        <li>login</li>
+                    </ul>
+                </div>
             </Footer>
         </Container>
     </>
@@ -292,7 +329,8 @@ const LeftBox = styled.div`
     >h1{
         font-size:48px;
         color:#5B220A;
-        font-weight:600;
+        font-weight:500;
+        text-shadow: #5B220A 0 0 0;
         
     }
     >p{  
@@ -330,6 +368,7 @@ const Second =styled(First)`
     background-color: white;
     flex-direction: column;
     align-items:flex-start;
+    margin-bottom:3.5rem;
      >h2{
          margin-left:30px;
          margin-bottom: 2.2rem;
@@ -419,10 +458,8 @@ const Second =styled(First)`
 
 const Third =styled(Second)`
   >div{
-
     >ul{
-            grid-template-columns: repeat(5, minmax(13.625rem, 1fr));
-            
+        grid-template-columns: repeat(5, minmax(13.625rem, 1fr));
             >li{
                 width:13.625rem;
                 >img{
@@ -433,7 +470,9 @@ const Third =styled(Second)`
                     object-fit:cover;
                 }
                 >div{
-                    height:auto;
+                    justify-content:flex-start;
+                    height:10.625rem;
+                    >p{}
                 }
             }
         }
@@ -441,10 +480,8 @@ const Third =styled(Second)`
 `;
 const Firth =styled(Second)`
   >div{
-
     >ul{
-            grid-template-columns: repeat(2, minmax(28.125rem, 1fr));
-            
+        grid-template-columns: repeat(2, minmax(28.125rem, 1fr));
             >li{
                 width:28.125rem;
                 >img{
@@ -453,29 +490,39 @@ const Firth =styled(Second)`
                     object-fit:cover;
                 }
                 >div{
-                    /* padding: 1rem 0.3rem 3rem 0.3rem; */
+                    height:10.625rem;
+                    padding: 1rem;
+                    justify-content: flex-start;
                     >div{
                     display: flex;
                     width:100%;
                     justify-content: space-between;
                     /* padding:0rem 0.3rem; */
-                        
+                    font-size:14px;
                         >h5{
-                           
                         }
                         >p{
-
                         }
-                    }
-                  
+                    } 
                     >h4{
-                        line-height: 1.3rem;
-                        
+                        width:100%;
+                        line-height: 1.4rem;
+                        text-align:justify;
+                        /* position: relative; */
+
                     }
                     >span{
-                      
-                    }
-                   
+                                /* position: absolute;
+                                right:0; */
+                                position: relative;
+                                top:-10px;
+                                width:100%;
+                                color: ${theme.colors.green};
+                                text-align:end;
+                                cursor:pointer;
+                                font-size:14px;
+                                }
+                  
                 }
             }
         }
@@ -485,8 +532,82 @@ const Firth =styled(Second)`
 `;
 const Final =styled(Second)`
     margin-bottom: 0;
-      
-  
+   
+      >div{
+        width: 1216px;
+        height:100%;
+        flex-direction: column;
+        justify-content: center;
+        padding: 4rem 0;
+            >div{
+              width:100%;
+              height:100%;
+              display:flex;
+              align-items:center;
+              justify-content: center;
+                 &.feedBox{
+                    height:100%;
+                    justify-content: flex-start;
+                    background-color:#FDC189;
+                    color:white;
+                    font-size: ${theme.fonts.size.base};
+                    font-weight: ${theme.fonts.weight.bold};
+                    padding-left:2rem;
+                    gap:0rem;
+                    cursor: pointer;
+                    >img{
+
+                    }
+                    >h1{
+                        display: flex;
+                        align-items:flex-end;
+                        
+                        >p{
+                            color:#B96619;
+                            font-family:${theme.fonts.family.mypage};
+                            font-size: ${theme.fonts.size.llg};
+                            font-weight: 500;
+                            margin-right:0.3rem;
+                        }
+                    }     
+                 }
+              }
+            >div{
+              gap:3rem;
+                 >p{
+                    color:${theme.colors.mapgrey};
+                    font-size:${theme.fonts.size.base};
+                    font-weight: 500;
+                    >span{
+                        margin:0 1rem;
+                    }
+                  
+                 }
+                 >button{
+                    display: flex;
+                    width: 7.375rem;
+                    font-size: ${theme.fonts.size.base};
+                    font-family: ${theme.fonts.button};
+                    font-weight: 500;
+                    justify-content: center;
+                    align-items: center;
+                    height: 3rem;
+                    border-radius: 0.5rem;
+                    border: none;
+                    background-color: ${theme.colors.green};
+                    color: white;
+                    cursor: pointer;
+                    transition: all 0.5s ease-in-out;
+                    :hover {
+                        background-color: white;
+                        color: ${theme.colors.green};
+                        transition: all 0.5s ease-in-out;
+                        border: 1px solid ${theme.colors.green};
+                        
+                    }
+                 }
+            }     
+      }                   
 `;
 
 
@@ -498,5 +619,40 @@ const Footer =styled.footer`
     justify-content: center;
       >div{
         width:1216px;
+        height:100%;
+        display:flex;
+        justify-content: space-between;
+        padding: 6rem 0;
+        >ul{
+            display:flex;
+            flex-direction: column;
+            align-items: center;
+            flex:1;
+            color:${theme.colors.mapgrey};
+            font-weight:bold;
+            font-size:${theme.fonts.size.lg};
+            gap:0.5rem;
+            >li{
+                opacity: 0.9;
+                font-weight:500;
+                font-size:15px;
+            }
+        }
+        >div{
+            flex:1.5;
+            display:flex;
+            flex-direction: column;
+            align-items:center;
+            text-align:center;
+            >img{
+                width:11.563rem;
+                margin-bottom:1rem;
+            }
+            >p{
+               width:100%;
+               color:${theme.colors.mapgrey};
+               line-height: 1.3rem;
+            }
+        }
       }
 `;
