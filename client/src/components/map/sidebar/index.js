@@ -108,6 +108,9 @@ const Exit = styled.div`
 `;
 const Side = styled.div`
   display: flex;
+  border: 2px solid rgba(124, 183, 0, 0.5);
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
   flex-direction: column;
   align-items: center;
   background-color: white;
