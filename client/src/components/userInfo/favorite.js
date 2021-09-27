@@ -106,7 +106,7 @@ export default function Favorite() {
             else{
                 history.push('/notfound');
             }
-      
+          console.log(res.data)
             setLoading(false) 
         })
         .catch(err => {
@@ -141,7 +141,7 @@ export default function Favorite() {
                 
                   if((res.data.place).length > 0){
                    dispatch(getmyfavorite(res.data.place))
-                   history.push('/mypage');
+                   setPlaces(res.data.place)
                   }
              }
              else{
@@ -419,7 +419,7 @@ const transform = keyframes`
 
   100% {
     width:32.063rem;
-  } // 안먹힘
+  } 
 `;
 
 const Container = styled.div`
@@ -437,7 +437,6 @@ const Title = styled.div`
   padding-top: 2.4rem;
   padding-bottom: 3rem;
   font-size: var(--font-size-xl);
-  font-style: var(--font-mypage);
   color: var(--color-darkgrey);
 `;
 const Bottom = styled.div`
@@ -452,7 +451,6 @@ const Recommend = styled.div`
  height:2rem;
  display:flex;
  color: ${theme.colors.green};
- font-style: ${theme.fonts.family.mypage};
  font-weight:600;
   
 `;
@@ -476,7 +474,6 @@ const SearchContainer = styled.div`
     transition: all 0.5s ease;
      :hover {
        background-color: ${theme.colors.lightgreen};
-       /* border: 2px solid var(--color-lightgreen); */
        transition: all 0.5s ease;
      }
     
@@ -531,8 +528,6 @@ border: none;
 border-radius: 0 0 1rem 1rem;
 box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
 z-index: 3;
-/* border:2px solid var(--color-lightgreen);
-outline:none; */
 > li {
   padding: 0 1rem;
   &:hover {

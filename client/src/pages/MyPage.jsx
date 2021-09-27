@@ -1,4 +1,3 @@
-import axios from "axios";
 import React from "react"
 import { Route } from 'react-router-dom';
 import UserSideBar from '../components/userInfo/userSideBar';

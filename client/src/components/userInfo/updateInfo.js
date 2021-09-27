@@ -42,13 +42,15 @@ export default function UpdateInfo() {
 
     // 최초 렌더링시 유저정보 받아오기
     useEffect(()=>{
+        
         if(googleToken){
            setGoogleUser(true)
         }else {
          getUserInfo(accessToken)
         }
     },[])
-
+ 
+    
 
    // 유저 정보 요청 함수 - 통과
     const getUserInfo = (accessToken) => {
