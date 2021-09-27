@@ -1,4 +1,4 @@
-import react, { useState } from "react";
+import react, { useState, useRef, useEffect } from "react";
 import { useHistory } from "react-router";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
@@ -8,12 +8,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import theme from "../../styles/theme";
+import gsap from "gsap";
 
 export default function Login(props) {
   let userdata = useSelector((state) => state.userReducer);
   let googleState = useSelector((state) => state.googleReducer);
   const history = useHistory();
-
+  const size = useRef();
+  useEffect(() => {
+    gsap.to(size.current, { scale: 1, duration: 0.5, ease: "back" });
+  });
   const dispatch = useDispatch();
   const [user, setUser] = useState({
     email: "",
@@ -51,7 +55,7 @@ export default function Login(props) {
       });
   };
   const responseGoogle = (res) => {
-    console.log(res,res.accessToken);
+    console.log(res, res.accessToken);
     const accessToken = res.accessToken;
     const email = res.profileObj.email;
     const nickName = res.profileObj.name;
@@ -62,9 +66,18 @@ export default function Login(props) {
         nickName,
       })
       .then((res) => {
-        dispatch(userLogin({ isLogin: true, email, nickName, profileblob}));
+        const accessToken = res.data.accessToken;
+        dispatch(
+          userLogin({
+            isLogin: true,
+            email,
+            nickName,
+            profileblob,
+            accessToken,
+          })
+        );
         dispatch(getgoogleToken({ googleToken: accessToken }));
-        console.log(res,'되는건가이거')
+        console.log(res, "되는건가이거");
         history.push("/mypage");
       });
     // axios 요청
@@ -75,7 +88,7 @@ export default function Login(props) {
       <Exit onClick={props.exit}>
         <FontAwesomeIcon color={"white"} icon={faTimes} />
       </Exit>
-      <LoginForm onSubmit={handleSubmit}>
+      <LoginForm ref={size} onSubmit={handleSubmit}>
         <Logo>
           <img src="/image/logo.svg" />
         </Logo>
@@ -125,18 +138,15 @@ const Exit = styled.div`
   font-size: 2rem;
 `;
 const LoginForm = styled.form`
-  position: absolute;
   display: flex;
   flex-direction: column;
   align-items: center;
-  top: 50vh;
-  left: 50vw;
   width: 26.25rem;
   height: 30.433rem;
   background-color: white;
   border-radius: 1rem;
-  transform: translate(-50%, -50%);
   padding: 0 3.5rem;
+  transform: scale(0);
 `;
 const Logo = styled.div`
   display: flex;

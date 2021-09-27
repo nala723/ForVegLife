@@ -15,8 +15,8 @@ module.exports = async (req, res) => {
         where: { latitude: latitude, longitude: longitude },
       });
       const accessToken = authorization.split(" ")[1];
-      if(isAuthorized(accessToken) === 'jwt expired'){
-        res.set('accessToken', remakeToken(req));
+      if (isAuthorized(accessToken) === "jwt expired") {
+        res.set("accessToken", remakeToken(req));
       }
       console.log(accessToken);
       const userData = isAuthorized(accessToken);
@@ -33,11 +33,12 @@ module.exports = async (req, res) => {
             latitude: latitude,
             address: address,
           });
-
-          models.vegCategory.create({
-            place_id: placeData.id,
-            category: category,
-          });
+          for (let i = 0; i < category.length; i++) {
+            models.vegCategory.create({
+              place_id: placeData.id,
+              category: category[i],
+            });
+          }
 
           for (let i = 0; i < menu.length; i++) {
             models.menuprice.create({

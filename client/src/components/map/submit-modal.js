@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import styled from "styled-components";
 import theme from "../../styles/theme";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -6,13 +6,18 @@ import { faTimes, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { MenuPrices } from "./menuPrices";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
+import gsap from "gsap";
 export default function EnrollPlace(props) {
   const selPlace = useSelector((state) => state.selectPlace);
   const user = useSelector((state) => state.userReducer);
   const [place, setPlace] = useState({
     place: selPlace.name,
     address: selPlace.address,
-    type: "",
+  });
+  const [type, setType] = useState([]);
+  const size = useRef();
+  useEffect(() => {
+    gsap.to(size.current, { scale: 1, duration: 0.5, ease: "back" });
   });
   const [menu, setMenu] = useState([
     { id: 1, menu: "", price: "" },
@@ -35,7 +40,7 @@ export default function EnrollPlace(props) {
         {
           title: place.place,
           address: place.address,
-          category: place.type,
+          category: type,
           point: [selPlace.x, selPlace.y],
           menu: menu.map((x) => x.menu),
           price: menu.map((x) => x.price),
@@ -57,10 +62,22 @@ export default function EnrollPlace(props) {
       ...place,
       [e.target.name]: e.target.value,
     });
+    console.log(place);
   };
+  const changeType = (e) => {
+    console.log(e.target.value);
+    let temp = type.filter((x) => x === e.target.value);
+    console.log(temp);
+    if (temp.length === 0) {
+      setType([...type, e.target.value]);
+    } else {
+      setType([...type.filter((x) => x !== e.target.value)]);
+    }
+  };
+  console.log(type);
   return (
     <Temp>
-      <Submit onSubmit={(e) => onsubmit(e)}>
+      <Submit ref={size} onSubmit={(e) => onsubmit(e)}>
         <Exit onClick={() => props.exit()}>
           <FontAwesomeIcon color={"green"} icon={faTimes} />
         </Exit>
@@ -81,11 +98,11 @@ export default function EnrollPlace(props) {
         />
         <TypeForm
           name="type"
-          value={place.type}
-          onChange={changePlace}
+          value={type}
+          onChange={(e) => changeType(e)}
           placeholder="채식타입을 선택해 주세요"
+          multiple
         >
-          <option value="">채식타입을 선택해 주세요</option>
           <option value="비건">비건</option>
           <option value="락토">락토</option>
           <option value="오보">오보</option>
@@ -116,8 +133,11 @@ export default function EnrollPlace(props) {
 
 const Temp = styled.div`
   width: 100vw;
-  height: 95vh;
+  height: calc(100vh - 3.35rem);
   position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   z-index: 3;
   background-color: rgba(0, 0, 0, 0.4);
 `;
@@ -133,20 +153,17 @@ const Plus = styled.div`
   right: 1rem;
 `;
 const Submit = styled.form`
-  position: absolute;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  top: 50vh;
-  left: 50vw;
+  transform: scale(0);
   min-width: 18rem;
   width: 18vw;
   min-height: 27rem;
   height: 27vh;
   background-color: white;
   border-radius: 0.2rem;
-  transform: translate(-50%, -50%);
   overflow: auto;
 `;
 const ReviewTitle = styled.div`
@@ -179,6 +196,10 @@ const TypeForm = styled.select`
   border: 0.5px solid #bbbbbb;
   text-align: left;
   text-indent: 2rem;
+  -ms-overflow-style: none;
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 const Keyword = styled.div`
   display: flex;

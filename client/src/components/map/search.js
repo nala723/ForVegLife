@@ -71,7 +71,7 @@ export default function SearchPlace({ selData, setCategory }) {
       x,
       y,
     });
-    dispatch(selectPlace({ x, y, address: address, name: name }));
+    dispatch(selectPlace({ x, y, address: address, name: name, id: 0 }));
   };
 
   return (
@@ -120,7 +120,7 @@ const SearchForm = styled.form`
   position: absolute;
   display: flex;
   flex-direction: column;
-  top: 3%;
+  top: 3rem;
   right: 30%;
   z-index: 2;
 `;
@@ -128,8 +128,8 @@ const Category = styled.div`
   position: absolute;
   flex-direction: row;
   display: flex;
-  top: 3%;
-  right: 1%;
+  top: 3rem;
+  right: 10%;
   display: flex;
   z-index: 2;
 `;

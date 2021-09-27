@@ -16,8 +16,8 @@ const GlobalStyles = createGlobalStyle`
         /* overflow-x:hidden; */
         padding: 0;
         margin: 0;
+        width:100vw;
         max-width:100%;
-        width: 100vw;
         height: 100vh;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     }

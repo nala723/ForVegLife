@@ -4,8 +4,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as fullStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as EmptyStar } from "@fortawesome/free-regular-svg-icons";
 import theme from "../../../styles/theme";
+import { useSelector } from "react-redux";
 
 export default function Review({ review, inReview }) {
+  const user = useSelector((state) => state.userReducer);
   let avearge = 0;
   let star = [0, 0, 0, 0, 0];
   const fillStar = (avearge) => {
@@ -29,7 +31,11 @@ export default function Review({ review, inReview }) {
   return (
     <Temp>
       <Title> 후기 </Title>
-      <GoReview onClick={() => inReview()}> 후기 남기러 가기</GoReview>
+      {user.isLogin ? (
+        <GoReview onClick={() => inReview()}> 후기 남기러 가기</GoReview>
+      ) : (
+        ""
+      )}
       <Avearge>
         <Score> {avearge.toFixed(2)}점 </Score>
         {star.map((x) => {
