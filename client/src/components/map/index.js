@@ -2,12 +2,17 @@ import react, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { mapCenter, selectPlace } from "../../actions/index";
+import { useHistory } from "react-router-dom";
+import TutoModal from "./tuto-modal";
 const { kakao } = window;
 
 export default function MapIndex({ data, latlng }) {
   const selPlace = useSelector((state) => state.selectPlace);
   console.log(selPlace);
   const MapCenter = useSelector((state) => state.MapCenter);
+  const history = useHistory();
+  const [isOpen,setIsOpen] = useState(false)
+  const [tutorial,setTutorial] = useState(false)
   let lng =
     MapCenter.x !== 0
       ? MapCenter.x
@@ -90,9 +95,32 @@ export default function MapIndex({ data, latlng }) {
       }
     }
   }, [selPlace, data]);
+
+  useEffect(()=>{
+    handleOpenTuto(true)
+  },[])
+
+  const handleOpenTuto=(boolean) => {
+    setIsOpen(boolean)
+    if(isOpen=== true ){
+       setTutorial(true)
+       history.push('/tutorial')
+    }
+  }
+  const handleCloseTuto = () => {
+    setIsOpen(false)
+  }
   return (
     <>
-      <Map id="map"></Map>
+      {isOpen
+          ? 
+        <TutoModal isOpen={isOpen}  handleClick={handleOpenTuto} handleClose={handleCloseTuto} >
+            환영합니다.<p></p> ForVegiLife는 채식주의자를 위한 지도 기반 서비스입니다.<p></p> 여러분의 성향에 맞는 장소를 검색할 수 있고,<p></p>
+            여러분만의 장소를 직접 등록할 수 있습니다.
+          </TutoModal> 
+          :
+        null}
+          <Map id="map"></Map>
     </>
   );
 }

@@ -1,12 +1,11 @@
 import styled from "styled-components";
-import react from 'react';
 
 export default function NotFound() {
  
   return (
    <>
     <Container>
-     <img src="/image/notfound.svg" />
+     <img src="/image/notfound.svg" alt="notfound"/>
      </ Container>
     </>
     
