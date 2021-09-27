@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import SearchPlace from "../components/map/search";
+import { useHistory } from "react-router";
 import SideBar from "../components/map/sidebar/index";
 import styled from "styled-components";
 import ReviewModal from "../components/map/review-modal";
@@ -12,19 +13,25 @@ import axios from "axios";
 export default function MapPage(props) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.userReducer);
-  let link = window.location.href.split("?")[1];
+  const history = useHistory("/");
+  let link = window.location.href.split("//");
+  link = link[1].split("/")[2];
+  console.log(link);
   useEffect(() => {
     if (link) {
-      let temp = link.split("&");
-      console.log(temp[0].split("=")[1]);
-      dispatch(
-        selectPlace({
-          id: temp[0].split("=")[1],
-          x: temp[2].split("=")[1],
-          y: temp[1].split("=")[1],
+      axios
+        .get(`${process.env.REACT_APP_SERVER_URL}/restaurant/${link}`, {
+          headers: {
+            authorization: `Bearer ${user.accessToken}`,
+          },
         })
-      );
+        .then((res) => {
+          dispatch(
+            selectPlace({ x: res.data[0].lng, y: res.data[0].lat, id: link })
+          );
+        });
     }
+    history.push("/");
   }, []);
   const selPlace = useSelector((state) => state.selectPlace);
   const mapCenter = useSelector((state) => state.MapCenter);

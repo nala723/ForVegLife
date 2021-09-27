@@ -6,10 +6,9 @@ import { useHistory } from "react-router-dom";
 import TutoModal from "./tuto-modal";
 const { kakao } = window;
 
-const API_KEY = "8ae459a51f5b018322fee10f7aa86f24";
-
 export default function MapIndex({ data, latlng }) {
   const selPlace = useSelector((state) => state.selectPlace);
+  console.log(selPlace);
   const MapCenter = useSelector((state) => state.MapCenter);
   const history = useHistory();
   const [isOpen,setIsOpen] = useState(false)
