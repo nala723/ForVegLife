@@ -228,15 +228,16 @@ export default function UpdateInfo() {
             handleBack(e)
             return;
         }
-        setLoading(true)
+      
         if(inValidEditMSG){
             return
         }
+         
          if((!currentInput.inputPassword || !currentInput.imgFile || !currentInput.inputVegtype || inValidEditMSG)){
             setInvalidEditMSG('입력을 모두 완료해주세요') 
             return
          } 
-      
+        setLoading(true)
         const MAX_WIDTH = 320;
         const MAX_HEIGHT = 180;
         const MIME_TYPE = "image/*";
