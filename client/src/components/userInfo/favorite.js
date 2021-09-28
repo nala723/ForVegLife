@@ -139,10 +139,10 @@ export default function Favorite() {
             } 
              if(res.status === 200){
                 
-                  if((res.data.place).length > 0){
+                  // if((res.data.place).length > 0){
                    dispatch(getmyfavorite(res.data.place))
                    setPlaces(res.data.place)
-                  }
+                  // }
              }
              else{
                   history.push('/notfound');
@@ -423,6 +423,13 @@ const transform = keyframes`
 `;
 
 const Container = styled.div`
+${theme.device.tablet}{
+  margin-left:0;
+  padding:0;
+}
+${theme.device.mobile}{
+  align-items: center;
+}
   width: calc(100%-7.313rem);
   height: 100%;
   display: flex;
@@ -432,6 +439,9 @@ const Container = styled.div`
   padding-right: 3.5rem;
 `;
 const Title = styled.div`
+${theme.device.mobile}{
+  justify-content: center;
+}
   display: flex;
   width: 100%;
   padding-top: 2.4rem;
@@ -440,6 +450,10 @@ const Title = styled.div`
   color: var(--color-darkgrey);
 `;
 const Bottom = styled.div`
+${theme.device.tablet}{
+  margin:0;
+  align-items:center;
+}
   height: 100%;
   margin-right: 3.5rem;
   flex-direction: column;
@@ -447,6 +461,9 @@ const Bottom = styled.div`
 `;
 
 const Recommend = styled.div`
+${theme.device.mobile}{
+ justify-content: center;
+}
  width:100%;
  height:2rem;
  display:flex;
@@ -540,6 +557,10 @@ z-index: 3;
 `;
 
 const CardBox = styled.div`
+ ${theme.device.mobile}{
+  /* display:block; */
+  place-items: center;
+}
   display: grid;
   width: 100%;
   min-height: 40rem;
@@ -551,6 +572,16 @@ const CardBox = styled.div`
   gap: 30px 15px;
 `;
 const Card = styled.div`
+ ${theme.device.mobile}{
+   width:23rem;
+   flex-direction: row;
+    >img{
+      &.hot{
+        opacity:1;
+        z-index:5;
+      }
+    }
+}
    width:12.313rem;  
    height: 14.313rem;
    display:flex;
@@ -610,6 +641,11 @@ const Card = styled.div`
   
 `;
 const CardImg = styled.img`
+ ${theme.device.mobile}{
+  width:15rem;
+  height:100%;
+  border-radius: 0.5rem 0 0 0.5rem;
+}
    display:flex;
    width:100%;
    height:6.438rem;
@@ -625,6 +661,14 @@ const CardImg = styled.img`
 
 `;
 const CardContent = styled(Card)`
+ ${theme.device.mobile}{
+  flex-direction:column;
+  flex:2;
+  margin:0;
+  >p{
+    line-height: 1rem;
+  }
+}
    text-align: center;
    justify-content: center;
    margin-bottom:12px;
@@ -645,11 +689,20 @@ const CardContent = styled(Card)`
     }
 `;
 const CardSns = styled(CardContent)`
+ ${theme.device.mobile}{
+  flex:1;
+  margin:0;
+  gap: 0.6rem;
+  position:absolute;
+  width:20%;
+  height:20%;
+  bottom:0;
+  right:28px;
+  
+}
    width:96%;
    margin-bottom:5px;
-   /* border-radius: 0 0 0.5rem 0.5rem; */
    flex:1.2;
-   /* background-color: white; */
    color: var(--color-brown);
    font-size: var(--font-size-sm);
    flex-direction: row;

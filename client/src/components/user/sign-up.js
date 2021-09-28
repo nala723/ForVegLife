@@ -62,8 +62,8 @@ export default function SignUp(props) {
         password: data.password,
       })
       .then((res) => {
-        const { email, nickName } = data;
-        dispatch(userLogin({ isLogin: true, email, nickName }));
+        const { email, nickname, accessToken,profileblob } =res.data;
+        dispatch(userLogin({ isLogin: true, email, profileblob ,nickName:nickname,accessToken }));
       })
       .catch((err) => {
      

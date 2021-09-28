@@ -91,15 +91,12 @@ useEffect(() => {
               }
             } 
              if(res.status === 200){ 
-                  
-                 if((res.data.review_star).length > 0){
                    dispatch(
                        getmyreview(  // 상태전달 
                                res.data.review_star
                          )
                        )
                      setReivews(res.data.review_star)
-               } 
              }
              else{
                   history.push('/notfound');
