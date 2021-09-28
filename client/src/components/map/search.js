@@ -48,8 +48,8 @@ export default function SearchPlace({ selData, setCategory }) {
   };
   useEffect(() => {
     if (inputText !== "") {
-      var places = new kakao.maps.services.Places();
-      var callback = function (result, status) {
+      let places = new kakao.maps.services.Places();
+      let callback = function (result, status) {
         if (status === kakao.maps.services.Status.OK) {
           setData(result);
 
@@ -61,8 +61,6 @@ export default function SearchPlace({ selData, setCategory }) {
         y: mapCenter.y,
         radius: 1000,
       });
-    } else {
-      dispatch(selectPlace({ x: 0, y: 0, address: null, name: null, id: 0 }));
     }
   }, [mapCenter, inputText]);
   const handleSubmit = (e) => {
