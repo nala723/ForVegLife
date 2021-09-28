@@ -48,6 +48,7 @@ export default function Login(props) {
           })
         );
         history.push("/mypage");
+        props.exit();
       })
       .catch((err) => {
         return err;
@@ -121,7 +122,7 @@ export default function Login(props) {
 const Temp = styled.div`
   width: 100vw;
   height: calc(100vh - 3.45rem);
-  max-height:calc(100vh - 3.45rem);
+  max-height: calc(100vh - 3.45rem);
   max-width: 100%;
   z-index: 3;
   position: absolute;
