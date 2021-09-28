@@ -10,6 +10,7 @@ export default function UserSideBar() {
   const userState = useSelector((state)=> state)
   const { email,nickName,profileblob} = userState.userReducer;
   const [loading, setLoading] = useState(true);
+  const [sidebar, setSidebar] = useState(true);
     
    
   useEffect(()=>{
@@ -18,7 +19,19 @@ export default function UserSideBar() {
       setLoading(false);
     }
   },[])
+ 
+    const showSidebar = () => {
+        if(window.innerWidth <= 960) {
+           setSidebar(false);
+        } else {
+           setSidebar(true);
+        }
+    };
+    useEffect(() => {
+      showSidebar();
+    }, []) 
 
+    window.addEventListener('resize', showSidebar); 
 
     // 프로필 이미지 설정 
     let profileIMG;

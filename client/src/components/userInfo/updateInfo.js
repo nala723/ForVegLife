@@ -16,7 +16,7 @@ export default function UpdateInfo() {
     const userState = useSelector((state) => state.userReducer);
     const googleState = useSelector((state)=> state.googleReducer);
     const {
-      accessToken, email, nickName, vegType, password, profileblob, isLogin 
+      accessToken, email, nickName,profileblob
     } = userState;
     const {googleToken} = googleState;
     const dispatch = useDispatch();
