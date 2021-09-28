@@ -213,7 +213,8 @@ export default function SignUp(props) {
 const Temp = styled.div`
   width: 100vw;
   max-width: 100%;
-  height: calc(100vh - 3.35rem);
+  height: calc(100vh - 3.45rem);
+  max-height:calc(100vh - 3.45rem);
   background-color: rgba(0, 0, 0, 0.4);
   z-index: 3;
   display: flex;

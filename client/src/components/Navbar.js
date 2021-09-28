@@ -114,6 +114,9 @@ const Navbar = () => {
               <img src="/image/logo.svg" />
             </Logo>
             <ButtonBox primary>
+            <Link to="/content">
+              content
+            </Link>
               <Link to="/">
                 <StyledLogin onClick={() => logout()}>Logout</StyledLogin>
               </Link>
@@ -143,6 +146,9 @@ const Navbar = () => {
               <img src="/image/logo.svg" />
             </Logo>
             <ButtonBox>
+                 <Link to="/content">
+              content
+            </Link>
               <StyledLogin onClick={userSignin}>Login</StyledLogin>
               <StyledRegister onClick={Register}>Register</StyledRegister>
             </ButtonBox>
@@ -220,7 +226,7 @@ const Logo = styled(Link)`
 
 const ButtonBox = styled.div`
   display: flex;
-  width: ${(props) => (props.primary ? "20rem" : "16.563rem")};
+  width: ${(props) => (props.primary ? "28rem" : "24.563rem")};
   height: inherit;
   justify-content: center;
   align-items: center;

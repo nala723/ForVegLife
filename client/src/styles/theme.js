@@ -40,6 +40,7 @@ const calcRem = (size) => `${size / 16}rem`;
     mobileS: "320px",
     mobile: "425px",
     tablet: "768px",
+    change: "960px",
     laptop: "1024px",
     desktop: "1440px",
   };
@@ -49,6 +50,7 @@ const calcRem = (size) => `${size / 16}rem`;
     mobileS: `only screen and (max-width: ${size.mobileS})`,
     mobile: `@media only screen and (max-width: ${size.mobile})`,
     tablet: `@media only screen and (max-width: ${size.tablet})`,
+    change: `@media only screen and (max-width: ${size.change})`,
     laptop: `@media only screen and (max-width: ${size.laptop})`,
     desktop: `@media only screen and (max-width: ${size.desktop})`,
   };

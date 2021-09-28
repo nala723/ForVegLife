@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectPlace } from "../../actions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { ReactComponent as SearchIcon } from "../../static/search.svg";
 import axios from "axios";
 import theme from "../../styles/theme";
 const { kakao } = window;
@@ -84,7 +85,7 @@ export default function SearchPlace({ selData, setCategory }) {
             value={inputText}
           />
           <SubmitButton type="submit">
-            <FontAwesomeIcon icon={faSearch} />
+            <StyledSearch   fill={`${theme.colors.darkgrey}`}/>
           </SubmitButton>
         </InputStyle>
         <Keyword>
@@ -120,54 +121,83 @@ const SearchForm = styled.form`
   z-index: 2;
 `;
 const InputStyle = styled.div`
-  width: 15rem;
+  margin-top: 0.3rem;
+  width: 17.25rem;
   position: relative;
+  
+ 
 `;
 const Category = styled.div`
   position: absolute;
   flex-direction: row;
   display: flex;
+  align-items: center;
   top: 3rem;
-  right: 1rem;
+  right: 3rem;
   display: flex;
   z-index: 2;
+  gap:1rem;
 `;
 
-const Type = styled.image`
-  width: 3rem;
-  height: 3rem;
+const Type = styled.img`
+  width: 3.5rem;
+  height: 3.5rem;
   z-index: 6;
+  border-radius:100%;
+  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  :hover{
+      transform: scale(1.1);
+      transition: all 0.2s ease-in-out;
+  
+   }
+
 `;
 
 const PlaceInput = styled.input`
-  background-color: rgba(255, 255, 255, 0.6);
+  background-color: rgba(255, 255, 255, 0.8);
   border: none;
-  width: 15rem;
+  width: 100%;
   height: 3rem;
-  border-radius: 0.2rem;
+  border-radius: 0.625rem;
   color: ${theme.colors.mapgrey};
+  padding: 0 1rem;
+  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.3);
+  :focus {
+      outline:none;
+   }
+
 `;
 const SubmitButton = styled.button`
   position: absolute;
   background-color: rgba(0, 0, 0, 0);
   border: none;
-  right: 0%;
+  right: 0;
   height: 3rem;
-  top: 0%;
+  top: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 1.8rem;
+  padding: 0 1rem;
+
+`;
+
+const StyledSearch = styled(SearchIcon)`
+  
+
 `;
 const PlaceData = styled.div`
-  background-color: rgba(255, 255, 255, 0.6);
-
+  background-color: rgba(255, 255, 255, 0.8);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 15rem;
+  width: 17rem;
   height: 6rem;
   color: black;
+  margin-left:0.1rem;
 `;
 const PlaceName = styled.div`
   font-size: 1rem;
@@ -191,8 +221,10 @@ const Keyword = styled.div`
   }
 `;
 const VegeType = styled.div`
-  width: 5rem;
-  height: 2rem;
+  width: 6em;
+  height: 1.625rem;
+  font-size: 0.75rem;
+  padding-top:0.2rem;
   background-color: #b96619;
   display: flex;
   justify-content: center;
@@ -200,4 +232,6 @@ const VegeType = styled.div`
   border-radius: 1.5rem;
   color: white;
   margin: 1rem;
+  margin-right: 0.6rem;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.5);
 `;

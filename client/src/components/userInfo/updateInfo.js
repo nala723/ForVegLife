@@ -4,7 +4,7 @@ import DefaultModal from "./defaultmodal";
 import theme from "../../styles/theme";
 import { useSelector, useDispatch } from "react-redux";
 import {useHistory} from 'react-router-dom';
-import { userInfo,userUpdateInfo,newAccessToken} from "../../actions/index";
+import { userInfo,userUpdateInfo,newAccessToken,getgoogleToken} from "../../actions/index";
 import {Buffer} from 'buffer';
 import axios from 'axios';
 import { dummydatas } from "./dummydatas";
@@ -22,7 +22,6 @@ export default function UpdateInfo() {
     const dispatch = useDispatch();
     const history = useHistory();
     const [isOpen,setIsOpen] = useState(false);
-    const [isGoogleUser,setGoogleUser] = useState(false); // 구글 유저 수정 금지 모달 위함
     const [imageSizeError,setImageSizeError] = useState(false);
     const [currentInput, setCurrentInput] = useState({
         imgFile:'',
@@ -42,40 +41,54 @@ export default function UpdateInfo() {
 
     // 최초 렌더링시 유저정보 받아오기
     useEffect(()=>{
-        
+        let token
         if(googleToken){
-           setGoogleUser(true)
+          token = googleToken
+           getUserInfo(token)
         }else {
-         getUserInfo(accessToken)
+            token = accessToken
+         getUserInfo(token)
         }
     },[])
  
     
 
    // 유저 정보 요청 함수 - 통과
-    const getUserInfo = (accessToken) => {
+    const getUserInfo = (token) => {
         setLoading(true)
         axios
           .get(process.env.REACT_APP_SERVER_URL + '/mypage/user-info',{
             headers: {
                 "Content-Type": "multipart/form-data",
-                authorization: `Bearer ` + accessToken
+                authorization: `Bearer ` + token
                 },
             withCredentials: true
         })
         .then((res)=> {
             if(res.headers.accessToken){
-              dispatch(newAccessToken({accessToken: res.headers.accessToken}));
+                if(googleToken){
+                        dispatch(getgoogleToken({accessToken: res.headers.accessToken}));
+                        // handleBack()
+                        // return;
+                    }
+                else {
+                    dispatch(newAccessToken({accessToken: res.headers.accessToken}));
+                }
               }
              if(res.status === 200){
-                 console.log(res.data)
+                 if(googleToken){
+                    dispatch(userInfo({vegType :res.data.vegType}))
+                 }
+                else{
                    dispatch(userInfo({nickName :res.data.nickname,vegType :res.data.vegType,profileblob:res.data.profileblob, email:res.data.email}))
                  // 상태전달 
+                }
              }
              else{
                   history.push('/notfound');
              }
              setLoading(false) 
+             console.log(res)
          })
          .catch(err => {
                 console.log(err)
@@ -122,14 +135,6 @@ export default function UpdateInfo() {
 
    // open모달 위한 상태변경함수
     const handleClick = () => {
-        
-        // 아무것도 변경안했을때와 분기(다른모달)
-        // if((currentInput.inputPassword && inValidEditMSG) || !currentInput.imgFile || !currentInput.inputVegtype){
-        //     setIsOpen(false)
-        // }
-        // if((currentInput.inputPassword && !inValidEditMSG) || currentInput.imgFile || currentInput.inputVegtype ){
-        //     setIsOpen(true)
-        // }
         setIsOpen(!isOpen)
         if((isOpen===true) && changed){
             console.log('마이페이지업뎃 안되냐')
@@ -219,19 +224,20 @@ export default function UpdateInfo() {
 
     const onSubmitHandler = async (e) => { //현재 안먹힘
         e.preventDefault();
-        if(isGoogleUser){
-            handleBack()
+        if(googleToken){
+            handleBack(e)
             return;
         }
-        setLoading(true)
+      
         if(inValidEditMSG){
             return
         }
+         
          if((!currentInput.inputPassword || !currentInput.imgFile || !currentInput.inputVegtype || inValidEditMSG)){
             setInvalidEditMSG('입력을 모두 완료해주세요') 
             return
          } 
-      
+        setLoading(true)
         const MAX_WIDTH = 320;
         const MAX_HEIGHT = 180;
         const MIME_TYPE = "image/*";
@@ -283,7 +289,6 @@ export default function UpdateInfo() {
                                     
                                    // 그다음은 얻은 상태정보들을 전달
                                     // 모달 오픈 위한 콜
-                                   console.log('전송된건가')
                                      setIsChanged(true);
                                      handleClick();
                              }
@@ -335,18 +340,18 @@ export default function UpdateInfo() {
             inputVegtype: iconname}); 
            
     }
-  console.log(currentInput, `하하하하`)// 안먹힘???
 
   
     
    // 구글유저 아웃     
-     const handleBack = (e) => {
-        e.preventDefault()
-          if(isGoogleUser){
+     const handleBack = () => {
+        // e.preventDefault()
+          if(googleToken){
           setIsOpen(!isOpen)
            if(isOpen === true){
-           history.push('/'); // 후에 마이페이지로 수정 
+           history.push('/mypage'); // 후에 마이페이지로 수정 
          }
+         
       } 
      }
      if(loading){
@@ -433,7 +438,7 @@ export default function UpdateInfo() {
                     </ButtonBox>
                          {(isOpen && changed) ? <DefaultModal isOpen={isOpen} handleClick={handleClick} header="회원정보 수정이 완료되었습니다.">
                      앞으로도 계속 forVegLife 안에서 건강한 life 누리세요</DefaultModal> : null}
-                     {(isGoogleUser && isOpen) ? <DefaultModal isOpen={isOpen} handleClick={handleBack} header="경고">
+                     {(googleToken && isOpen) ? <DefaultModal isOpen={isOpen} handleClick={handleBack} header="경고">
                      소셜 로그인 유저는 회원정보수정을 할 수 없습니다</DefaultModal> : null}
                  </UserBottom>
            </UserContainer>
