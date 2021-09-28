@@ -582,8 +582,8 @@ const Card = styled.div`
       }
     }
 }
-   width:12.313rem;  
-   height: 14.313rem;
+   /* width:12.313rem;  
+   height: 14.313rem; */
    display:flex;
    background-color: var(--color-mypagecard);
    border-radius: 0.5rem;
