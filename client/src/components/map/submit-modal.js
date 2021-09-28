@@ -131,7 +131,7 @@ export default function EnrollPlace(props) {
 const Temp = styled.div`
   width: 100vw;
   height: calc(100vh - 3.45rem);
-  max-width: 100%;
+  max-height:calc(100vh - 3.45rem);
   position: absolute;
   display: flex;
   justify-content: center;

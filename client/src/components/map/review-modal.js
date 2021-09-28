@@ -94,7 +94,8 @@ const Temp = styled.div`
   align-items: center;
   width: 100vw;
   max-width: 100%;
-  height: calc(100vh - 3.35rem);
+  height: calc(100vh - 3.45rem);
+  max-height:calc(100vh - 3.45rem);
   z-index: 3;
 `;
 const Exit = styled.div`
