@@ -50,7 +50,7 @@ export default function SearchPlace({ selData, setCategory }) {
     var callback = function (result, status) {
       if (status === kakao.maps.services.Status.OK) {
         setData(result);
-        console.log(result);
+
         return result;
       }
     };
@@ -103,7 +103,11 @@ export default function SearchPlace({ selData, setCategory }) {
       <Category>
         <VegeType>채식 타입</VegeType>
         {veggieIcon.map((x) => {
-          return <Type src={x.img} onClick={() => setCategory(x.name)}></Type>;
+          return (
+            <Type src={x.img} onClick={() => setCategory(x.name)}>
+              {x.name}
+            </Type>
+          );
         })}
       </Category>
       <MapIndex data={selData} latlng={latlng} />

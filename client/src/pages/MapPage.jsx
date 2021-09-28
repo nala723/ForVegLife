@@ -16,7 +16,7 @@ export default function MapPage(props) {
   const history = useHistory("/");
   let link = window.location.href.split("//");
   link = link[1].split("/")[2];
-  console.log(link);
+
   useEffect(() => {
     if (link) {
       axios
@@ -65,7 +65,7 @@ export default function MapPage(props) {
       })
       .catch((err) => setData([]));
   }, [mapCenter.address, category]);
-  console.log(category);
+
   return (
     <Temp>
       <SearchPlace selData={data} setCategory={changeCategory} />

@@ -78,14 +78,14 @@ const Navbar = () => {
           );
           dispatch(getgoogleToken({ googleToken: "" }));
           history.push("/");
-          console.log(isLogin);
+          
         } else {
           history.push("/notfound");
         }
         //  setIsLoding(false)
       })
       .catch((err) => {
-        console.log(err);
+       
       });
   };
 

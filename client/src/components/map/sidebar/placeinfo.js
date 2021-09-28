@@ -8,7 +8,7 @@ export default function PlaceInfo({ user }) {
   let ratio;
   if (user) {
     const likeType = Object.entries(user);
-    console.log(likeType);
+  
     type = likeType.map((x) => x[0]);
     ratio = likeType.map((x) => x[1]);
   } else {

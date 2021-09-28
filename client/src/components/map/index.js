@@ -8,7 +8,7 @@ const { kakao } = window;
 
 export default function MapIndex({ data, latlng }) {
   const selPlace = useSelector((state) => state.selectPlace);
-  console.log(selPlace);
+
   const MapCenter = useSelector((state) => state.MapCenter);
   const history = useHistory();
   const [isOpen,setIsOpen] = useState(false)

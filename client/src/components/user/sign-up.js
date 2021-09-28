@@ -27,25 +27,20 @@ export default function SignUp(props) {
   const [isVerify, setIsVerify] = useState(false);
   const [isSend, setIsSend] = useState(false);
   const send = (email) => {
-    console.log(email);
     // axios로 email보내고  코드 값 가져오기
     axios
       .post(`${process.env.REACT_APP_SERVER_URL}/sign/email-code`, {
         email: email,
       })
       .then((res) => {
-        console.log(res.data);
         setVerifyCode(res.data.data.emailcode);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
 
     // 오류는 중복되거나 또는 서버 오류
     setIsSend(true);
   };
   const verify = (code) => {
-    console.log(verifyCode);
     axios
       .post(
         `${process.env.REACT_APP_SERVER_URL}/sign/email-verification?code=${verifyCode}`,
@@ -54,12 +49,9 @@ export default function SignUp(props) {
         }
       )
       .then((res) => {
-        console.log(res);
         setIsVerify(true);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   };
   const onCreate = (data) => {
     // axios 요청 성공 시2
@@ -74,7 +66,7 @@ export default function SignUp(props) {
         dispatch(userLogin({ isLogin: true, email, nickName }));
       })
       .catch((err) => {
-        console.log(err);
+     
       });
   };
   const handleChange = (e) => {

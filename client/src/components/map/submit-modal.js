@@ -51,8 +51,7 @@ export default function EnrollPlace(props) {
           },
         }
       )
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+      .then((res) => res);
   };
   const onUpdate = (name, value, key) => {
     setMenu(menu.map((x) => (x.id === key ? { ...x, [name]: value } : x)));
@@ -62,19 +61,17 @@ export default function EnrollPlace(props) {
       ...place,
       [e.target.name]: e.target.value,
     });
-    console.log(place);
   };
   const changeType = (e) => {
-    console.log(e.target.value);
     let temp = type.filter((x) => x === e.target.value);
-    console.log(temp);
+
     if (temp.length === 0) {
       setType([...type, e.target.value]);
     } else {
       setType([...type.filter((x) => x !== e.target.value)]);
     }
   };
-  console.log(type);
+ 
   return (
     <Temp>
       <Submit ref={size} onSubmit={(e) => onsubmit(e)}>

@@ -85,6 +85,7 @@ module.exports = async (req, res) => {
         title: placeData.title,
         menu: menuprices.map((x) => x.menu),
         price: menuprices.map((x) => x.price),
+        image: placeData.picture_url,
         favirote: favirote,
         lat: placeData.latitude,
         lng: placeData.longitude,

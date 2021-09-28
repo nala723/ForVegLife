@@ -25,7 +25,6 @@ export default function SideBar({ select, inReview, exitReview }) {
         },
       })
       .then((res) => {
-        console.log(res.data);
         setTempData(...res.data);
       });
   }, [selPlace.id]);
@@ -85,6 +84,7 @@ export default function SideBar({ select, inReview, exitReview }) {
             menu={data.menu}
             price={data.price}
             like={data.favirote}
+            src={data.image}
           />
           <PlaceInfo user={data.like} />
           <Review
