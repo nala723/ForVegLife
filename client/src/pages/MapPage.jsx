@@ -98,6 +98,10 @@ const Temp = styled.div`
   height: calc(100% - 3.35rem);
 `;
 const Enroll = styled.div`
+  ${theme.device.tablet} {
+    width: 3rem;
+    font-size: ${theme.fonts.size.sm};
+  }
   position: absolute;
   width: 6rem;
   height: 2rem;
@@ -108,7 +112,7 @@ const Enroll = styled.div`
   justify-content: center;
   align-items: center;
   top: 4rem;
-  left: 5rem;
+  left: 10%;
   color: white;
   z-index: 2;
   border-radius: 0.3rem;

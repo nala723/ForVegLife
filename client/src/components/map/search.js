@@ -47,19 +47,23 @@ export default function SearchPlace({ selData, setCategory }) {
     setInputText(e.target.value);
   };
   useEffect(() => {
-    var places = new kakao.maps.services.Places();
-    var callback = function (result, status) {
-      if (status === kakao.maps.services.Status.OK) {
-        setData(result);
+    if (inputText !== "") {
+      var places = new kakao.maps.services.Places();
+      var callback = function (result, status) {
+        if (status === kakao.maps.services.Status.OK) {
+          setData(result);
 
-        return result;
-      }
-    };
-    places.keywordSearch(inputText, callback, {
-      x: mapCenter.x,
-      y: mapCenter.y,
-      radius: 1000,
-    });
+          return result;
+        }
+      };
+      places.keywordSearch(inputText, callback, {
+        x: mapCenter.x,
+        y: mapCenter.y,
+        radius: 1000,
+      });
+    } else {
+      dispatch(selectPlace({ x: 0, y: 0, address: null, name: null, id: 0 }));
+    }
   }, [mapCenter, inputText]);
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -85,30 +89,30 @@ export default function SearchPlace({ selData, setCategory }) {
             value={inputText}
           />
           <SubmitButton type="submit">
-            <StyledSearch   fill={`${theme.colors.darkgrey}`}/>
+            <StyledSearch fill={`${theme.colors.darkgrey}`} />
           </SubmitButton>
         </InputStyle>
         <Keyword>
-          {data.map((x) => {
-            return (
-              <PlaceData
-                onClick={() => onClick(x.x, x.y, x.address_name, x.place_name)}
-              >
-                <PlaceName>{x.place_name}</PlaceName>
-                <PlaceAddress>{x.address_name}</PlaceAddress>
-              </PlaceData>
-            );
-          })}
+          {inputText !== ""
+            ? data.map((x) => {
+                return (
+                  <PlaceData
+                    onClick={() =>
+                      onClick(x.x, x.y, x.address_name, x.place_name)
+                    }
+                  >
+                    <PlaceName>{x.place_name}</PlaceName>
+                    <PlaceAddress>{x.address_name}</PlaceAddress>
+                  </PlaceData>
+                );
+              })
+            : ""}
         </Keyword>
       </SearchForm>
       <Category>
         <VegeType>채식 타입</VegeType>
         {veggieIcon.map((x) => {
-          return (
-            <Type src={x.img} onClick={() => setCategory(x.name)}>
-              {x.name}
-            </Type>
-          );
+          return <Type src={x.img} onClick={() => setCategory(x.name)}></Type>;
         })}
       </Category>
       <MapIndex data={selData} latlng={latlng} />
@@ -117,47 +121,67 @@ export default function SearchPlace({ selData, setCategory }) {
 }
 
 const SearchForm = styled.form`
+  ${theme.device.moblie} {
+    right: 5vw;
+  }
+  @media only screen and (min-width: 425px) {
+    left: 40%;
+    top: 3rem;
+    transform: translate(-50%, 0%);
+  }
+  width: 17.25rem;
   position: absolute;
   display: flex;
   flex-direction: column;
   top: 3rem;
-  right: 30%;
   z-index: 2;
 `;
 const InputStyle = styled.div`
   margin-top: 0.3rem;
   width: 17.25rem;
   position: relative;
-  
- 
 `;
 const Category = styled.div`
+  @media only screen and (min-width: 425px) {
+    top: 3rem;
+    right: 3rem;
+  }
+  @media only screen and (min-width: 425px) and (max-width: 1024px) {
+    flex-direction: column;
+  }
+  ${theme.device.mobile} {
+    bottom: 3rem;
+    top: 85vh;
+    left: 0;
+    right: 0;
+  }
   position: absolute;
-  flex-direction: row;
   display: flex;
+  flex-direction: row;
   align-items: center;
-  top: 3rem;
-  right: 3rem;
+  justify-content: center;
   display: flex;
   z-index: 2;
-  gap:1rem;
+  gap: 1rem;
 `;
 
 const Type = styled.img`
+  ${theme.device.mobile} {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
   width: 3.5rem;
   height: 3.5rem;
-  z-index: 6;
-  border-radius:100%;
+  z-index: 2;
+  border-radius: 100%;
   box-shadow: 0 3px 9px rgba(0, 0, 0, 0.3);
   border: 1px solid rgba(0, 0, 0, 0.2);
   cursor: pointer;
   transition: all 0.2s ease-in-out;
-  :hover{
-      transform: scale(1.1);
-      transition: all 0.2s ease-in-out;
-  
-   }
-
+  :hover {
+    transform: scale(1.1);
+    transition: all 0.2s ease-in-out;
+  }
 `;
 
 const PlaceInput = styled.input`
@@ -170,9 +194,8 @@ const PlaceInput = styled.input`
   padding: 0 1rem;
   box-shadow: 0 3px 9px rgba(0, 0, 0, 0.3);
   :focus {
-      outline:none;
-   }
-
+    outline: none;
+  }
 `;
 const SubmitButton = styled.button`
   position: absolute;
@@ -186,13 +209,9 @@ const SubmitButton = styled.button`
   align-items: center;
   font-size: 1.8rem;
   padding: 0 1rem;
-
 `;
 
-const StyledSearch = styled(SearchIcon)`
-  
-
-`;
+const StyledSearch = styled(SearchIcon)``;
 const PlaceData = styled.div`
   background-color: rgba(255, 255, 255, 0.8);
   display: flex;
@@ -201,7 +220,7 @@ const PlaceData = styled.div`
   width: 17rem;
   height: 6rem;
   color: black;
-  margin-left:0.1rem;
+  margin-left: 0.1rem;
 `;
 const PlaceName = styled.div`
   font-size: 1rem;
@@ -225,10 +244,13 @@ const Keyword = styled.div`
   }
 `;
 const VegeType = styled.div`
+  ${theme.device.mobile} {
+    display: none;
+  }
   width: 6em;
   height: 1.625rem;
   font-size: 0.75rem;
-  padding-top:0.2rem;
+  padding-top: 0.2rem;
   background-color: #b96619;
   display: flex;
   justify-content: center;

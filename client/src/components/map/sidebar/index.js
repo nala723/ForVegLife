@@ -34,7 +34,8 @@ export default function SideBar({ select, inReview, exitReview }) {
       gsap.to(sideRef.current, {
         left: 0,
         height: "calc(100vh - 3.35rem - 5vh)",
-        width: "30%",
+        width: "30vw",
+        minWidth: "20rem",
       });
     }
   });
