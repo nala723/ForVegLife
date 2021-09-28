@@ -51,7 +51,7 @@ export default function EnrollPlace(props) {
           },
         }
       )
-      .then((res) => res);
+      .then((res) => props.exit());
   };
   const onUpdate = (name, value, key) => {
     setMenu(menu.map((x) => (x.id === key ? { ...x, [name]: value } : x)));
@@ -71,7 +71,7 @@ export default function EnrollPlace(props) {
       setType([...type.filter((x) => x !== e.target.value)]);
     }
   };
- 
+
   return (
     <Temp>
       <Submit ref={size} onSubmit={(e) => onsubmit(e)}>
@@ -130,7 +130,8 @@ export default function EnrollPlace(props) {
 
 const Temp = styled.div`
   width: 100vw;
-  height: calc(100vh - 3.35rem);
+  height: calc(100vh - 3.45rem);
+  max-width: 100%;
   position: absolute;
   display: flex;
   justify-content: center;
