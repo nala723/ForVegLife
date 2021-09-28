@@ -36,7 +36,7 @@ export default function ReviewModal(props) {
           },
         }
       )
-      .then((res) => console.log(res));
+      .then((res) => res);
     props.exit();
   };
   const contentChange = (e) => {
@@ -50,7 +50,7 @@ export default function ReviewModal(props) {
     for (let i = 0; i <= idx; i++) {
       reviewStar[i] = 1;
     }
-    console.log(reviewStar);
+    
     setStar({
       array: reviewStar,
     });

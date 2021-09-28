@@ -38,7 +38,6 @@ export default function Login(props) {
         password: user.password,
       })
       .then((res) => {
-        console.log(res.data);
         dispatch(
           userLogin({
             isLogin: true,
@@ -51,11 +50,10 @@ export default function Login(props) {
         history.push("/mypage");
       })
       .catch((err) => {
-        console.log(err);
+        return err;
       });
   };
   const responseGoogle = (res) => {
-    console.log(res, res.accessToken);
     const accessToken = res.accessToken;
     const email = res.profileObj.email;
     const nickName = res.profileObj.name;
@@ -77,7 +75,7 @@ export default function Login(props) {
           })
         );
         dispatch(getgoogleToken({ googleToken: accessToken }));
-        console.log(res, "되는건가이거");
+
         history.push("/mypage");
       });
     // axios 요청

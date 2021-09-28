@@ -25,7 +25,6 @@ export default function SideBar({ select, inReview, exitReview }) {
         },
       })
       .then((res) => {
-        console.log(res.data);
         setTempData(...res.data);
       });
   }, [selPlace.id]);
@@ -35,7 +34,8 @@ export default function SideBar({ select, inReview, exitReview }) {
       gsap.to(sideRef.current, {
         left: 0,
         height: "calc(100vh - 3.35rem - 5vh)",
-        width: "30%",
+        width: "30vw",
+        minWidth: "20rem",
       });
     }
   });
@@ -85,6 +85,7 @@ export default function SideBar({ select, inReview, exitReview }) {
             menu={data.menu}
             price={data.price}
             like={data.favirote}
+            src={data.image}
           />
           <PlaceInfo user={data.like} />
           <Review
