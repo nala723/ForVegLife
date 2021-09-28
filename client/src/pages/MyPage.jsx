@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect,useState} from "react";
 import { Route } from 'react-router-dom';
 import UserSideBar from '../components/userInfo/userSideBar';
 import Favorite from '../components/userInfo/favorite';
@@ -8,10 +8,28 @@ import SignOut from '../components/userInfo/sign-Out';
 import styled from "styled-components";
 
 export default function MyPage() {
+  const [sidebar, setSidebar] = useState(true);
+     
+ 
+    const showSidebar = () => {
+        if(window.innerWidth <= 960) {
+           setSidebar(false);
+        } else {
+           setSidebar(true);
+        }
+    };
+    useEffect(() => {
+      showSidebar();
+    }, []) 
+
+    window.addEventListener('resize', showSidebar); 
+
+
+
   return (
     <>
       <Container>
-        <UserSideBar />
+        {sidebar && <UserSideBar />}
         <Box>
           <Top>
             <Line></Line>

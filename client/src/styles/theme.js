@@ -47,7 +47,7 @@ const calcRem = (size) => `${size / 16}rem`;
   
   // 미디어 쿼리의 중복 코드를 줄이기위해 정의된 변수입니다
   const device = {
-    mobileS: `only screen and (max-width: ${size.mobileS})`,
+    mobileS: `@media only screen and (max-width: ${size.mobileS})`,
     mobile: `@media only screen and (max-width: ${size.mobile})`,
     tablet: `@media only screen and (max-width: ${size.tablet})`,
     change: `@media only screen and (max-width: ${size.change})`,
