@@ -62,12 +62,19 @@ export default function SignUp(props) {
         password: data.password,
       })
       .then((res) => {
+        console.log(res.data);
         const { email, nickName } = data;
-        dispatch(userLogin({ isLogin: true, email, nickName }));
+        dispatch(
+          userLogin({
+            isLogin: true,
+            email,
+            nickName,
+            accessToken: res.data.accessToken,
+            profileblob: res.data.profileblob,
+          })
+        );
       })
-      .catch((err) => {
-     
-      });
+      .catch((err) => {});
   };
   const handleChange = (e) => {
     setUser({
@@ -206,7 +213,7 @@ const Temp = styled.div`
   width: 100vw;
   max-width: 100%;
   height: calc(100vh - 3.45rem);
-  max-height:calc(100vh - 3.45rem);
+  max-height: calc(100vh - 3.45rem);
   background-color: rgba(0, 0, 0, 0.4);
   z-index: 3;
   display: flex;

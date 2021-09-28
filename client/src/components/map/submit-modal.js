@@ -4,12 +4,16 @@ import theme from "../../styles/theme";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { MenuPrices } from "./menuPrices";
+import { newAccessToken, getgoogleToken } from "../../actions";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import gsap from "gsap";
 export default function EnrollPlace(props) {
+  const dispatch = useDispatch();
   const selPlace = useSelector((state) => state.selectPlace);
   const user = useSelector((state) => state.userReducer);
+  const googleState = useSelector((state) => state.googleReducer);
+  const { googleToken } = googleState;
   const [place, setPlace] = useState({
     place: selPlace.name,
     address: selPlace.address,
@@ -51,7 +55,16 @@ export default function EnrollPlace(props) {
           },
         }
       )
-      .then((res) => props.exit());
+      .then((res) => {
+        if (res.headers.accessToken) {
+          if (googleToken) {
+            dispatch(getgoogleToken({ accessToken: res.headers.accessToken }));
+          } else {
+            dispatch(newAccessToken({ accessToken: res.headers.accessToken }));
+          }
+        }
+        props.exit();
+      });
   };
   const onUpdate = (name, value, key) => {
     setMenu(menu.map((x) => (x.id === key ? { ...x, [name]: value } : x)));
@@ -131,7 +144,7 @@ export default function EnrollPlace(props) {
 const Temp = styled.div`
   width: 100vw;
   height: calc(100vh - 3.45rem);
-  max-height:calc(100vh - 3.45rem);
+  max-height: calc(100vh - 3.45rem);
   position: absolute;
   display: flex;
   justify-content: center;

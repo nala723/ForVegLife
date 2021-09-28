@@ -5,13 +5,17 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { faStar as fullStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as EmptyStar } from "@fortawesome/free-regular-svg-icons";
 import { useSelector, useDispatch } from "react-redux";
+import { newAccessToken, getgoogleToken } from "../../actions";
 import theme from "../../styles/theme";
 import axios from "axios";
 import gsap from "gsap";
 
 export default function ReviewModal(props) {
+  const dispatch = useDispatch();
   const selPlace = useSelector((state) => state.selectPlace);
   const user = useSelector((state) => state.userReducer);
+  const googleState = useSelector((state) => state.googleReducer);
+  const { googleToken } = googleState;
   const [star, setStar] = useState({
     array: [0, 0, 0, 0, 0],
   });
@@ -36,7 +40,15 @@ export default function ReviewModal(props) {
           },
         }
       )
-      .then((res) => res);
+      .then((res) => {
+        if (res.headers.accessToken) {
+          if (googleToken) {
+            dispatch(getgoogleToken({ accessToken: res.headers.accessToken }));
+          } else {
+            dispatch(newAccessToken({ accessToken: res.headers.accessToken }));
+          }
+        }
+      });
     props.exit();
   };
   const contentChange = (e) => {
@@ -50,7 +62,7 @@ export default function ReviewModal(props) {
     for (let i = 0; i <= idx; i++) {
       reviewStar[i] = 1;
     }
-    
+
     setStar({
       array: reviewStar,
     });
@@ -95,7 +107,7 @@ const Temp = styled.div`
   width: 100vw;
   max-width: 100%;
   height: calc(100vh - 3.45rem);
-  max-height:calc(100vh - 3.45rem);
+  max-height: calc(100vh - 3.45rem);
   z-index: 3;
 `;
 const Exit = styled.div`
