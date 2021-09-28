@@ -129,5 +129,6 @@ const Map = styled.div`
   position: absolute;
   max-width: 100%;
   width: 100vw;
-  height: calc(100vh - 3.35rem);
+  height: calc(100vh - 3.45rem);
+  max-height:calc(100vh - 3.45rem);
 `;

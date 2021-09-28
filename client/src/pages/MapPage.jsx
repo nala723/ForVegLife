@@ -95,21 +95,26 @@ export default function MapPage(props) {
 const Temp = styled.div`
   position: relative;
   width: 100%;
-  height: calc(100% - 3.125rem);
+  height: calc(100% - 3.35rem);
 `;
 const Enroll = styled.div`
   position: absolute;
   width: 6rem;
   height: 2rem;
+  font-size: ${theme.fonts.size.base};
+  font-family: ${theme.fonts.button};
+  font-weight: 500;
   display: flex;
   justify-content: center;
   align-items: center;
-  top: 5rem;
+  top: 4rem;
   left: 5rem;
   color: white;
   z-index: 2;
-  border-radius: 0.2rem;
+  border-radius: 0.3rem;
   background-color: ${theme.colors.green};
+  cursor: pointer;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.5);
 `;
 const Center = styled.div`
   width: 100%;
