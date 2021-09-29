@@ -63,6 +63,7 @@ export default function SearchPlace({ selData, setCategory }) {
       });
     }
   }, [mapCenter, inputText]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setPlace(inputText);
@@ -74,7 +75,7 @@ export default function SearchPlace({ selData, setCategory }) {
       x,
       y,
     });
-    setInputText("");
+    setInputText(name);
     dispatch(selectPlace({ x, y, address: address, name: name, id: 0 }));
   };
 
@@ -219,9 +220,13 @@ const PlaceData = styled.div`
   flex-direction: column;
   justify-content: space-between;
   width: 17rem;
-  height: 6rem;
+  height: 3rem;
   color: black;
   margin-left: 0.1rem;
+  :hover {
+    background-color: ${theme.colors.lightgreen};
+    transition: all 0.5s ease;
+  }
 `;
 const PlaceName = styled.div`
   font-size: 1rem;
@@ -236,8 +241,8 @@ const PlaceAddress = styled.div`
 const Keyword = styled.div`
   display: flex;
   flex-direction: column;
-  height: 7rem;
   width: 20rem;
+  height: 6rem;
   overflow: auto;
   -ms-overflow-style: none;
   ::-webkit-scrollbar {
