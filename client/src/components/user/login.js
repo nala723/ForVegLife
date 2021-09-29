@@ -55,9 +55,8 @@ export default function Login(props) {
       });
   };
   const responseGoogle = (res) => {
-    const accessToken = res.accessToken;
     const email = res.profileObj.email;
-    const nickName = res.profileObj.name;
+    const nickName = res.profileObj.nickname;
     const profileblob = res.profileObj.imageUrl;
     axios
       .post(`${process.env.REACT_APP_SERVER_URL}/google/signin`, {

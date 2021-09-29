@@ -63,6 +63,7 @@ export default function SearchPlace({ selData, setCategory }) {
       });
     }
   }, [mapCenter, inputText]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setPlace(inputText);
@@ -74,6 +75,7 @@ export default function SearchPlace({ selData, setCategory }) {
       x,
       y,
     });
+    setInputText(name);
     dispatch(selectPlace({ x, y, address: address, name: name, id: 0 }));
   };
 
@@ -133,18 +135,20 @@ const SearchForm = styled.form`
   flex-direction: column;
   top: 3rem;
   z-index: 2;
+  right: -200px;
 `;
 const InputStyle = styled.div`
   margin-top: 0.3rem;
   width: 17.25rem;
   position: relative;
+  right: -200px;
 `;
 const Category = styled.div`
   @media only screen and (min-width: 425px) {
     top: 3rem;
     right: 3rem;
   }
-  @media only screen and (min-width: 425px) and (max-width: 1024px) {
+  @media only screen and (min-width: 425px) and (max-width: 1280px) {
     flex-direction: column;
   }
   ${theme.device.mobile} {
@@ -216,9 +220,13 @@ const PlaceData = styled.div`
   flex-direction: column;
   justify-content: space-between;
   width: 17rem;
-  height: 6rem;
+  height: 3rem;
   color: black;
   margin-left: 0.1rem;
+  :hover {
+    background-color: ${theme.colors.lightgreen};
+    transition: all 0.5s ease;
+  }
 `;
 const PlaceName = styled.div`
   font-size: 1rem;
@@ -233,13 +241,16 @@ const PlaceAddress = styled.div`
 const Keyword = styled.div`
   display: flex;
   flex-direction: column;
-  height: 7rem;
   width: 20rem;
+  height: 6rem;
   overflow: auto;
   -ms-overflow-style: none;
   ::-webkit-scrollbar {
     display: none;
   }
+  position: absolute;
+  top: 3.25rem;
+  right: -243px;
 `;
 const VegeType = styled.div`
   ${theme.device.mobile} {
