@@ -148,7 +148,7 @@ const Category = styled.div`
     top: 3rem;
     right: 3rem;
   }
-  @media only screen and (min-width: 425px) and (max-width: 1024px) {
+  @media only screen and (min-width: 425px) and (max-width: 1280px) {
     flex-direction: column;
   }
   ${theme.device.mobile} {
