@@ -19,13 +19,13 @@ export default function Tutorial() {
      e.preventDefault();
      setOrder(Order+1)
      console.log(Order);
-     if(Order >= 5){
+     if(Order >= 6){
        history.push('/')
      }
    }
    const handleMove=(e,step)=>{
     e.preventDefault();
-    if(step === 6){
+    if(step === 7){
       history.push('/')
     }
     setOrder(step)
@@ -42,8 +42,8 @@ export default function Tutorial() {
       <Container >
         <Map>  
           <TopBox >
-              <Enroll data-tip data-for='4' className={Order===4 && 'active'} onClick={(e)=>handleStep(e)}> 장소 추가</Enroll>
-              <Searchbar data-tip data-for='0' className={Order===0 && 'active'} src="/image/searchbar-icon.svg" onClick={(e)=>handleStep(e)} />
+              <Enroll data-tip data-for='5' className={Order===5 && 'active'} onClick={(e)=>handleStep(e)}> 장소 추가</Enroll>
+              <Searchbar data-tip data-for='0' className={Order===0 && 'active'} src="/image/searchbar.svg" onClick={(e)=>handleStep(e)} />
               <IconBox data-tip data-for='3' className={Order===3 && 'active'} onClick={(e)=>handleStep(e)}>
                 <button>채식 타입</button>
                 {dummydatas.veggieIcon.map((v,idx) => (
@@ -51,8 +51,9 @@ export default function Tutorial() {
               </ IconBox >
           </TopBox>
           <MiddleBox>
+              <MarkerTwo data-tip data-for='4' className={Order===4 && 'active'} src="/image/marker.svg" onClick={(e)=>handleStep(e)}/>
               <Marker data-tip data-for='1' className={Order===1 && 'active'} src="/image/marker.svg" onClick={(e)=>handleStep(e)}/>
-              <SubmitMdr data-tip data-for='5' className={Order===5 && 'active'} src="/image/장소등록모달.svg" onClick={(e)=>handleStep(e)}/>
+              <SubmitMdr data-tip data-for='6' className={Order===6 && 'active'} src="/image/장소등록모달.svg" onClick={(e)=>handleStep(e)}/>
               <ReviewMd src="/image/후기모달.svg" />
           </MiddleBox>
           <BarBox >
@@ -98,7 +99,7 @@ export default function Tutorial() {
                 {Order === idx 
                   ?
                 <SecondTooltip 
-                  id={(idx === 1 || idx === 5 || idx=== 2 || idx ===4)? `${idx}`: ''} 
+                  id={(idx === 1 || idx === 5 || idx=== 2 || idx ===4 ||  idx === 6)? `${idx}`: ''} 
                   place="right"  
                   type="success" 
                   effect="solid"  
@@ -170,7 +171,7 @@ export default function Tutorial() {
    position: relative;
    min-width:100%;
    height: 3rem;
-   top: 6rem;
+   top: 5.3rem;
    display: flex;
    justify-content: space-between;
    padding: 0 4rem 0 5rem;
@@ -178,13 +179,16 @@ export default function Tutorial() {
   `;
  
  const Enroll = styled.div`
+ position: absolute;
+ left: 7rem;
+ top: 2.23rem;
  width: 6rem;
  height: 2rem;
  display: flex;
  justify-content: center;
  align-items: center;
  color: white;
- border-radius: 0.2rem;
+ border-radius: 0.3rem;
  background-color: ${theme.colors.green};
  opacity:0;
 
@@ -197,11 +201,12 @@ export default function Tutorial() {
 `;
 
  const Searchbar = styled.img`
+  position:absolute;
   display: flex;
-   width:17.25rem;
-   height:2.813rem;
+   width:22.25rem;
+   height:12.563rem;
    opacity:0;
-   margin-left:15rem;
+   margin-left:42.5rem;
     &.active{
       opacity:1;
       z-index:999;
@@ -212,8 +217,11 @@ export default function Tutorial() {
 
 
 const IconBox = styled.div`
+  position:absolute;
   display:flex;
   width: 30rem;
+  top:1.25rem;
+  right:1.8rem;
   flex-direction: row;
   gap: 1rem;
   align-items: center;
@@ -221,8 +229,25 @@ const IconBox = styled.div`
   opacity:0;
   transition: all 0.5s ease-in-out;
   >img{
-    height:60px;
-    width:60px;
+    height:3.5rem;
+    width:3.5rem;
+    border-radius: 100%;
+    box-shadow: 0 3px 9px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+  }
+  >button{
+  width: 6em;
+  height: 1.625rem;
+  font-size: 0.75rem;
+  background-color: #b96619;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 1.5rem; 
+  color: white;
+  margin-right:0.65rem;
+  border: none;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
   }
   &.active{
       opacity:1;
@@ -247,11 +272,8 @@ const MiddleBox = styled.div`
 
 const Marker = styled.img`
    position: absolute;
-   /* width:5.875rem;
-   height:91rem; */
-   bottom:20rem;
-   left:40rem;
-  
+   bottom:17rem;
+   left:48.5rem;
    opacity:0;
    &.active{
       opacity:1;
@@ -260,6 +282,9 @@ const Marker = styled.img`
       transition: all 0.5s ease-in-out;
     }
  `;
+
+const MarkerTwo = styled(Marker)`
+`;
 
 const ReviewMd = styled.img`
  position: absolute;
@@ -270,6 +295,7 @@ opacity: 0;
 
 const SubmitMdr = styled.img`
 opacity: 0;
+transform: translate(0%,25%);
 &.active{
       opacity:1;
       cursor:pointer;
@@ -288,7 +314,7 @@ justify-content: space-between;
 
 const Sidebar = styled.img`
 position: relative;
-top:-650px; 
+top:-490px; 
 opacity: 0;
 &.active{
       opacity:1;

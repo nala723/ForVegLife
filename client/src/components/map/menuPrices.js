@@ -37,8 +37,8 @@ const Menu = styled.input`
   border-radius: 0.5rem;
   margin-bottom: 1rem;
   border: 0.5px solid #bbbbbb;
-  text-align: left;
-  text-indent: 2rem;
+  text-align: center;
+  /* text-indent: 2rem; */
 `;
 const Price = styled.input`
   width: 40%;
@@ -46,6 +46,6 @@ const Price = styled.input`
   border-radius: 0.5rem;
   margin-bottom: 1rem;
   border: 0.5px solid #bbbbbb;
-  text-align: left;
-  text-indent: 2rem;
+  text-align: center;
+  /* text-indent: 2rem; */
 `;
