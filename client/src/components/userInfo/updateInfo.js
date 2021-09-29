@@ -36,7 +36,7 @@ export default function UpdateInfo() {
     const refPassword = useRef(null);
     const refPasswordCheck = useRef(null);
     const photoInput = useRef(null);
-    const veggieIcon = dummydatas.veggieIcon; // 임시 - 더미데이터, 추후 교체
+    const veggieIcon = dummydatas.veggieIcon; 
     const [loading, setLoading] = useState(true);
 
     // 최초 렌더링시 유저정보 받아오기
