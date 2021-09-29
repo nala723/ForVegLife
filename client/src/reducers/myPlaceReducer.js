@@ -27,7 +27,7 @@ const myPlaceReducer = (state = initialState, action) => {
       });
     case DELETE_MY_FAVORITE:
       return Object.assign({}, state, {
-        myFavPlaces : state.myFavPlaces.filter((el)=> el.placeId !== action.payload.id)
+        myFavPlaces : state.myFavPlaces.filter((el)=> el.place_id !== action.payload.id)
       })
     case GET_MY_REVIEW:
     return Object.assign({}, state, {

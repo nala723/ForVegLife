@@ -20,6 +20,16 @@ export default function SideBar({ select, inReview, exitReview }) {
   const [tempdata, setTempData] = useState([]);
   const sideRef = useRef();
   useEffect(() => {
+    if (selPlace.id !== 0) {
+      gsap.to(sideRef.current, {
+        left: 0,
+        height: "calc(100vh - 3.35rem - 5vh)",
+        width: "20vw",
+        minWidth: "15rem",
+      });
+    }
+  });
+  useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_SERVER_URL}/restaurant/${selPlace.id}`, {
         headers: {
@@ -37,19 +47,8 @@ export default function SideBar({ select, inReview, exitReview }) {
         setTempData(...res.data);
       });
   }, [selPlace.id]);
-
-  useEffect(() => {
-    if (selPlace.id !== 0) {
-      gsap.to(sideRef.current, {
-        left: 0,
-        height: "calc(100vh - 3.35rem - 5vh)",
-        width: "20vw",
-        minWidth: "15rem",
-      });
-    }
-  });
   let data = tempdata;
-  console.log(data);
+  console.log(data.favirote);
   // axios 요청으로 받아오기
   // 일단은 더미데이터
   // const data = {

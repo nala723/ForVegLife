@@ -4,19 +4,24 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as fullHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as EmptyHeart } from "@fortawesome/free-regular-svg-icons";
 import { useSelector, useDispatch } from "react-redux";
+import { newAccessToken, getgoogleToken } from "../../../actions";
 import theme from "../../../styles/theme";
 const axios = require("axios");
 export default function MenuInfo({ place, menu, price, like, src }) {
   const selPlace = useSelector((state) => state.selectPlace);
   const user = useSelector((state) => state.userReducer);
+  const googleState = useSelector((state) => state.googleReducer);
+  const { googleToken } = googleState;
+  const dispatch = useDispatch();
   const [favirote, setFavirote] = useState(false);
+
   useEffect(() => {
     if (like) {
       setFavirote(true);
     } else {
       setFavirote(false);
     }
-  }, [like]);
+  }, [selPlace.id]);
   const onLike = () => {
     axios
       .post(
@@ -29,6 +34,13 @@ export default function MenuInfo({ place, menu, price, like, src }) {
         }
       )
       .then((res) => {
+        if (res.headers.accessToken) {
+          if (googleToken) {
+            dispatch(getgoogleToken({ accessToken: res.headers.accessToken }));
+          } else {
+            dispatch(newAccessToken({ accessToken: res.headers.accessToken }));
+          }
+        }
         setFavirote(true);
       });
   };
@@ -44,6 +56,13 @@ export default function MenuInfo({ place, menu, price, like, src }) {
         }
       )
       .then((res) => {
+        if (res.headers.accessToken) {
+          if (googleToken) {
+            dispatch(getgoogleToken({ accessToken: res.headers.accessToken }));
+          } else {
+            dispatch(newAccessToken({ accessToken: res.headers.accessToken }));
+          }
+        }
         setFavirote(false);
       });
   };

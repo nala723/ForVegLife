@@ -174,7 +174,8 @@ export default function Favorite() {
         }
         if (res.status === 200) {
           //갖고 있는 상태의 장소의 이름과 일치하는 것- 의 placeId
-          let id = places.filter((el) => el.place_id === place_id)[0];
+          let id = places.filter((el) => el.place_id === place_id)[0].place_id;
+          console.log(id);
           dispatch(deletemyfavorite(id)); // 추후 보고 수정 객체형으로?
           getFavList(); // 다시 렌더링 호출
           window.location.href = window.location.href;

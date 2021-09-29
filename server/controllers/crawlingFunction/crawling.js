@@ -4,14 +4,14 @@ const chrome = require("selenium-webdriver/chrome");
 
 exports.crawling = async (placeUrl, placeData) => {
   const service = new chrome.ServiceBuilder(
-    "./controllers/crawlingFunction/chrome"
+    "./controllers/crawlingFunction/chromedriver"
   ).build();
   chrome.setDefaultService(service);
 
-  // const driver = await new webdriver.Builder().forBrowser('chrome').build();
+   //const driver = await new webdriver.Builder().forBrowser('chrome').build();
   const driver = new webdriver.Builder()
     .forBrowser("chrome")
-    .setChromeOptions(new chrome.Options().addArguments("--headless"))
+    .setChromeOptions(new chrome.Options().addArguments("--headless", "--no-sandbox", "--single-process", "--disable-dev-shm-usage"))
     .build();
   await driver.manage().setTimeouts({
     implicit: 30000,
