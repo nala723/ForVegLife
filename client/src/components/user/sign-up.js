@@ -56,26 +56,26 @@ export default function SignUp(props) {
   const onCreate = (data) => {
     // axios 요청 성공 시2
     axios
-    .post(`${process.env.REACT_APP_SERVER_URL}/sign/signup`, {
-      nickname: data.nickName,
-      email: data.email,
-      password: data.password,
-    })
-    .then((res) => {
-      console.log(res.data);
-      const { email, nickName } = data;
-      dispatch(
-        userLogin({
-          isLogin: true,
-          email,
-          nickName: res.data.nickname,
-          accessToken: res.data.accessToken,
-          profileblob: res.data.profileblob,
-        })
-      );
-    })
-    .catch((err) => {});
-};
+      .post(`${process.env.REACT_APP_SERVER_URL}/sign/signup`, {
+        nickname: data.nickName,
+        email: data.email,
+        password: data.password,
+      })
+      .then((res) => {
+        console.log(res.data);
+        const { email, nickName } = data;
+        dispatch(
+          userLogin({
+            isLogin: true,
+            email,
+            nickName: res.data.nickname,
+            accessToken: res.data.accessToken,
+            profileblob: res.data.profileblob,
+          })
+        );
+      })
+      .catch((err) => {});
+  };
   const handleChange = (e) => {
     setUser({
       ...user,
@@ -213,7 +213,7 @@ const Temp = styled.div`
   width: 100vw;
   max-width: 100%;
   height: calc(100vh - 3.45rem);
-  max-height:calc(100vh - 3.45rem);
+  max-height: calc(100vh - 3.45rem);
   background-color: rgba(0, 0, 0, 0.4);
   z-index: 3;
   display: flex;

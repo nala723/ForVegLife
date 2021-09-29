@@ -4,7 +4,7 @@ import MenuInfo from "./menuInfo";
 import PlaceInfo from "./placeinfo";
 import Review from "./review";
 import { useSelector, useDispatch } from "react-redux";
-import { selectPlace } from "../../../actions";
+import { selectPlace, newAccessToken, getgoogleToken } from "../../../actions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
@@ -12,6 +12,8 @@ import gsap from "gsap";
 import { useRef } from "react";
 
 export default function SideBar({ select, inReview, exitReview }) {
+  const googleState = useSelector((state) => state.googleReducer);
+  const { googleToken } = googleState;
   const dispatch = useDispatch();
   const user = useSelector((state) => state.userReducer);
   const selPlace = useSelector((state) => state.selectPlace);
@@ -25,6 +27,13 @@ export default function SideBar({ select, inReview, exitReview }) {
         },
       })
       .then((res) => {
+        if (res.headers.accessToken) {
+          if (googleToken) {
+            dispatch(getgoogleToken({ accessToken: res.headers.accessToken }));
+          } else {
+            dispatch(newAccessToken({ accessToken: res.headers.accessToken }));
+          }
+        }
         setTempData(...res.data);
       });
   }, [selPlace.id]);
@@ -34,8 +43,8 @@ export default function SideBar({ select, inReview, exitReview }) {
       gsap.to(sideRef.current, {
         left: 0,
         height: "calc(100vh - 3.35rem - 5vh)",
-        width: "30vw",
-        minWidth: "20rem",
+        width: "20vw",
+        minWidth: "15rem",
       });
     }
   });
