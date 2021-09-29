@@ -13,7 +13,8 @@ module.exports = async (req, res) => {
          email : email,
          social : 1
        })
-       .then((result) => {
+       return users
+       .then((users) => {
          const googleUserInfo = {id: users.id, email: email, nickname: nickName, vegtype:users.vegtype}
          const access_token = generateAccessToken(googleUserInfo);
          const refresh_token = generateRefreshToken(googleUserInfo);

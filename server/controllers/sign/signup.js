@@ -28,11 +28,13 @@ module.exports = async (req, res) => {
                  profile : profile,
                  social : 0
               })
-              .then((result) => {
+              return users
+              .then((users) => {
                 const userInfo = {id: users.id, email: email, nickName: nickname, vegtype:users.vegtype}
+                console.log(userInfo)
                 const access_token = generateAccessToken(userInfo);
                 const refresh_token = generateRefreshToken(userInfo);
-
+                
                 res.cookie('RefreshToken', refresh_token, {httpOnly: true, sameSite: 'none', secure: true});
                 res.status(200).json({
                   message : 'ok',
