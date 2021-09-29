@@ -74,6 +74,7 @@ export default function SearchPlace({ selData, setCategory }) {
       x,
       y,
     });
+    setInputText("");
     dispatch(selectPlace({ x, y, address: address, name: name, id: 0 }));
   };
 
@@ -120,13 +121,11 @@ export default function SearchPlace({ selData, setCategory }) {
 
 const SearchForm = styled.form`
   ${theme.device.moblie} {
-    right: 2%;
-    width: 14rem;
+    right: 5vw;
   }
   @media only screen and (min-width: 425px) {
     left: 40%;
     top: 3rem;
-    width: 17.25rem;
     transform: translate(-50%, 0%);
   }
   width: 17.25rem;
@@ -135,11 +134,13 @@ const SearchForm = styled.form`
   flex-direction: column;
   top: 3rem;
   z-index: 2;
+  right: -200px;
 `;
 const InputStyle = styled.div`
   margin-top: 0.3rem;
-  width: 100%;
+  width: 17.25rem;
   position: relative;
+  right: -200px;
 `;
 const Category = styled.div`
   @media only screen and (min-width: 425px) {
@@ -236,12 +237,15 @@ const Keyword = styled.div`
   display: flex;
   flex-direction: column;
   height: 7rem;
-  width: 100%;
+  width: 20rem;
   overflow: auto;
   -ms-overflow-style: none;
   ::-webkit-scrollbar {
     display: none;
   }
+  position: absolute;
+  top: 3.25rem;
+  right: -243px;
 `;
 const VegeType = styled.div`
   ${theme.device.mobile} {

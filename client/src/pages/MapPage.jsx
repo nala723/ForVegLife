@@ -117,7 +117,7 @@ const Enroll = styled.div`
   justify-content: center;
   align-items: center;
   top: 4rem;
-  left: 10%;
+  left: 6%;
   color: white;
   z-index: 2;
   border-radius: 0.3rem;
