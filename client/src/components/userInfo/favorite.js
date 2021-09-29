@@ -294,7 +294,12 @@ export default function Favorite() {
         Kakao.init(process.env.REACT_APP_JAVASCRIPT_KEY);
         console.log(Kakao.isInitialized());
       }
-
+      let placeId 
+      if(el.place_id){
+        placeId = el.place_id
+      }else if(el.placeId){
+        placeId = el.placeId
+      }
       console.log("카카오되라",el);
       Kakao.Link.sendDefault({
         objectType: 'location',
@@ -303,10 +308,10 @@ export default function Favorite() {
         content: {
           title: `${el.title}`,
           description: `${el.title}`,
-          imageUrl:`http://localhost:3000/restaurant/${el.place_id}`,
+          imageUrl:`https://forveglife.ml/restaurant/${placeId}`,
           link: {
-            mobileWebUrl:`http://localhost:3000/restaurant/${el.place_id}`,
-            webUrl: `http://localhost:3000/restaurant/${el.place_id}`,
+            mobileWebUrl:`https://forveglife.ml/restaurant/${placeId}`,
+            webUrl: `https://forveglife.ml/restaurant/${placeId}`,
           },
         },
         social: {
@@ -318,8 +323,8 @@ export default function Favorite() {
           {
             title: '웹으로 보기',
             link: {
-              mobileWebUrl: `http://localhost:3000/restaurant/${el.place_id}`,
-              webUrl: `http://localhost:3000/restaurant/${el.place_id}`,
+              mobileWebUrl: `https://forveglife.ml/restaurant/${placeId}`,
+              webUrl: `https://forveglife.ml/restaurant/${placeId}`,
             },
           },
         ],
@@ -328,15 +333,27 @@ export default function Favorite() {
   };
 
   const shareTwitter = (el) => {
+    let placeId 
+    if(el.place_id){
+      placeId = el.place_id
+    }else if(el.placeId){
+      placeId = el.placeId
+    }
     let sendText = el.title; // 전달할 텍스트
-    let sendUrl = `http://localhost:3000/restaurant/${el.place_id}`; // 전달할 URL
+    let sendUrl = `https://forveglife.ml/restaurant/${placeId}`; // 전달할 URL
     window.open(
       "https://twitter.com/intent/tweet?text=" + sendText + "&url=" + sendUrl
     );
   };
 
   const shareFacebook = (el) => {
-    let sendUrl = `http://localhost:3000/restaurant/${el.place_id}`; // 전달할 URL
+    let placeId 
+    if(el.place_id){
+      placeId = el.place_id
+    }else if(el.placeId){
+      placeId = el.placeId
+    }
+    let sendUrl = `https://forveglife.ml/restaurant/${placeId}`; // 전달할 URL
     window.open("http://www.facebook.com/sharer/sharer.php?u=" + sendUrl);
   };
 
