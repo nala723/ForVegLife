@@ -56,19 +56,26 @@ export default function SignUp(props) {
   const onCreate = (data) => {
     // axios 요청 성공 시2
     axios
-      .post(`${process.env.REACT_APP_SERVER_URL}/sign/signup`, {
-        nickname: data.nickName,
-        email: data.email,
-        password: data.password,
-      })
-      .then((res) => {
-        const { email, nickname, accessToken,profileblob } =res.data;
-        dispatch(userLogin({ isLogin: true, email, profileblob ,nickName:nickname,accessToken }));
-      })
-      .catch((err) => {
-     
-      });
-  };
+    .post(`${process.env.REACT_APP_SERVER_URL}/sign/signup`, {
+      nickname: data.nickName,
+      email: data.email,
+      password: data.password,
+    })
+    .then((res) => {
+      console.log(res.data);
+      const { email, nickName } = data;
+      dispatch(
+        userLogin({
+          isLogin: true,
+          email,
+          nickName: res.data.nickname,
+          accessToken: res.data.accessToken,
+          profileblob: res.data.profileblob,
+        })
+      );
+    })
+    .catch((err) => {});
+};
   const handleChange = (e) => {
     setUser({
       ...user,
