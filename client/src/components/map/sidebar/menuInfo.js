@@ -14,13 +14,14 @@ export default function MenuInfo({ place, menu, price, like, src }) {
   const { googleToken } = googleState;
   const dispatch = useDispatch();
   const [favirote, setFavirote] = useState(false);
+
   useEffect(() => {
     if (like) {
       setFavirote(true);
     } else {
       setFavirote(false);
     }
-  }, [like]);
+  }, [selPlace.id]);
   const onLike = () => {
     axios
       .post(
