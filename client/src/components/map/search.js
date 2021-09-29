@@ -75,11 +75,7 @@ export default function SearchPlace({ selData, setCategory }) {
       x,
       y,
     });
-<<<<<<< HEAD
-    setInputText("");
-=======
     setInputText(name);
->>>>>>> Upstream/dev
     dispatch(selectPlace({ x, y, address: address, name: name, id: 0 }));
   };
 
@@ -139,21 +135,13 @@ const SearchForm = styled.form`
   flex-direction: column;
   top: 3rem;
   z-index: 2;
-<<<<<<< HEAD
-  right:-200px;
-=======
   right: -200px;
->>>>>>> Upstream/dev
 `;
 const InputStyle = styled.div`
   margin-top: 0.3rem;
   width: 17.25rem;
   position: relative;
-<<<<<<< HEAD
-  right:-200px;
-=======
   right: -200px;
->>>>>>> Upstream/dev
 `;
 const Category = styled.div`
   @media only screen and (min-width: 425px) {
@@ -260,15 +248,9 @@ const Keyword = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
-<<<<<<< HEAD
-  position:absolute;
-  top:3.25rem;
-  right:-243px;
-=======
   position: absolute;
   top: 3.25rem;
   right: -243px;
->>>>>>> Upstream/dev
 `;
 const VegeType = styled.div`
   ${theme.device.mobile} {

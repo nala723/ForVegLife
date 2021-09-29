@@ -38,7 +38,7 @@ export default function Favorite() {
   const [selected, setSelected] = useState(-1);
   const [isActive, setIsActive] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [recommend, setRecommend] = useState(dummyplace.slice(0, 4)); // 추후수정
+  const [recommend, setRecommend] = useState(dummydatas.favorites.slice(0,4)); // 추후수정
   const { nickName } = userState;
  
   //최초렌더링시-
@@ -97,7 +97,7 @@ export default function Favorite() {
           }
         }
         if (res.status === 200) {
-          if (res.data.data.length === 4) {
+          if (res.data.data) {
             let recommendAr = res.data.data;
             setRecommend(recommendAr); //--상태값 알아서 변경되는지 확인
             getFavList();
@@ -134,10 +134,8 @@ export default function Favorite() {
           }
         }
         if (res.status === 200) {
-          if (res.data.place.length > 0) {
             dispatch(getmyfavorite(res.data.place));
             setPlaces(res.data.place);
-          }
         } else {
           history.push("/notfound");
         }
@@ -174,8 +172,7 @@ export default function Favorite() {
         }
         if (res.status === 200) {
           //갖고 있는 상태의 장소의 이름과 일치하는 것- 의 placeId
-          let id = places.filter((el) => el.place_id === place_id)[0].place_id;
-          console.log(id);
+          let id = places.filter((el) => el.place_id === place_id)[0];
           dispatch(deletemyfavorite(id)); // 추후 보고 수정 객체형으로?
           getFavList(); // 다시 렌더링 호출
           window.location.href = window.location.href;
@@ -313,8 +310,9 @@ export default function Favorite() {
           },
         },
         social: {
-          likeCount: el.star,
-          commentCount: el.review.length,
+          likeCount: 221,
+          commentCount: 25,
+          sharedCount: 123,
         },
         buttons: [
           {

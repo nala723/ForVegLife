@@ -177,33 +177,47 @@ useEffect(() => {
 
   // sns 공유 핸들러
  
-   const shareKakao = (el) => {
+  const shareKakao = (el) => {
     if (window.Kakao) {
-      const Kakao = window.Kakao
-         // 중복 initialization 방지
-         if (!Kakao.isInitialized()) {
-          // 두번째 step 에서 가져온 javascript key 를 이용하여 initialize
-          Kakao.init(process.env.REACT_APP_JAVASCRIPT_KEY)
-          console.log(Kakao.isInitialized())
-        }
-  
-    console.log('카카오되라')
-    Kakao.Link.createDefaultButton({
-      container: '#btnKakao', // 카카오공유버튼ID
-      objectType: 'feed',
-      content: {
-        title: el.title, // 보여질 제목
-        description: el.content, // 보여질 설명
-        imageUrl: "www.naver.com", // 콘텐츠 URL
-        link: {
-          mobileWebUrl: "devpad.tistory.com/",
-          webUrl: "devpad.tistory.com/"
-        }
+      const Kakao = window.Kakao;
+      // 중복 initialization 방지
+      if (!Kakao.isInitialized()) {
+        // 두번째 step 에서 가져온 javascript key 를 이용하여 initialize
+        Kakao.init(process.env.REACT_APP_JAVASCRIPT_KEY);
+        console.log(Kakao.isInitialized());
       }
-    });
-  }
 
-  }
+      console.log("카카오되라",el);
+      Kakao.Link.sendDefault({
+        objectType: 'location',
+        address: `${el.title}`,
+        addressTitle: `${el.title}`,
+        content: {
+          title: `${el.title}`,
+          description: `${el.content}`,
+          imageUrl:`http://localhost:3000/restaurant/${el.place_id}`,
+          link: {
+            mobileWebUrl:`http://localhost:3000/restaurant/${el.place_id}`,
+            webUrl: `http://localhost:3000/restaurant/${el.place_id}`,
+          },
+        },
+        social: {
+          likeCount: el.star,
+          commentCount: reviewState.myReviews.length,
+          sharedCount: 123,
+        },
+        buttons: [
+          {
+            title: '웹으로 보기',
+            link: {
+              mobileWebUrl: `http://localhost:3000/restaurant/${el.place_id}`,
+              webUrl: `http://localhost:3000/restaurant/${el.place_id}`,
+            },
+          },
+        ],
+      });
+    }
+  };
 
   const shareTwitter = (el) => {
     let sendText = el.title; // 전달할 텍스트
@@ -265,7 +279,7 @@ useEffect(() => {
                                   <div>{dum.content ? '.....' : ""}</div>
                                 </CardContent>
                                <CardSns>
-                                <img src="/image/kakaotalk.png" onClick={()=>shareKakao(dum)} id="btnKakao"/>
+                                <img src="/image/kakaotalk.png" onClick={()=>shareKakao(dum)} />
                                  <img src="/image/facebook.png" onClick={()=>shareFacebook(dum)}/>
                                  <img src="/image/twitter.png" onClick={()=>shareTwitter(dum)}/>
                               </CardSns>
