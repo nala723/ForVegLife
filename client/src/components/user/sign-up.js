@@ -68,7 +68,7 @@ export default function SignUp(props) {
           userLogin({
             isLogin: true,
             email,
-            nickName,
+            nickName: res.data.nickname,
             accessToken: res.data.accessToken,
             profileblob: res.data.profileblob,
           })
