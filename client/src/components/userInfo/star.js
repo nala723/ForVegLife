@@ -195,10 +195,10 @@ useEffect(() => {
         content: {
           title: `${el.title}`,
           description: `${el.content}`,
-          imageUrl:`https://forveglife.ml/restaurant/${placeId}`,
+          imageUrl:`https://forveglife.ml/restaurant/${el.placeId}`,
           link: {
-            mobileWebUrl:`https://forveglife.ml/restaurant/${placeId}`,
-            webUrl: `https://forveglife.ml/restaurant/${placeId}`,
+            mobileWebUrl:`https://forveglife.ml/restaurant/${el.placeId}`,
+            webUrl: `https://forveglife.ml/restaurant/${el.placeId}`,
           },
         },
         social: {
@@ -210,8 +210,8 @@ useEffect(() => {
           {
             title: '웹으로 보기',
             link: {
-              mobileWebUrl: `https://forveglife.ml/restaurant/${placeId}`,
-              webUrl: `https://forveglife.ml/restaurant/${placeId}`,
+              mobileWebUrl: `https://forveglife.ml/restaurant/${el.placeId}`,
+              webUrl: `https://forveglife.ml/restaurant/${el.placeId}`,
             },
           },
         ],
@@ -221,12 +221,12 @@ useEffect(() => {
 
   const shareTwitter = (el) => {
     let sendText = el.title; // 전달할 텍스트
-    let sendUrl = `https://forveglife.ml/restaurant/${placeId}`; // 전달할 URL
+    let sendUrl = `https://forveglife.ml/restaurant/${el.placeId}`; // 전달할 URL
     window.open("https://twitter.com/intent/tweet?text=" + sendText + "&url=" + sendUrl);
   }
 
   const shareFacebook = (el) => {
-    let sendUrl = `https://forveglife.ml/restaurant/${placeId}`; // 전달할 URL
+    let sendUrl = `https://forveglife.ml/restaurant/${el.placeId}`; // 전달할 URL
     window.open("http://www.facebook.com/sharer/sharer.php?u=" + sendUrl);
   }
   
