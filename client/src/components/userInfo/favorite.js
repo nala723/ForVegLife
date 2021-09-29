@@ -38,9 +38,9 @@ export default function Favorite() {
   const [selected, setSelected] = useState(-1);
   const [isActive, setIsActive] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [recommend, setRecommend] = useState(dummyplace.slice(0, 4)); // 추후수정
+  const [recommend, setRecommend] = useState(dummydatas.favorites.slice(0,4)); // 추후수정
   const { nickName } = userState;
-
+ 
   //최초렌더링시-
   useEffect(() => {
     // getRecommendation()
@@ -97,7 +97,7 @@ export default function Favorite() {
           }
         }
         if (res.status === 200) {
-          if (res.data.data.length === 4) {
+          if (res.data.data) {
             let recommendAr = res.data.data;
             setRecommend(recommendAr); //--상태값 알아서 변경되는지 확인
             getFavList();
@@ -134,10 +134,8 @@ export default function Favorite() {
           }
         }
         if (res.status === 200) {
-          if (res.data.place.length > 0) {
             dispatch(getmyfavorite(res.data.place));
             setPlaces(res.data.place);
-          }
         } else {
           history.push("/notfound");
         }
@@ -174,8 +172,7 @@ export default function Favorite() {
         }
         if (res.status === 200) {
           //갖고 있는 상태의 장소의 이름과 일치하는 것- 의 placeId
-          let id = places.filter((el) => el.place_id === place_id)[0].place_id;
-          console.log(id);
+          let id = places.filter((el) => el.place_id === place_id)[0];
           dispatch(deletemyfavorite(id)); // 추후 보고 수정 객체형으로?
           getFavList(); // 다시 렌더링 호출
           window.location.href = window.location.href;
@@ -297,34 +294,66 @@ export default function Favorite() {
         Kakao.init(process.env.REACT_APP_JAVASCRIPT_KEY);
         console.log(Kakao.isInitialized());
       }
-
-      console.log("카카오되라");
-      Kakao.Link.createDefaultButton({
-        container: "#btnKakao", // 카카오공유버튼ID
-        objectType: "feed",
+      let placeId 
+      if(el.place_id){
+        placeId = el.place_id
+      }else if(el.placeId){
+        placeId = el.placeId
+      }
+      console.log("카카오되라",el);
+      Kakao.Link.sendDefault({
+        objectType: 'location',
+        address: `${el.title}`,
+        addressTitle: `${el.title}`,
         content: {
-          title: el.title, // 보여질 제목
-          description: el.address, // 보여질 설명
-          imageUrl: `http://localhost:3000/restaurant/${el.placeId}`, // 콘텐츠 URL
+          title: `${el.title}`,
+          description: `${el.title}`,
+          imageUrl:`https://forveglife.ml/restaurant/${placeId}`,
           link: {
-            mobileWebUrl: "devpad.tistory.com/",
-            webUrl: "devpad.tistory.com/",
+            mobileWebUrl:`https://forveglife.ml/restaurant/${placeId}`,
+            webUrl: `https://forveglife.ml/restaurant/${placeId}`,
           },
         },
+        social: {
+          likeCount: 221,
+          commentCount: 25,
+          sharedCount: 123,
+        },
+        buttons: [
+          {
+            title: '웹으로 보기',
+            link: {
+              mobileWebUrl: `https://forveglife.ml/restaurant/${placeId}`,
+              webUrl: `https://forveglife.ml/restaurant/${placeId}`,
+            },
+          },
+        ],
       });
     }
   };
 
   const shareTwitter = (el) => {
+    let placeId 
+    if(el.place_id){
+      placeId = el.place_id
+    }else if(el.placeId){
+      placeId = el.placeId
+    }
     let sendText = el.title; // 전달할 텍스트
-    let sendUrl = `http://localhost:3000/restaurant/${el.placeId}`; // 전달할 URL
+    let sendUrl = `https://forveglife.ml/restaurant/${placeId}`; // 전달할 URL
     window.open(
       "https://twitter.com/intent/tweet?text=" + sendText + "&url=" + sendUrl
     );
   };
 
   const shareFacebook = (el) => {
-    let sendUrl = `http://localhost:3000/restaurant/${el.placeId}`; // 전달할 URL
+    let placeId 
+    if(el.place_id){
+      placeId = el.place_id
+    }else if(el.placeId){
+      placeId = el.placeId
+    }
+    let sendUrl = `https://forveglife.ml/restaurant/${placeId}`; // 전달할 URL
     window.open("http://www.facebook.com/sharer/sharer.php?u=" + sendUrl);
   };
 
@@ -389,7 +418,6 @@ export default function Favorite() {
                   <img
                     src="/image/kakaotalk.png"
                     onClick={() => shareKakao(dum)}
-                    id="btnKakao"
                   />
                   <img
                     src="/image/facebook.png"
@@ -420,7 +448,6 @@ export default function Favorite() {
                   <img
                     src="/image/kakaotalk.png"
                     onClick={() => shareKakao(dum)}
-                    id="btnKakao"
                   />
                   <img
                     src="/image/facebook.png"

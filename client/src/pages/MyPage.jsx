@@ -6,6 +6,7 @@ import Star from '../components/userInfo/star';
 import UpdateInfo from '../components/userInfo/updateInfo';
 import SignOut from '../components/userInfo/sign-Out';
 import styled from "styled-components";
+import theme from "../styles/theme";
 
 export default function MyPage() {
   const [sidebar, setSidebar] = useState(true);
@@ -45,6 +46,9 @@ export default function MyPage() {
 }
 
 const Container = styled.div`
+${theme.device.change}{
+  justify-content: center;
+}
  width:100%;
  max-width:100%;
  height:auto;
@@ -58,7 +62,11 @@ const Box = styled(Container)`
  
 `;
 const Top = styled.div`
- direction: flex;
+${theme.device.change}{
+ margin-left:4.2rem;
+}
+
+ display: block;
  width: calc(100% - 7.313rem);
  height: 5rem;
  margin-left: 7.313rem;

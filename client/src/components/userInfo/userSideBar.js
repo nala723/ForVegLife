@@ -4,34 +4,25 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {Buffer} from 'buffer';
 import { TraceSpinner } from "react-spinners-kit";
-
+import { useHistory } from "react-router-dom";
 
 export default function UserSideBar() {
   const userState = useSelector((state)=> state)
-  const { email,nickName,profileblob} = userState.userReducer;
+  const { email,nickName,profileblob,isLogin} = userState.userReducer;
   const [loading, setLoading] = useState(true);
-  const [sidebar, setSidebar] = useState(true);
-    
-   
+  const history = useHistory();
+ 
   useEffect(()=>{
     setLoading(true);
     if(profileblob !== null){
       setLoading(false);
     }
+    if(!isLogin){
+      history.push('/')
+      setLoading(false);
+    }
   },[])
- 
-    const showSidebar = () => {
-        if(window.innerWidth <= 960) {
-           setSidebar(false);
-        } else {
-           setSidebar(true);
-        }
-    };
-    useEffect(() => {
-      showSidebar();
-    }, []) 
-
-    window.addEventListener('resize', showSidebar); 
+  
 
     // 프로필 이미지 설정 
     let profileIMG;
@@ -63,7 +54,7 @@ export default function UserSideBar() {
                 </UserBox>
                 <TextBox>
                    <UserName>
-                       {nickName ? nickName : 'Kimusername'}
+                       {nickName ? nickName : 'Guest'}
                    </UserName>
                    <UserEmail>
                        {email ? email : `hahihuhe3@gmail.com`}
