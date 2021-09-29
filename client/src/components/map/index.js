@@ -11,8 +11,8 @@ export default function MapIndex({ data, latlng }) {
 
   const MapCenter = useSelector((state) => state.MapCenter);
   const history = useHistory();
-  const [isOpen,setIsOpen] = useState(false)
-  const [tutorial,setTutorial] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
+  const [tutorial, setTutorial] = useState(false);
   let lng =
     MapCenter.x !== 0
       ? MapCenter.x
@@ -42,8 +42,17 @@ export default function MapIndex({ data, latlng }) {
         return;
       }
       let markerPosition = new kakao.maps.LatLng(selPlace.y, selPlace.x);
+      let imageSrc = "/image/pngwing.com.png",
+        imageSize = new kakao.maps.Size(40, 40),
+        imageOption = { offset: new kakao.maps.Point(27, 69) };
+      var markerImage = new kakao.maps.MarkerImage(
+        imageSrc,
+        imageSize,
+        imageOption
+      );
       let marker = new kakao.maps.Marker({
         position: markerPosition,
+        image: markerImage,
       });
       marker.setMap(map);
       searchAddrFromCoords(map.getCenter(), displayCenterInfo);
@@ -96,31 +105,35 @@ export default function MapIndex({ data, latlng }) {
     }
   }, [selPlace, data]);
 
-  useEffect(()=>{
-    handleOpenTuto(true)
-  },[])
+  useEffect(() => {
+    handleOpenTuto(true);
+  }, []);
 
-  const handleOpenTuto=(boolean) => {
-    setIsOpen(boolean)
-    if(isOpen=== true ){
-       setTutorial(true)
-       history.push('/tutorial')
+  const handleOpenTuto = (boolean) => {
+    setIsOpen(boolean);
+    if (isOpen === true) {
+      setTutorial(true);
+      history.push("/tutorial");
     }
-  }
+  };
   const handleCloseTuto = () => {
-    setIsOpen(false)
-  }
+    setIsOpen(false);
+  };
   return (
     <>
-      {isOpen
-          ? 
-        <TutoModal isOpen={isOpen}  handleClick={handleOpenTuto} handleClose={handleCloseTuto} >
-            환영합니다.<p></p> ForVegiLife는 채식주의자를 위한 지도 기반 서비스입니다.<p></p> 여러분의 성향에 맞는 장소를 검색할 수 있고,<p></p>
-            여러분만의 장소를 직접 등록할 수 있습니다.
-          </TutoModal> 
-          :
-        null}
-          <Map id="map"></Map>
+      {isOpen ? (
+        <TutoModal
+          isOpen={isOpen}
+          handleClick={handleOpenTuto}
+          handleClose={handleCloseTuto}
+        >
+          환영합니다.<p></p> ForVegiLife는 채식주의자를 위한 지도 기반
+          서비스입니다.<p></p> 여러분의 성향에 맞는 장소를 검색할 수 있고,
+          <p></p>
+          여러분만의 장소를 직접 등록할 수 있습니다.
+        </TutoModal>
+      ) : null}
+      <Map id="map"></Map>
     </>
   );
 }
@@ -130,5 +143,5 @@ const Map = styled.div`
   max-width: 100%;
   width: 100vw;
   height: calc(100vh - 3.45rem);
-  max-height:calc(100vh - 3.45rem);
+  max-height: calc(100vh - 3.45rem);
 `;

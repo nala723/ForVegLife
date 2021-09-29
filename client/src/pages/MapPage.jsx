@@ -102,6 +102,11 @@ const Enroll = styled.div`
     width: 3rem;
     font-size: ${theme.fonts.size.sm};
   }
+  ${theme.device.mobileS} {
+    width: 3rem;
+    font-size: ${theme.fonts.size.sm};
+    left: 2%;
+  }
   position: absolute;
   width: 6rem;
   height: 2rem;

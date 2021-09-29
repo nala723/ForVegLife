@@ -120,11 +120,13 @@ export default function SearchPlace({ selData, setCategory }) {
 
 const SearchForm = styled.form`
   ${theme.device.moblie} {
-    right: 5vw;
+    right: 2%;
+    width: 14rem;
   }
   @media only screen and (min-width: 425px) {
     left: 40%;
     top: 3rem;
+    width: 17.25rem;
     transform: translate(-50%, 0%);
   }
   width: 17.25rem;
@@ -136,7 +138,7 @@ const SearchForm = styled.form`
 `;
 const InputStyle = styled.div`
   margin-top: 0.3rem;
-  width: 17.25rem;
+  width: 100%;
   position: relative;
 `;
 const Category = styled.div`
@@ -234,7 +236,7 @@ const Keyword = styled.div`
   display: flex;
   flex-direction: column;
   height: 7rem;
-  width: 20rem;
+  width: 100%;
   overflow: auto;
   -ms-overflow-style: none;
   ::-webkit-scrollbar {
