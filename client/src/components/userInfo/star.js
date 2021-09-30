@@ -246,7 +246,7 @@ useEffect(() => {
         </Title>
        <Bottom>
          <SearchContainer hasText={hasText} onKeyUp={handleKeyUp}>
-         <button onClick={handleAllview}> 전체 조회 </button>
+         <button onClick={handleAllview}> <p>전체 조회</p> </button>
            <Search placeholder="별점 순 검색"
              className={inputValue? 'autocomplete-input' : ''}
              onChange={handleInputChange}
@@ -307,21 +307,24 @@ useEffect(() => {
 
 }    
 
-const transform = keyframes`
+const transform = (start,middle,end) => keyframes`
   0% {
-    width:10rem;
+    width:${start};
   }
   
   10% {
-    width:9rem;
+    width:${middle};
   }
 
   100% {
-    width:20rem;
-  } // 안먹힘
+    width:${end};
+  } 
 `;
 
 const Container = styled.div`
+${theme.device.mobile}{
+ margin-top: 0.3rem;
+}
 ${theme.device.change}{
   padding: 0;
   margin-left:0.5rem;
@@ -335,6 +338,11 @@ ${theme.device.change}{
     padding-right: 3.5rem;
 `;
 const Title = styled.div`
+${theme.device.mobile}{
+  font-size: ${theme.fonts.size.llg};
+  justify-content:center;
+  padding-bottom:1rem;
+}
  ${theme.device.change}{
   padding-top: 1.4rem;
   padding-bottom: 2rem;
@@ -357,6 +365,11 @@ ${theme.device.change}{
     align-items: flex-start;
 `; 
 const SearchContainer = styled.div`
+${theme.device.mobile}{
+  height:5rem;
+  
+}
+
     width:100%;
    padding-bottom: 5rem;
    display: flex;
@@ -364,6 +377,18 @@ const SearchContainer = styled.div`
   flex-direction: row;
   position: relative;
   >button{
+    ${theme.device.mobile}{
+      margin: 0;
+      margin-right: 0.8rem;
+      width: 3rem;
+      height:3rem;
+      background-color: ${theme.colors.lightgreen};
+      font-size: 10px;
+       >p{
+         width:70%;
+         text-align:center;
+       }
+   }
     margin-top: 2.5rem;
     margin-right: 2rem;
     width: 5.5rem;
@@ -376,12 +401,21 @@ const SearchContainer = styled.div`
     transition: all 0.3s linear;
      :hover {
        background-color: ${theme.colors.lightgreen};
-       /* border: 2px solid var(--color-lightgreen); */
        transition: all 0.3s linear;
      }
     }
 `;
 const Search = styled.input`
+${theme.device.mobile}{
+  margin: 0;
+  width:3rem;
+  ::placeholder{
+    color: transparent;
+  }
+  background-position: center;
+  cursor: pointer;
+}
+
 ${theme.device.change}{
   height: 2.8rem;
 }
@@ -398,12 +432,24 @@ background-repeat: no-repeat,no-repeat;
 background-position: 4% 50%, 96% 50%;
 box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
 :focus {
+  ${theme.device.mobile}{
+      background-position: 96% 50%;
+      width: 18rem;
+      animation: ${transform('3rem','2.5rem','18rem')} 0.8s ease-in-out;
+      ::placeholder{
+        color: ${theme.colors.mapgrey};
+       }
+    }
       border:2px solid var(--color-lightgreen);
       outline:none;
       width:20rem;
       animation: ${transform} 0.8s ease-in-out;
   }
   &.autocomplete-input{
+    ${theme.device.mobile}{
+      width: 18rem;
+      background-position: 96% 50%;
+    }
     width:20rem;
     animation:none;
   }
@@ -414,6 +460,10 @@ box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
 `;
 
 const DropDownContainer = styled.ul` 
+  ${theme.device.mobile}{
+      width: 17.5rem;
+      top:43px;
+    }
 background-color: #ffffff;
 display: block;
 width:20rem;

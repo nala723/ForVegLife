@@ -43,8 +43,8 @@ export default function Favorite() {
  
   //최초렌더링시-
   useEffect(() => {
-    // getRecommendation()
-    getFavList();
+    getRecommendation()
+    // getFavList();
   }, []);
   console.log(myfavState, myfavState.myFavPlaces, "되라"); //아무것도 저장 안했을시 처리
 
@@ -377,7 +377,7 @@ export default function Favorite() {
       <Title>나의 즐겨찾기</Title>
       <Bottom>
         <SearchContainer hasText={hasText} onKeyUp={handleKeyUp}>
-          <button onClick={handleAllview}> 전체 조회 </button>
+          <button onClick={handleAllview}> <p>전체 조회</p> </button>
           <Search
             placeholder="주소로 검색"
             className={inputValue ? "autocomplete-input" : ""}
@@ -408,7 +408,7 @@ export default function Favorite() {
                   className="selectcard hot"
                   onClick={(e) => deleteFavList(e, dum.placeId)}
                 />
-                <CardImg src={dum.pictureUr ? dum.pictureUrl : dum.img} />
+                <CardImg src={dum.picture_url ? dum.picture_url : dum.img} />
                 <CardContent>
                   <h4>{dum.title}</h4>
                   <p>{dum.address}</p>
@@ -469,17 +469,17 @@ export default function Favorite() {
   );
 }
 
-const transform = keyframes`
+const transform = (start,middle,end) => keyframes`
   0% {
-    width:10rem;
+    width:${start};
   }
   
   10% {
-    width:9rem;
+    width:${middle};
   }
 
   100% {
-    width:32.063rem;
+    width:${end};
   } 
 `;
 
@@ -503,6 +503,7 @@ const Title = styled.div`
 ${theme.device.mobile}{
   font-size: ${theme.fonts.size.llg};
   justify-content:center;
+  padding-bottom:1rem;
 }
  ${theme.device.change}{
   padding-top: 1.4rem;
@@ -533,6 +534,10 @@ const Recommend = styled.div`
   font-weight: 600;
 `;
 const SearchContainer = styled.div`
+${theme.device.mobile}{
+  height:5rem;
+  
+}
   width: 100%;
   padding-bottom: 4.5rem;
   display: flex;
@@ -540,11 +545,26 @@ const SearchContainer = styled.div`
   flex-direction: row;
   position: relative;
   > button {
+    ${theme.device.mobile}{
+      margin: 0;
+      margin-right: 0.8rem;
+      width: 3rem;
+      height:3rem;
+      background-color: ${theme.colors.lightgreen};
+      font-size: 10px;
+       >p{
+         width:70%;
+         text-align:center;
+       }
+   }
     margin-top: 2.5rem;
     margin-right: 2rem;
     width: 5.5rem;
-    height: 2.8rem;
+    max-height: 2.8rem;
     border-radius: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items:center;
     border: none;
     background-color: transparent;
     color: ${theme.colors.mapgrey};
@@ -557,6 +577,15 @@ const SearchContainer = styled.div`
   }
 `;
 const Search = styled.input`
+${theme.device.mobile}{
+  margin: 0;
+  width:3rem;
+  ::placeholder{
+    color: transparent;
+  }
+  background-position: center;
+  cursor: pointer;
+}
 ${theme.device.change}{
   height: 2.8rem;
 }
@@ -573,12 +602,24 @@ ${theme.device.change}{
   background-position: 96% 50%;
   box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
   :focus {
+    ${theme.device.mobile}{
+      background-position: 96% 50%;
+      width: 18rem;
+      animation: ${transform('3rem','2.5rem','18rem')} 0.8s ease-in-out;
+      ::placeholder{
+        color: ${theme.colors.mapgrey};
+       }
+    }
     border: 2px solid var(--color-lightgreen);
     outline: none;
     width: 32.063rem;
-    animation: ${transform} 0.8s ease-in-out;
+    animation: ${transform('10rem','9rem','32.063rem')} 0.8s ease-in-out;
   }
   &.autocomplete-input {
+    ${theme.device.mobile}{
+      width: 18rem;
+      background-position: 96% 50%;
+    }
     width: 32.063rem;
     animation: none;
   }
@@ -589,6 +630,10 @@ ${theme.device.change}{
 `;
 
 const DropDownContainer = styled.ul`
+    ${theme.device.mobile}{
+      width: 17.5rem;
+      top:43px;
+    }
   background-color: #ffffff;
   display: block;
   width: 32.063rem;
