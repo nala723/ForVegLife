@@ -408,7 +408,7 @@ export default function Favorite() {
                   className="selectcard hot"
                   onClick={(e) => deleteFavList(e, dum.placeId)}
                 />
-                <CardImg src={dum.picture_url ? dum.picture_url : dum.img} />
+                <CardImg src={dum.pictureUrl ? dum.pictureUrl : dum.img} />
                 <CardContent>
                   <h4>{dum.title}</h4>
                   <p>{dum.address}</p>
