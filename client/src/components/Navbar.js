@@ -151,7 +151,7 @@ const Navbar = () => {
                 }
               </Route>
               
-              <Route exact path="/resturant/:placeId">
+              <Route exact path="/restaurant/:placeId">
               {button && 
                 <Link to="/mypage">
                   <StyledMypage>Mypage</StyledMypage>
