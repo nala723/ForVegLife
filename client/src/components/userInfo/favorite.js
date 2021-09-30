@@ -43,8 +43,8 @@ export default function Favorite() {
  
   //최초렌더링시-
   useEffect(() => {
-    // getRecommendation()
-    getFavList();
+    getRecommendation()
+    // getFavList();
   }, []);
   console.log(myfavState, myfavState.myFavPlaces, "되라"); //아무것도 저장 안했을시 처리
 
@@ -97,15 +97,14 @@ export default function Favorite() {
           }
         }
         if (res.status === 200) {
-          if (res.data.data) {
-            let recommendAr = res.data.data;
+          if (res.data) {
+            let recommendAr = res.data;
             setRecommend(recommendAr); //--상태값 알아서 변경되는지 확인
             getFavList();
           }
         } else {
           history.push("/notfound");
         }
-        console.log(res.data);
         setLoading(false);
       })
       .catch((err) => {
@@ -378,7 +377,7 @@ export default function Favorite() {
       <Title>나의 즐겨찾기</Title>
       <Bottom>
         <SearchContainer hasText={hasText} onKeyUp={handleKeyUp}>
-          <button onClick={handleAllview}> 전체 조회 </button>
+          <button onClick={handleAllview}> <p>전체 조회</p> </button>
           <Search
             placeholder="주소로 검색"
             className={inputValue ? "autocomplete-input" : ""}
@@ -409,7 +408,7 @@ export default function Favorite() {
                   className="selectcard hot"
                   onClick={(e) => deleteFavList(e, dum.placeId)}
                 />
-                <CardImg src={dum.pictureUr ? dum.pictureUrl : dum.img} />
+                <CardImg src={dum.pictureUrl ? dum.pictureUrl : dum.img} />
                 <CardContent>
                   <h4>{dum.title}</h4>
                   <p>{dum.address}</p>
@@ -439,7 +438,7 @@ export default function Favorite() {
                   className="selectcard"
                   onClick={(e) => deleteFavList(e, dum.place_id)}
                 />
-                <CardImg src={dum.picture_url ? dum.picture_url : dum.img} />
+                <CardImg src={dum.pictureUrl ? dum.pictureUrl : dum.img} />
                 <CardContent>
                   <h4>{dum.title}</h4>
                   <p>{dum.address}</p>
@@ -470,21 +469,28 @@ export default function Favorite() {
   );
 }
 
-const transform = keyframes`
+const transform = (start,middle,end) => keyframes`
   0% {
-    width:10rem;
+    width:${start};
   }
   
   10% {
-    width:9rem;
+    width:${middle};
   }
 
   100% {
-    width:32.063rem;
+    width:${end};
   } 
 `;
 
 const Container = styled.div`
+${theme.device.mobile}{
+ margin-top: 0.3rem;
+}
+${theme.device.change}{
+  padding: 0;
+  margin-left:0.5rem;
+}
   width: calc(100%-7.313rem);
   height: 100%;
   display: flex;
@@ -494,6 +500,15 @@ const Container = styled.div`
   padding-right: 3.5rem;
 `;
 const Title = styled.div`
+${theme.device.mobile}{
+  font-size: ${theme.fonts.size.llg};
+  justify-content:center;
+  padding-bottom:1rem;
+}
+ ${theme.device.change}{
+  padding-top: 1.4rem;
+  padding-bottom: 2rem;
+}
   display: flex;
   width: 100%;
   padding-top: 2.4rem;
@@ -502,6 +517,9 @@ const Title = styled.div`
   color: var(--color-darkgrey);
 `;
 const Bottom = styled.div`
+${theme.device.change}{
+  margin-right:0.5rem;
+}
   height: 100%;
   margin-right: 3.5rem;
   flex-direction: column;
@@ -516,6 +534,10 @@ const Recommend = styled.div`
   font-weight: 600;
 `;
 const SearchContainer = styled.div`
+${theme.device.mobile}{
+  height:5rem;
+  
+}
   width: 100%;
   padding-bottom: 4.5rem;
   display: flex;
@@ -523,11 +545,26 @@ const SearchContainer = styled.div`
   flex-direction: row;
   position: relative;
   > button {
+    ${theme.device.mobile}{
+      margin: 0;
+      margin-right: 0.8rem;
+      width: 3rem;
+      height:3rem;
+      background-color: ${theme.colors.lightgreen};
+      font-size: 10px;
+       >p{
+         width:70%;
+         text-align:center;
+       }
+   }
     margin-top: 2.5rem;
     margin-right: 2rem;
     width: 5.5rem;
-    height: 2.563rem;
+    max-height: 2.8rem;
     border-radius: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items:center;
     border: none;
     background-color: transparent;
     color: ${theme.colors.mapgrey};
@@ -540,8 +577,21 @@ const SearchContainer = styled.div`
   }
 `;
 const Search = styled.input`
+${theme.device.mobile}{
+  margin: 0;
+  width:3rem;
+  ::placeholder{
+    color: transparent;
+  }
+  background-position: center;
+  cursor: pointer;
+}
+${theme.device.change}{
+  height: 2.8rem;
+}
   display: flex;
   margin-top: 2.5rem;
+  text-indent: 0.5rem;
   width: 10rem;
   height: 2.563rem;
   color: ${({ theme }) => theme.colors.darkgrey};
@@ -552,12 +602,24 @@ const Search = styled.input`
   background-position: 96% 50%;
   box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
   :focus {
+    ${theme.device.mobile}{
+      background-position: 96% 50%;
+      width: 18rem;
+      animation: ${transform('3rem','2.5rem','18rem')} 0.8s ease-in-out;
+      ::placeholder{
+        color: ${theme.colors.mapgrey};
+       }
+    }
     border: 2px solid var(--color-lightgreen);
     outline: none;
     width: 32.063rem;
-    animation: ${transform} 0.8s ease-in-out;
+    animation: ${transform('10rem','9rem','32.063rem')} 0.8s ease-in-out;
   }
   &.autocomplete-input {
+    ${theme.device.mobile}{
+      width: 18rem;
+      background-position: 96% 50%;
+    }
     width: 32.063rem;
     animation: none;
   }
@@ -568,6 +630,10 @@ const Search = styled.input`
 `;
 
 const DropDownContainer = styled.ul`
+    ${theme.device.mobile}{
+      width: 17.5rem;
+      top:43px;
+    }
   background-color: #ffffff;
   display: block;
   width: 32.063rem;
@@ -599,6 +665,13 @@ const DropDownContainer = styled.ul`
 `;
 
 const CardBox = styled.div`
+${theme.device.change}{
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  grid-template-rows: repeat(auto-fill, minmax(16rem, 1fr));
+  grid-auto-columns: minmax(14rem, 14rem);
+  grid-auto-rows: minmax(16rem, 16rem);
+  gap: 30px 22px;
+}
   display: grid;
   width: 100%;
   min-height: 40rem;
@@ -610,8 +683,6 @@ const CardBox = styled.div`
   gap: 30px 15px;
 `;
 const Card = styled.div`
-  width: 12.313rem;
-  height: 14.313rem;
   display: flex;
   background-color: var(--color-mypagecard);
   border-radius: 0.5rem;
@@ -663,6 +734,9 @@ const Card = styled.div`
   }
 `;
 const CardImg = styled.img`
+${theme.device.change}{
+  height: 10rem;
+}
   display: flex;
   width: 100%;
   height: 6.438rem;
@@ -677,6 +751,14 @@ const CardImg = styled.img`
   }
 `;
 const CardContent = styled(Card)`
+${theme.device.change}{
+  width:100%;
+  align-items: flex-start;
+  padding-left:1rem;
+  padding-top:1.3rem;
+  margin-bottom: 0;
+  justify-content:flex-start;
+}
   text-align: center;
   justify-content: center;
   margin-bottom: 12px;
@@ -697,6 +779,16 @@ const CardContent = styled(Card)`
   }
 `;
 const CardSns = styled(CardContent)`
+${theme.device.change}{
+  flex:1;
+  gap:0.5rem;
+  position:absolute;
+  padding:0;
+  margin: 0;
+  bottom:0.3rem;
+  right:0.5rem;
+  justify-content: flex-end;
+}
   width: 96%;
   margin-bottom: 5px;
   /* border-radius: 0 0 0.5rem 0.5rem; */

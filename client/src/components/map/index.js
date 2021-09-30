@@ -13,6 +13,7 @@ export default function MapIndex({ data, latlng }) {
   const history = useHistory();
   const [isOpen, setIsOpen] = useState(false);
   const [tutorial, setTutorial] = useState(false);
+  const HAS_VISITED_BEFORE = localStorage.getItem('hasVisitedBefore');
   let lng =
     MapCenter.x !== 0
       ? MapCenter.x
@@ -106,13 +107,26 @@ export default function MapIndex({ data, latlng }) {
   }, [selPlace, data]);
 
   useEffect(() => {
-    handleOpenTuto(true);
-  }, []);
+
+     const handleTime= () => {
+       if (HAS_VISITED_BEFORE && HAS_VISITED_BEFORE > new Date()) {
+        return;
+      }
+
+      if (!HAS_VISITED_BEFORE) {
+        setIsOpen(true);
+        let expires = new Date();
+        expires = expires.setHours(expires.getHours() + 1);
+        localStorage.setItem('hasVisitedBefore', expires);
+      }
+     }
+
+    window.setTimeout(handleTime, 1000);
+  }, [HAS_VISITED_BEFORE]);
+
 
   const handleOpenTuto = (boolean) => {
-    setIsOpen(boolean);
     if (isOpen === true) {
-      setTutorial(true);
       history.push("/tutorial");
     }
   };
