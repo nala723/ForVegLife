@@ -62,15 +62,25 @@ const Box = styled(Container)`
  
 `;
 const Top = styled.div`
-${theme.device.change}{
- margin-left:4.2rem;
+${theme.device.mobile}{
+  max-height:1rem;
 }
-
+${theme.device.change}{
+ margin-left:0;
+ width: 100%;
+ height:3rem;
+}
  display: block;
  width: calc(100% - 7.313rem);
  height: 5rem;
  margin-left: 7.313rem;
  :after{
+  ${theme.device.mobile}{
+    height:0.7rem;
+}
+  ${theme.device.change}{
+    max-height:0.85rem;
+}
    content:"";
    display:block;
    height:0.938rem;
@@ -79,6 +89,9 @@ ${theme.device.change}{
  }
 `;
 const Line= styled.div`
+${theme.device.mobile}{
+ height: 1rem;
+}
  width: calc(100% - 7.313rem);
  height: 100%;
 `;

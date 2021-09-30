@@ -322,7 +322,11 @@ const transform = keyframes`
 `;
 
 const Container = styled.div`
-    width: calc(100% - 7.313rem);
+${theme.device.change}{
+  padding: 0;
+  margin-left:0.5rem;
+}
+    width: calc(100%-7.313rem);
     height:100%;
     display: flex;
     flex-direction: column;
@@ -331,6 +335,10 @@ const Container = styled.div`
     padding-right: 3.5rem;
 `;
 const Title = styled.div`
+ ${theme.device.change}{
+  padding-top: 1.4rem;
+  padding-bottom: 2rem;
+}
     display:flex;
     width:100%;
     padding-top: 2.4rem;
@@ -340,6 +348,9 @@ const Title = styled.div`
     color: var(--color-darkgrey);
 `; 
 const Bottom = styled.div`
+${theme.device.change}{
+  margin-right:0.5rem;
+}
     height: 100%;
     margin-right: 3.5rem;
     flex-direction: column;
@@ -371,6 +382,9 @@ const SearchContainer = styled.div`
     }
 `;
 const Search = styled.input`
+${theme.device.change}{
+  height: 2.8rem;
+}
 display:flex;
 margin-top: 2.5rem;
 width:10rem;
@@ -431,6 +445,13 @@ z-index: 3;
 }
 `;
 const CardBox = styled.div`
+${theme.device.change}{
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  grid-template-rows: repeat(auto-fill, minmax(16rem, 1fr));
+  grid-auto-columns: minmax(14rem, 14rem);
+  grid-auto-rows: minmax(16rem, 16rem);
+  gap: 30px 22px;
+}
   display:grid;
   width:100%;
   min-height:40rem;
@@ -443,7 +464,9 @@ const CardBox = styled.div`
 
 `; 
 const Card = styled.div`
-      width:12.313rem;  
+  /* ${theme.device.change}{
+    height:16rem;
+  } */
    height: 14.313rem;
    display:flex;
    background-color: var(--color-mypagecard);
@@ -459,6 +482,9 @@ const Card = styled.div`
 `;
 
 const CardContent = styled(Card)`
+  ${theme.device.change}{
+       /* margin: 0; */
+    }
     text-align: center;
     justify-content: center;
     margin-top:30px;
@@ -469,11 +495,16 @@ const CardContent = styled(Card)`
     font-size: var(--font-size-base);
     font-weight: 500;
     }
+    >img{
     &.star{
-      width:100%;
-      height:100%;
-      transform: scale(1.1); // 현재 안먹힘
+      ${theme.device.change}{
+        width:150px;
+       height:30px;
     }
+      width:112px;
+      height:21px;
+    }
+  }
     :hover{
       box-shadow: none;
       transform: none;
@@ -527,10 +558,22 @@ const GotoCard = styled(Card)`
       letter-spacing: 3px;
       font-weight: 900;
      }
+     >img{
+      ${theme.device.change}{
+        width:150px;
+       height:30px;
+    }
+  }
 `;
 
 const StyledTooltip = styled(ReactTooltip)`
    &.toolTip{
+    ${theme.device.change}{
+     max-width: 17rem;
+     min-height:3rem;
+     display: flex;
+     align-items:center;
+  }
       max-width: 12rem;
       min-height:2rem;
       line-height: 1rem;

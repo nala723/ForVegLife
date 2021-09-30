@@ -74,7 +74,7 @@ export default function Tutorial() {
                     <img src="/image/diamond-icon.svg" alt="icon"/><p onClick={(e)=>handleMove(e,4)}>장소 등록</p>
                     </li>
                     <li>
-                    <img src="/image/diamond-icon.svg" alt="icon"/><p onClick={(e)=>handleMove(e,6)}>튜토리얼 종료</p>
+                    <img src="/image/diamond-icon.svg" alt="icon"/><p onClick={(e)=>handleMove(e,7)}>튜토리얼 종료</p>
                     </li>
                   </ul>
                 </div>

@@ -97,15 +97,14 @@ export default function Favorite() {
           }
         }
         if (res.status === 200) {
-          if (res.data.data) {
-            let recommendAr = res.data.data;
+          if (res.data) {
+            let recommendAr = res.data;
             setRecommend(recommendAr); //--상태값 알아서 변경되는지 확인
             getFavList();
           }
         } else {
           history.push("/notfound");
         }
-        console.log(res.data);
         setLoading(false);
       })
       .catch((err) => {
@@ -485,6 +484,13 @@ const transform = keyframes`
 `;
 
 const Container = styled.div`
+${theme.device.mobile}{
+ margin-top: 0.3rem;
+}
+${theme.device.change}{
+  padding: 0;
+  margin-left:0.5rem;
+}
   width: calc(100%-7.313rem);
   height: 100%;
   display: flex;
@@ -494,6 +500,14 @@ const Container = styled.div`
   padding-right: 3.5rem;
 `;
 const Title = styled.div`
+${theme.device.mobile}{
+  font-size: ${theme.fonts.size.llg};
+  justify-content:center;
+}
+ ${theme.device.change}{
+  padding-top: 1.4rem;
+  padding-bottom: 2rem;
+}
   display: flex;
   width: 100%;
   padding-top: 2.4rem;
@@ -502,6 +516,9 @@ const Title = styled.div`
   color: var(--color-darkgrey);
 `;
 const Bottom = styled.div`
+${theme.device.change}{
+  margin-right:0.5rem;
+}
   height: 100%;
   margin-right: 3.5rem;
   flex-direction: column;
@@ -526,7 +543,7 @@ const SearchContainer = styled.div`
     margin-top: 2.5rem;
     margin-right: 2rem;
     width: 5.5rem;
-    height: 2.563rem;
+    height: 2.8rem;
     border-radius: 0.5rem;
     border: none;
     background-color: transparent;
@@ -540,8 +557,12 @@ const SearchContainer = styled.div`
   }
 `;
 const Search = styled.input`
+${theme.device.change}{
+  height: 2.8rem;
+}
   display: flex;
   margin-top: 2.5rem;
+  text-indent: 0.5rem;
   width: 10rem;
   height: 2.563rem;
   color: ${({ theme }) => theme.colors.darkgrey};
@@ -599,6 +620,13 @@ const DropDownContainer = styled.ul`
 `;
 
 const CardBox = styled.div`
+${theme.device.change}{
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  grid-template-rows: repeat(auto-fill, minmax(16rem, 1fr));
+  grid-auto-columns: minmax(14rem, 14rem);
+  grid-auto-rows: minmax(16rem, 16rem);
+  gap: 30px 22px;
+}
   display: grid;
   width: 100%;
   min-height: 40rem;
@@ -610,8 +638,6 @@ const CardBox = styled.div`
   gap: 30px 15px;
 `;
 const Card = styled.div`
-  width: 12.313rem;
-  height: 14.313rem;
   display: flex;
   background-color: var(--color-mypagecard);
   border-radius: 0.5rem;
@@ -663,6 +689,9 @@ const Card = styled.div`
   }
 `;
 const CardImg = styled.img`
+${theme.device.change}{
+  height: 10rem;
+}
   display: flex;
   width: 100%;
   height: 6.438rem;
@@ -677,6 +706,14 @@ const CardImg = styled.img`
   }
 `;
 const CardContent = styled(Card)`
+${theme.device.change}{
+  width:100%;
+  align-items: flex-start;
+  padding-left:1rem;
+  padding-top:1.3rem;
+  margin-bottom: 0;
+  justify-content:flex-start;
+}
   text-align: center;
   justify-content: center;
   margin-bottom: 12px;
@@ -697,6 +734,16 @@ const CardContent = styled(Card)`
   }
 `;
 const CardSns = styled(CardContent)`
+${theme.device.change}{
+  flex:1;
+  gap:0.5rem;
+  position:absolute;
+  padding:0;
+  margin: 0;
+  bottom:0.3rem;
+  right:0.5rem;
+  justify-content: flex-end;
+}
   width: 96%;
   margin-bottom: 5px;
   /* border-radius: 0 0 0.5rem 0.5rem; */

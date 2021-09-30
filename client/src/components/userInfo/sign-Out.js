@@ -136,6 +136,13 @@ export default function SignOut() {
 
 
  const Container = styled.div`
+ ${theme.device.change}{
+    width: calc(100% - 0.5rem);
+     min-height:100vh;
+     margin-bottom:1rem;
+     margin-left: 0.5rem;
+     padding-right: 0;
+ }
     width: calc(100%-7.313rem);
     height:100%;
     display: flex;
@@ -145,6 +152,10 @@ export default function SignOut() {
     padding-right: 3.5rem;
 `;
 const Title = styled.div`
+ ${theme.device.change}{
+  padding-top: 1.4rem;
+  padding-bottom: 2rem;
+}
     display:flex;
     width:100%;
     padding-top: 2.4rem;
@@ -154,6 +165,9 @@ const Title = styled.div`
     color: var(--color-darkgrey);
 `; 
 const Bottom = styled.div`
+${theme.device.change}{
+  margin: 0;
+}
     display:flex;
     height: 100%;
     min-height: calc(100vh-);
