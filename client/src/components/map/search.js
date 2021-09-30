@@ -248,7 +248,6 @@ const Keyword = styled.div`
   }
   position: absolute;
   top: 3.25rem;
-  right: -243px;
 `;
 const VegeType = styled.div`
   ${theme.device.mobile} {
