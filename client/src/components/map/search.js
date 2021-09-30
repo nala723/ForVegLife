@@ -128,9 +128,9 @@ const SearchForm = styled.form`
   @media only screen and (min-width: 425px) {
     left: 40%;
     top: 3rem;
+    width: 17.25rem;
     transform: translate(-50%, 0%);
   }
-  width: 17.25rem;
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -139,7 +139,7 @@ const SearchForm = styled.form`
 `;
 const InputStyle = styled.div`
   @media only screen and (min-width: 425px) {
-    right: -200px;
+    right: -243px;
   }
   margin-top: 0.3rem;
   width: 100%;
