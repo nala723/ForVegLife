@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar as fullStar } from "@fortawesome/free-solid-svg-icons";
+import { faStar as fullStar, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { faStar as EmptyStar } from "@fortawesome/free-regular-svg-icons";
 import theme from "../../../styles/theme";
 import { useSelector } from "react-redux";
+import axios from "axios";
 
-export default function Review({ review, inReview }) {
+export default function Review({ review, inReview, setDelete }) {
   const user = useSelector((state) => state.userReducer);
   let avearge = 0;
   const [Review, setReview] = useState(review.slice(0, 3));
@@ -29,6 +30,18 @@ export default function Review({ review, inReview }) {
 
     star = fillStar(avearge);
   }
+  const DelReview = (el) => {
+    axios
+      .delete(`${process.env.REACT_APP_SERVER_URL}/restaurant/${el}/review`, {
+        headers: {
+          authorization: `Bearer ${user.accessToken}`,
+        },
+      })
+      .then((res) => {
+        setDelete();
+        setReview(review.filter((x) => x.review_id === el));
+      });
+  };
   return (
     <Temp>
       <Title> 후기 </Title>
@@ -47,22 +60,30 @@ export default function Review({ review, inReview }) {
         {Review.length !== 0
           ? Review.map((x) => {
               return (
-                <ReviewData>
-                  <Review_1>
-                    <ReviewStar>
-                      {fillStar(x.star).map((x) => (
-                        <DrawStar star={x} />
-                      ))}
-                    </ReviewStar>
-                    <ReviewAt>
-                      {x.createdAt.split("T")[0].replaceAll("-", ":")}
-                    </ReviewAt>
-                  </Review_1>
-                  <Review_2>
-                    <ReviewNickname>{x.nickName}</ReviewNickname>
-                    <ReviewContent>{x.content}</ReviewContent>
-                  </Review_2>
-                </ReviewData>
+                <ReviewContainer>
+                  <ReviewData>
+                    <Review_1>
+                      <ReviewStar>
+                        {fillStar(x.star).map((x) => (
+                          <DrawStar star={x} />
+                        ))}
+                      </ReviewStar>
+                      <ReviewAt>
+                        {x.createdAt.split("T")[0].replaceAll("-", ":")}
+                      </ReviewAt>
+                    </Review_1>
+                    <Review_2>
+                      <ReviewNickname>{x.nickName}</ReviewNickname>
+                      <ReviewContent>{x.content}</ReviewContent>
+                    </Review_2>
+                  </ReviewData>
+                  <DeleteReview onClick={() => DelReview(x.reviewId)}>
+                    <FontAwesomeIcon
+                      color="#7CB700"
+                      icon={faTimes}
+                    ></FontAwesomeIcon>
+                  </DeleteReview>
+                </ReviewContainer>
               );
             })
           : ""}
@@ -88,6 +109,10 @@ const Temp = styled.div`
   flex-direction: column;
   width: 80%;
   margin: 1rem;
+`;
+const ReviewContainer = styled.div`
+  display: flex;
+  border-bottom: 0.1rem solid rgba(187, 187, 187, 0.5); ;
 `;
 
 const Title = styled.div`
@@ -115,8 +140,8 @@ const ReviewForm = styled.div`
   flex-direction: column;
 `;
 const ReviewData = styled.div`
+  width: 80%;
   margin: 1rem 0 0 0;
-  border-bottom: 0.1rem solid rgba(187, 187, 187, 0.5); ;
 `;
 const Review_1 = styled.div`
   display: flex;
@@ -130,6 +155,12 @@ const Review_2 = styled.div`
   margin-bottom: 1rem;
   height: 3.2rem;
 `;
+const DeleteReview = styled.div`
+  width: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 const ReviewStar = styled.div`
   font-size: 0.7rem;
   color: ${theme.colors.mapgrey};
@@ -141,8 +172,11 @@ const ReviewNickname = styled.div`
   color: ${theme.colors.darkgrey};
 `;
 const ReviewContent = styled.div`
-  width: 10rem;
+  width: 70%;
   font-size: 0.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: ${theme.colors.mapgrey};
 `;
 const More = styled.div`

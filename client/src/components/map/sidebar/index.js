@@ -18,17 +18,9 @@ export default function SideBar({ select, inReview, exitReview }) {
   const user = useSelector((state) => state.userReducer);
   const selPlace = useSelector((state) => state.selectPlace);
   const [tempdata, setTempData] = useState([]);
+  const [delReview, setDelReview] = useState(false);
+  const [fav, setFav] = useState(false);
   const sideRef = useRef();
-  useEffect(() => {
-    if (selPlace.id !== 0) {
-      gsap.to(sideRef.current, {
-        left: 0,
-        height: "calc(100vh - 3.35rem - 5vh)",
-        width: "20vw",
-        minWidth: "15rem",
-      });
-    }
-  });
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_SERVER_URL}/restaurant/${selPlace.id}`, {
@@ -44,11 +36,26 @@ export default function SideBar({ select, inReview, exitReview }) {
             dispatch(newAccessToken({ accessToken: res.headers.accessToken }));
           }
         }
+        if (delReview === true) {
+          setDelReview(false);
+        }
+        if (fav === true) {
+          setFav(false);
+        }
         setTempData(...res.data);
+        if (selPlace.id !== 0) {
+          gsap.to(sideRef.current, {
+            left: 0,
+            height: "calc(100vh - 3.35rem - 5vh)",
+            width: "20vw",
+            minWidth: "15rem",
+          });
+        }
       });
-  }, [selPlace.id]);
+  }, [selPlace.id, delReview, fav]);
+
   let data = tempdata;
-  console.log(data.favirote);
+  console.log(data);
   // axios 요청으로 받아오기
   // 일단은 더미데이터
   // const data = {
@@ -94,12 +101,14 @@ export default function SideBar({ select, inReview, exitReview }) {
             price={data.price}
             like={data.favirote}
             src={data.image}
+            setFav={() => setFav(true)}
           />
           <PlaceInfo user={data.like} />
           <Review
             review={data.review}
             inReview={inReview}
             exitReview={exitReview}
+            setDelete={() => setDelReview(true)}
           />
         </Side>
       ) : (
