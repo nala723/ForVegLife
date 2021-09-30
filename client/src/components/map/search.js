@@ -135,13 +135,11 @@ const SearchForm = styled.form`
   flex-direction: column;
   top: 3rem;
   z-index: 2;
-  right: -200px;
 `;
 const InputStyle = styled.div`
   margin-top: 0.3rem;
   width: 17.25rem;
   position: relative;
-  right: -200px;
 `;
 const Category = styled.div`
   @media only screen and (min-width: 425px) {

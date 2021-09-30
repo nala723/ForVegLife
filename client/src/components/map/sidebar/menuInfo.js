@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { newAccessToken, getgoogleToken } from "../../../actions";
 import theme from "../../../styles/theme";
 const axios = require("axios");
-export default function MenuInfo({ place, menu, price, like, src }) {
+export default function MenuInfo({ place, menu, price, like, src, setFav }) {
   const selPlace = useSelector((state) => state.selectPlace);
   const user = useSelector((state) => state.userReducer);
   const googleState = useSelector((state) => state.googleReducer);
@@ -34,6 +34,8 @@ export default function MenuInfo({ place, menu, price, like, src }) {
         }
       )
       .then((res) => {
+        setFav();
+        setFavirote(true);
         if (res.headers.accessToken) {
           if (googleToken) {
             dispatch(getgoogleToken({ accessToken: res.headers.accessToken }));
@@ -41,7 +43,6 @@ export default function MenuInfo({ place, menu, price, like, src }) {
             dispatch(newAccessToken({ accessToken: res.headers.accessToken }));
           }
         }
-        setFavirote(true);
       });
   };
 
@@ -56,6 +57,8 @@ export default function MenuInfo({ place, menu, price, like, src }) {
         }
       )
       .then((res) => {
+        setFav();
+        setFavirote(false);
         if (res.headers.accessToken) {
           if (googleToken) {
             dispatch(getgoogleToken({ accessToken: res.headers.accessToken }));
@@ -63,7 +66,6 @@ export default function MenuInfo({ place, menu, price, like, src }) {
             dispatch(newAccessToken({ accessToken: res.headers.accessToken }));
           }
         }
-        setFavirote(false);
       });
   };
 
