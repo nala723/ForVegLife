@@ -2,11 +2,13 @@ import styled from "styled-components";
 import theme from "../styles/theme";
 import react,{useState,useEffect} from 'react';
 import { dummydatas } from "../components/userInfo/dummydatas";
+import DefaultModal from "../components/userInfo/defaultmodal";
 
 
 export default function Content() {
     const [isHot,setIsHot] = useState(dummydatas.favorites)
     const [index, setIndex] = useState(0);
+    const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
         const lastIndex = isHot.length - 1;
@@ -31,11 +33,15 @@ export default function Content() {
         e.preventDefault();
         setIndex(changeIdx)
     }
-
+    const handleClick = () => {
+        setIsOpen(!isOpen)  
+    }
 
     return(
      <>
         <Container>
+        {isOpen ? <DefaultModal isOpen={isOpen} handleClick={handleClick} header="Under Construction..">
+                     아직 준비 중인 서비스입니다. 곧 좋은 컨텐츠로 찾아뵙겠습니다.</DefaultModal> : null}
             <HotPlace>이 달의 HOT PLACE</HotPlace>
             <First className="first">
                 <SlideBox>
@@ -81,7 +87,7 @@ export default function Content() {
 
                 </SlideBox>
             </First>
-            <Second className="second">
+            <Second className="second" onClick={()=>handleClick()}>
                 <h2>읽으면 유용한 ARTICLE</h2>
                 <div>
                   <img src="/image/smallanker.svg" alt="image" className="left"/>
@@ -102,7 +108,7 @@ export default function Content() {
                   <img src="/image/smallanker.svg" alt="image" className="right"/>
                 </div>
             </Second>
-            <Third className="third">
+            <Third className="third" onClick={()=>handleClick()}>
                 <h2>당신을 위한 RECIPE</h2>
                 <div>
                   <img src="/image/smallanker.svg" alt="image" className="left"/>
@@ -123,7 +129,7 @@ export default function Content() {
                 <img src="/image/smallanker.svg" alt="image" className="right"/>
                 </div>
             </Third>
-            <Firth className="firth">
+            <Firth className="firth" onClick={()=>handleClick()}>
                 <h2>채식 YOUTUBE</h2>
                 <div>
                   <img src="/image/smallanker.svg" alt="image" className="left"/>
@@ -147,7 +153,7 @@ export default function Content() {
                 <img src="/image/smallanker.svg" alt="image" className="right"/>
                 </div>
             </Firth>
-            <Final className="final">
+            <Final className="final" onClick={()=>handleClick()}>
                 <div>
                     <div className="feedBox">
                          <img src="/image/message.png" />
@@ -291,7 +297,7 @@ const DotBox = styled.div`
   justify-content: center;
   align-items: flex-end;
   gap: 2rem;
-  z-index:500;
+  z-index:100;
   cursor: pointer;
   >img{
     margin-bottom: 1rem;
