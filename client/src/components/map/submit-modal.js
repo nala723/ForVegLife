@@ -165,14 +165,22 @@ const Plus = styled.div`
 `;
 const Submit = styled.form`
   display: flex;
+  ${theme.device.mobile} {
+    width: 18rem;
+    height: 27rem;
+  }
+  ${theme.device.mobileS} {
+    width: 15rem;
+    height: 24rem;
+  }
   flex-direction: column;
   align-items: center;
   justify-content: center;
   transform: scale(0);
-  min-width: 18rem;
-  width: 18vw;
-  min-height: 27rem;
-  height: 27vh;
+
+  width: 18rem;
+
+  height: 27rem;
   background-color: white;
   border-radius: 0.2rem;
   overflow: auto;

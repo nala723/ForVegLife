@@ -136,14 +136,20 @@ const ReviewStar = styled.div`
   color: ${theme.colors.green};
 `;
 const ReviewModalForm = styled.form`
+  ${theme.device.mobile} {
+    width: 21rem;
+    height: 18rem;
+  }
+  ${theme.device.mobileS} {
+    width: 15rem;
+    height: 15rem;
+  }
   position: absolute;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-  min-width: 24rem;
   width: 27vw;
-  min-height: 18rem;
   height: 21vw;
   background-color: white;
   border-radius: 1rem;
