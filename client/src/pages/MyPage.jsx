@@ -49,6 +49,10 @@ const Container = styled.div`
 ${theme.device.change}{
   justify-content: center;
 }
+${theme.device.mobile}{
+  justify-content: flex-start;
+  min-width:100%;
+}
  width:100%;
  max-width:100%;
  height:auto;
@@ -57,18 +61,21 @@ ${theme.device.change}{
 `;
 
 const Box = styled(Container)`
+${theme.device.mobile}{
+  padding: 0 1rem;
+}
  width: calc(100% - 4.188rem);
  flex-direction: column;
- 
 `;
 const Top = styled.div`
-${theme.device.mobile}{
-  max-height:1rem;
-}
 ${theme.device.change}{
  margin-left:0;
  width: 100%;
  height:3rem;
+}
+${theme.device.mobile}{
+  max-height:1rem;
+
 }
  display: block;
  width: calc(100% - 7.313rem);
@@ -76,7 +83,7 @@ ${theme.device.change}{
  margin-left: 7.313rem;
  :after{
   ${theme.device.mobile}{
-    height:0.7rem;
+    height:0.6rem;
 }
   ${theme.device.change}{
     max-height:0.85rem;

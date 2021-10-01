@@ -140,9 +140,16 @@ export default function SignOut() {
     width: calc(100% - 0.5rem);
      min-height:100vh;
      margin-bottom:1rem;
-     margin-left: 0.5rem;
+     margin-left: 0.2rem;
      padding-right: 0;
+     align-items: center;
  }
+ ${theme.device.mobile}{
+ margin-top: 0.2rem;
+ margin-bottom:0;
+ height:auto;
+ min-height:auto;
+}
     width: calc(100%-7.313rem);
     height:100%;
     display: flex;
@@ -156,6 +163,10 @@ const Title = styled.div`
   padding-top: 1.4rem;
   padding-bottom: 2rem;
 }
+${theme.device.mobile}{
+  font-size: 22px;
+  height:4.5rem;
+}
     display:flex;
     width:100%;
     padding-top: 2.4rem;
@@ -168,6 +179,10 @@ const Bottom = styled.div`
 ${theme.device.change}{
   margin: 0;
 }
+${theme.device.mobile}{
+   align-items: flex-start;
+   padding-top:1rem;
+}
     display:flex;
     height: 100%;
     min-height: calc(100vh-);
@@ -177,6 +192,10 @@ ${theme.device.change}{
 
 `; 
 const UserContainer = styled.div`
+${theme.device.mobile}{
+    width:24rem;
+    height:auto;
+}
    display:flex;
    flex-direction: column;
     width:32.688rem;
@@ -185,10 +204,18 @@ const UserContainer = styled.div`
     
 `; 
 const UserTop = styled(UserContainer)`
+ ${theme.device.mobile}{
+   gap:0.5rem;
+}
    height:100%;
     gap:1rem;
 `; 
 const UserPhotoBox = styled.div`
+${theme.device.mobile}{
+  height:30px;
+  font-size:12px;
+  padding-left:1rem;
+ }
     height: 50px;
     gap:0;
     font-family: var(--font-mypage);
@@ -196,6 +223,10 @@ const UserPhotoBox = styled.div`
     font-weight: 500;
 `; 
 const UserNmBox = styled(UserTop)`
+${theme.device.mobile}{
+    gap:1rem;
+ }
+
     width: 100%;
     background-color:  ${({theme})=>theme.colors.mypagecard}; 
     border-radius:1rem;
@@ -220,6 +251,16 @@ const UserNm = styled.div`
    }
 
    &.alert{
+     ${theme.device.mobile}{
+        display:inline; 
+        >p{
+         display:inline; 
+        font-size: 12px;
+        text-align: left;
+        line-height: 1rem;
+       }
+  }
+
     align-items: flex-start;
     color:${({theme})=>theme.colors.red};
     gap:0.3rem;
@@ -253,6 +294,10 @@ const UserBottom = styled(UserContainer)`
   
 `; 
 const UserAlertBox = styled(UserTop)`
+${theme.device.mobile}{
+    gap:0.2rem;
+    padding: 0.5rem 1rem;
+ }
     width: 100%;
     border-radius:1rem;
     padding: 2.3rem 1rem;
@@ -261,6 +306,10 @@ const UserAlertBox = styled(UserTop)`
 `; 
 
 const VegAnswer = styled.div`
+${theme.device.mobile}{
+   justify-content:flex-start;
+   font-size: 13px;
+ }
   display:flex;
   width:100%;
   height: 10px;

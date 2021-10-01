@@ -165,7 +165,6 @@ useEffect(() => {
     }
   };
 
-  
 
 
   // 장소등록하러 가기
@@ -322,12 +321,12 @@ const transform = (start,middle,end) => keyframes`
 `;
 
 const Container = styled.div`
-${theme.device.mobile}{
- margin-top: 0.3rem;
-}
 ${theme.device.change}{
   padding: 0;
   margin-left:0.5rem;
+}
+${theme.device.mobile}{
+ margin-top: 0.2rem;
 }
     width: calc(100%-7.313rem);
     height:100%;
@@ -338,14 +337,15 @@ ${theme.device.change}{
     padding-right: 3.5rem;
 `;
 const Title = styled.div`
-${theme.device.mobile}{
-  font-size: ${theme.fonts.size.llg};
-  justify-content:center;
-  padding-bottom:1rem;
-}
  ${theme.device.change}{
   padding-top: 1.4rem;
   padding-bottom: 2rem;
+}
+${theme.device.mobile}{
+  font-size: 22px;
+  justify-content:center;
+  padding-bottom:0;
+  height:4.5rem;
 }
     display:flex;
     width:100%;
@@ -366,10 +366,10 @@ ${theme.device.change}{
 `; 
 const SearchContainer = styled.div`
 ${theme.device.mobile}{
-  height:5rem;
-  
+  height:4rem;
+  /* padding-bottom:0; */
+  margin-bottom: 1rem;
 }
-
     width:100%;
    padding-bottom: 5rem;
    display: flex;
@@ -381,7 +381,7 @@ ${theme.device.mobile}{
       margin: 0;
       margin-right: 0.8rem;
       width: 3rem;
-      height:3rem;
+      height: 2.5rem;
       background-color: ${theme.colors.lightgreen};
       font-size: 10px;
        >p{
@@ -392,8 +392,11 @@ ${theme.device.mobile}{
     margin-top: 2.5rem;
     margin-right: 2rem;
     width: 5.5rem;
-    height:2.563rem;
+    max-height: 2.8rem;
     border-radius: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items:center;
     border: none;
     background-color: transparent;
     color: ${theme.colors.mapgrey};
@@ -406,21 +409,24 @@ ${theme.device.mobile}{
     }
 `;
 const Search = styled.input`
-${theme.device.mobile}{
-  margin: 0;
-  width:3rem;
-  ::placeholder{
-    color: transparent;
-  }
-  background-position: center;
-  cursor: pointer;
-}
-
 ${theme.device.change}{
   height: 2.8rem;
 }
+${theme.device.mobile}{
+  margin: 0;
+  width:3rem;
+  height: 2.5rem;
+  ::placeholder{
+    color: transparent;
+    font-size:12px;
+  }
+  background-position: center;
+  background-size: 0 0, 18px 18px;
+  cursor: pointer;
+}
 display:flex;
 margin-top: 2.5rem;
+text-indent: 0.5rem;
 width:10rem;
 height:2.563rem;
 color: ${({theme})=>theme.colors.darkgrey}; 
@@ -433,7 +439,8 @@ background-position: 4% 50%, 96% 50%;
 box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
 :focus {
   ${theme.device.mobile}{
-      background-position: 96% 50%;
+      background-position: 8% 50%, 96% 50%;
+      background-size: 114px 22px, 18px 18px;
       width: 18rem;
       animation: ${transform('3rem','2.5rem','18rem')} 0.8s ease-in-out;
       ::placeholder{
@@ -448,7 +455,8 @@ box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
   &.autocomplete-input{
     ${theme.device.mobile}{
       width: 18rem;
-      background-position: 96% 50%;
+      background-position: 8% 50%, 96% 50%;
+      background-size:114px 22px, 18px 18px;
     }
     width:20rem;
     animation:none;
@@ -462,7 +470,8 @@ box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
 const DropDownContainer = styled.ul` 
   ${theme.device.mobile}{
       width: 17.5rem;
-      top:43px;
+      top:38px;
+      right:0.13rem;
     }
 background-color: #ffffff;
 display: block;
@@ -514,9 +523,6 @@ ${theme.device.change}{
 
 `; 
 const Card = styled.div`
-  /* ${theme.device.change}{
-    height:16rem;
-  } */
    height: 14.313rem;
    display:flex;
    background-color: var(--color-mypagecard);
@@ -532,9 +538,6 @@ const Card = styled.div`
 `;
 
 const CardContent = styled(Card)`
-  ${theme.device.change}{
-       /* margin: 0; */
-    }
     text-align: center;
     justify-content: center;
     margin-top:30px;

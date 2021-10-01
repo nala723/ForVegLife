@@ -106,32 +106,40 @@ export default function MapIndex({ data, latlng }) {
     }
   }, [selPlace, data]);
 
-  useEffect(() => {
+  useEffect(() => {   
 
-     const handleTime= () => {
-       if (HAS_VISITED_BEFORE && HAS_VISITED_BEFORE > new Date()) {
+     const handleTime= () => { 
+       
+      if (HAS_VISITED_BEFORE && HAS_VISITED_BEFORE > new Date()) {
         return;
+      }
+      if(HAS_VISITED_BEFORE <= new Date()){
+        localStorage.removeItem("hasVisitedBefore")
+        handleOpenTuto(true)
       }
 
       if (!HAS_VISITED_BEFORE) {
-        setIsOpen(true);
+        handleOpenTuto(true)
         let expires = new Date();
-        expires = expires.setHours(expires.getHours() + 1);
+        expires = expires.setSeconds(expires.getSeconds() + 100);
         localStorage.setItem('hasVisitedBefore', expires);
       }
+     
      }
 
     window.setTimeout(handleTime, 1000);
-  }, [HAS_VISITED_BEFORE]);
-
+  }, []);
 
   const handleOpenTuto = (boolean) => {
-    if (isOpen === true) {
+    setIsOpen(boolean)
+    setTutorial(true)
+    if (isOpen === false && tutorial) {
       history.push("/tutorial");
     }
   };
   const handleCloseTuto = () => {
     setIsOpen(false);
+    setTutorial(false)
   };
   return (
     <>

@@ -39,8 +39,9 @@ const calcRem = (size) => `${size / 16}rem`;
   const size = {
     mobileS: "320px",
     mobile: "425px",
+    middle: "600px", //크롬브라우저 최소창에서의 뷰를 위함
     tablet: "768px",
-    change: "960px",
+    change: "960px", //햄버거바 생김, 마이페이지 슬라이드바 없어지는 포인트
     laptop: "1024px",
     desktop: "1440px",
   };
@@ -49,6 +50,7 @@ const calcRem = (size) => `${size / 16}rem`;
   const device = {
     mobileS: `@media only screen and (max-width: ${size.mobileS})`,
     mobile: `@media only screen and (max-width: ${size.mobile})`,
+    middle: `@media only screen and (max-width: ${size.middle})`,
     tablet: `@media only screen and (max-width: ${size.tablet})`,
     change: `@media only screen and (max-width: ${size.change})`,
     laptop: `@media only screen and (max-width: ${size.laptop})`,

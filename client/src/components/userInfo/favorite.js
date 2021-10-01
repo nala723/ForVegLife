@@ -438,7 +438,7 @@ export default function Favorite() {
                   className="selectcard"
                   onClick={(e) => deleteFavList(e, dum.place_id)}
                 />
-                <CardImg src={dum.pictureUrl ? dum.pictureUrl : dum.img} />
+                <CardImg src={dum.picture_url ? dum.picture_url : dum.img} />
                 <CardContent>
                   <h4>{dum.title}</h4>
                   <p>{dum.address}</p>
@@ -484,12 +484,12 @@ const transform = (start,middle,end) => keyframes`
 `;
 
 const Container = styled.div`
-${theme.device.mobile}{
- margin-top: 0.3rem;
-}
 ${theme.device.change}{
   padding: 0;
   margin-left:0.5rem;
+}
+${theme.device.mobile}{
+ margin-top: 0.2rem;
 }
   width: calc(100%-7.313rem);
   height: 100%;
@@ -500,14 +500,15 @@ ${theme.device.change}{
   padding-right: 3.5rem;
 `;
 const Title = styled.div`
-${theme.device.mobile}{
-  font-size: ${theme.fonts.size.llg};
-  justify-content:center;
-  padding-bottom:1rem;
-}
  ${theme.device.change}{
   padding-top: 1.4rem;
   padding-bottom: 2rem;
+}
+${theme.device.mobile}{
+  font-size: 22px;
+  justify-content:center;
+  padding-bottom:0;
+  height:4.5rem;
 }
   display: flex;
   width: 100%;
@@ -527,6 +528,10 @@ ${theme.device.change}{
 `;
 
 const Recommend = styled.div`
+${theme.device.mobile}{
+  height:1.5rem;
+  font-size: 14px;
+}
   width: 100%;
   height: 2rem;
   display: flex;
@@ -535,8 +540,8 @@ const Recommend = styled.div`
 `;
 const SearchContainer = styled.div`
 ${theme.device.mobile}{
-  height:5rem;
-  
+  height:4rem;
+  padding-bottom:0;
 }
   width: 100%;
   padding-bottom: 4.5rem;
@@ -547,9 +552,9 @@ ${theme.device.mobile}{
   > button {
     ${theme.device.mobile}{
       margin: 0;
-      margin-right: 0.8rem;
+      margin-right: 0.6rem;
       width: 3rem;
-      height:3rem;
+      height: 2.5rem;
       background-color: ${theme.colors.lightgreen};
       font-size: 10px;
        >p{
@@ -577,17 +582,20 @@ ${theme.device.mobile}{
   }
 `;
 const Search = styled.input`
+${theme.device.change}{
+  height: 2.8rem;
+}
 ${theme.device.mobile}{
   margin: 0;
   width:3rem;
+  height: 2.5rem;
   ::placeholder{
     color: transparent;
+    font-size:12px;
   }
   background-position: center;
+  background-size: 18px 18px;
   cursor: pointer;
-}
-${theme.device.change}{
-  height: 2.8rem;
 }
   display: flex;
   margin-top: 2.5rem;
@@ -604,6 +612,7 @@ ${theme.device.change}{
   :focus {
     ${theme.device.mobile}{
       background-position: 96% 50%;
+      background-size:18px 18px;
       width: 18rem;
       animation: ${transform('3rem','2.5rem','18rem')} 0.8s ease-in-out;
       ::placeholder{
@@ -618,6 +627,7 @@ ${theme.device.change}{
   &.autocomplete-input {
     ${theme.device.mobile}{
       width: 18rem;
+      background-size: 18px 18px;
       background-position: 96% 50%;
     }
     width: 32.063rem;
@@ -632,7 +642,8 @@ ${theme.device.change}{
 const DropDownContainer = styled.ul`
     ${theme.device.mobile}{
       width: 17.5rem;
-      top:43px;
+      top:38px;
+      right:0.13rem;
     }
   background-color: #ffffff;
   display: block;
@@ -737,6 +748,10 @@ const CardImg = styled.img`
 ${theme.device.change}{
   height: 10rem;
 }
+${theme.device.mobile}{
+     height:10.5rem;
+ }
+
   display: flex;
   width: 100%;
   height: 6.438rem;
@@ -744,7 +759,6 @@ ${theme.device.change}{
   border-radius: 0.5rem 0.5rem 0 0;
   :hover {
     width: 100%;
-    /* transform: scale(1.1); */
     display: absolute;
     box-shadow: none;
     transform: none;
@@ -759,6 +773,10 @@ ${theme.device.change}{
   margin-bottom: 0;
   justify-content:flex-start;
 }
+${theme.device.mobile}{
+  padding-top:1rem;
+  gap:0.7rem;
+ }
   text-align: center;
   justify-content: center;
   margin-bottom: 12px;
@@ -789,11 +807,13 @@ ${theme.device.change}{
   right:0.5rem;
   justify-content: flex-end;
 }
+${theme.device.mobile}{
+    gap:0.8rem;
+    padding-right:0.2rem;
+  }
   width: 96%;
   margin-bottom: 5px;
-  /* border-radius: 0 0 0.5rem 0.5rem; */
   flex: 1.2;
-  /* background-color: white; */
   color: var(--color-brown);
   font-size: var(--font-size-sm);
   flex-direction: row;
