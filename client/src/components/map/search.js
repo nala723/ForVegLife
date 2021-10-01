@@ -123,13 +123,14 @@ export default function SearchPlace({ selData, setCategory }) {
 const SearchForm = styled.form`
   ${theme.device.moblie} {
     right: 5vw;
+    width: 12.25rem;
   }
   @media only screen and (min-width: 425px) {
     left: 40%;
     top: 3rem;
+    width: 17.25rem;
     transform: translate(-50%, 0%);
   }
-  width: 17.25rem;
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -137,8 +138,11 @@ const SearchForm = styled.form`
   z-index: 2;
 `;
 const InputStyle = styled.div`
+  @media only screen and (min-width: 425px) {
+    right: -243px;
+  }
   margin-top: 0.3rem;
-  width: 17.25rem;
+  width: 100%;
   position: relative;
 `;
 const Category = styled.div`
@@ -237,9 +241,12 @@ const PlaceAddress = styled.div`
   color: ${theme.colors.darkgrey};
 `;
 const Keyword = styled.div`
+  @media only screen and (min-width: 425px) {
+    right: -243px;
+  }
   display: flex;
   flex-direction: column;
-  width: 20rem;
+  width: 100%;
   height: 6rem;
   overflow: auto;
   -ms-overflow-style: none;
