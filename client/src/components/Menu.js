@@ -11,6 +11,7 @@ import {
 } from "react-router-dom";
 import gsap from "gsap";
 export default function Menubar({ logOut, register, login }) {
+  const history = useHistory();
   const ref = useRef();
   useEffect(() => {
     gsap.to(ref.current, { scale: 1, duration: 0.5, ease: "back" });
@@ -72,7 +73,7 @@ export default function Menubar({ logOut, register, login }) {
             <Logout
               onClick={() => {
                 logOut();
-                window.location.href = "/";
+                history.push("/");
               }}
             >
               Logout
