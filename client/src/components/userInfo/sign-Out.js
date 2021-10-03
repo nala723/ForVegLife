@@ -112,7 +112,7 @@ export default function SignOut() {
                  <UserBottom>
                     <UserAlertBox>
                        <UserNm className="alert">
-                          <p>계정을 삭제한 이후에는 회원님의 모든 콘텐츠와 활동 기록이 삭제됩니다.</p><p> 삭제된 정보는 복구할 수 없으니 
+                          <p>계정을 삭제한 이후에는 회원님의 모든 콘텐츠와 활동 기록이 삭제됩니다. 삭제된 정보는 복구할 수 없으니 
                           신중하게 결정해주세요.</p>
                        </UserNm > 
                         <VegAnswer>
@@ -138,7 +138,6 @@ export default function SignOut() {
  const Container = styled.div`
  ${theme.device.change}{
     width: calc(100% - 0.5rem);
-     min-height:100vh;
      margin-bottom:1rem;
      margin-left: 0.2rem;
      padding-right: 0;
@@ -147,13 +146,12 @@ export default function SignOut() {
  ${theme.device.mobile}{
  margin-top: 0.2rem;
  margin-bottom:0;
- height:auto;
- min-height:auto;
 }
     width: calc(100%-7.313rem);
     height:100%;
     display: flex;
     flex-direction: column;
+    justify-content: flex-start;
     margin-top:1rem;
     margin-left: 7.313rem;
     padding-right: 3.5rem;
@@ -161,16 +159,18 @@ export default function SignOut() {
 const Title = styled.div`
  ${theme.device.change}{
   padding-top: 1.4rem;
-  padding-bottom: 2rem;
+  
 }
 ${theme.device.mobile}{
   font-size: 22px;
   height:4.5rem;
+  padding-bottom:0;
+  padding-top: 0.9rem;
 }
     display:flex;
     width:100%;
     padding-top: 2.4rem;
-    padding-bottom:3rem;
+    padding-bottom:8rem;
     font-size: var(--font-size-xl);
     font-style: var(--font-mypage);
     color: var(--color-darkgrey);
@@ -184,17 +184,23 @@ ${theme.device.mobile}{
    padding-top:1rem;
 }
     display:flex;
-    height: 100%;
-    min-height: calc(100vh-);
+    height: auto;
+    max-height: 100%;
     margin-right: 3.5rem;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
 
 `; 
 const UserContainer = styled.div`
+${theme.device.tablet}{
+   max-width:32.688rem;
+   max-height:34.562rem;
+   width:100%;
+   height:100%;
+}
 ${theme.device.mobile}{
-    width:24rem;
-    height:auto;
+    max-width:24rem;
+    max-height:25rem;
 }
    display:flex;
    flex-direction: column;
@@ -203,14 +209,25 @@ ${theme.device.mobile}{
     height: auto;
     
 `; 
-const UserTop = styled(UserContainer)`
+const UserTop = styled.div`
+${theme.device.tablet}{
+   max-width:32.688rem;
+   width:auto;
+}
  ${theme.device.mobile}{
    gap:0.5rem;
 }
-   height:100%;
+    height:auto;
     gap:1rem;
+    display:flex;
+   flex-direction: column;
+    width:32.688rem;
 `; 
 const UserPhotoBox = styled.div`
+${theme.device.tablet}{
+    max-width:32.688rem;
+    width:auto;
+}
 ${theme.device.mobile}{
   height:30px;
   font-size:12px;
@@ -226,17 +243,24 @@ const UserNmBox = styled(UserTop)`
 ${theme.device.mobile}{
     gap:1rem;
  }
+ ${theme.device.mobileM}{
+    padding: 1.5rem 1.8rem;
+}
 
-    width: 100%;
     background-color:  ${({theme})=>theme.colors.mypagecard}; 
     border-radius:1rem;
     padding: 2.3rem 3rem;
     justify-content: center;
     align-items:center;
-    height:100%;
+    
   
 `; 
 const UserNm = styled.div`
+${theme.device.mobileM}{
+    font-size: 14px;  
+    padding-top:0.5rem;
+
+}
    width: 100%;
    height:100%;
    padding: 1rem 0 0.5rem 0;
@@ -251,13 +275,12 @@ const UserNm = styled.div`
    }
 
    &.alert{
+    font-size: 13px;
+    line-height: 1rem;
      ${theme.device.mobile}{
-        display:inline; 
         >p{
-         display:inline; 
         font-size: 12px;
         text-align: left;
-        line-height: 1rem;
        }
   }
 
@@ -289,8 +312,18 @@ const UserContent = styled(UserNm)`
 `;
 
 
-const UserBottom = styled(UserContainer)`
+const UserBottom = styled.div`
+${theme.device.tablet}{
+    max-width:32.688rem;
+    width:auto;
+}
+
     flex:1;
+    display:flex;
+    flex-direction: column;
+    width:32.688rem;
+    min-height: 5rem;
+    height: auto;
   
 `; 
 const UserAlertBox = styled(UserTop)`
@@ -300,7 +333,7 @@ ${theme.device.mobile}{
  }
     width: 100%;
     border-radius:1rem;
-    padding: 2.3rem 1rem;
+    padding: 1rem;
     justify-content: center;
     align-items:center;
 `; 
@@ -330,7 +363,16 @@ const ButtonBox = styled.div`
   display: flex;
   justify-content: center;
   align-items:center;
-   >button{
+  >button{
+    ${theme.device.mobile}{
+    width:6rem;
+    margin-bottom:1rem;
+} 
+${theme.device.mobileM}{
+    font-size:14px;
+    width:5.5rem;
+    height:2rem;
+  }
        width: 7.375rem;
        height: 2.063rem;
        border: none;

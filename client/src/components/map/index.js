@@ -115,13 +115,15 @@ export default function MapIndex({ data, latlng }) {
       }
       if(HAS_VISITED_BEFORE <= new Date()){
         localStorage.removeItem("hasVisitedBefore")
-        handleOpenTuto(true)
+        setIsOpen(true)
+        setTutorial(true)
       }
 
       if (!HAS_VISITED_BEFORE) {
-        handleOpenTuto(true)
+        setIsOpen(true)
+        setTutorial(true)
         let expires = new Date();
-        expires = expires.setSeconds(expires.getSeconds() + 100);
+        expires = expires.setSeconds(expires.getSeconds() + 3600);
         localStorage.setItem('hasVisitedBefore', expires);
       }
      
@@ -129,11 +131,10 @@ export default function MapIndex({ data, latlng }) {
 
     window.setTimeout(handleTime, 1000);
   }, []);
-
+ 
   const handleOpenTuto = (boolean) => {
-    setIsOpen(boolean)
-    setTutorial(true)
-    if (isOpen === false && tutorial) {
+    setIsOpen(!isOpen)
+    if ( tutorial) {
       history.push("/tutorial");
     }
   };

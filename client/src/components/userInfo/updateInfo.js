@@ -440,13 +440,9 @@ export default function UpdateInfo() {
      margin-left: 0.5rem;
      padding-right: 0;
  }
- /* ${theme.device.tablet}{
-
-} */
  ${theme.device.mobile}{
  margin-top: 0.2rem;
- height:auto;
- min-height:auto;
+  
 }
     width: calc(100% - 7.313rem);
     height:100%;
@@ -459,15 +455,18 @@ export default function UpdateInfo() {
 const Title = styled.div`
  ${theme.device.change}{
   padding-top: 1.4rem;
+  /* padding-bottom:7rem; */
 }
 ${theme.device.mobile}{
   font-size: 22px;
+  padding-bottom:0;
+  padding-top: 0.9rem;
   height:4.5rem;
 }
     display:flex;
     width:100%;
     padding-top: 2.4rem;
-    /* padding-bottom:3rem; */
+    padding-bottom:8rem;
     font-size: var(--font-size-xl);
     font-style: var(--font-mypage);
     color: var(--color-darkgrey);
@@ -482,16 +481,18 @@ ${theme.device.mobile}{
    padding-top:1rem;
 }
     display:flex;
-    height: 100%;
+    height: auto;
     margin-right: 3.5rem;
     justify-content: center;
     align-items: center;
 
 `; 
 const UserContainer = styled.div`
-${theme.device.mobile}{
-    width:24rem;
-    height:auto;
+${theme.device.tablet}{
+   max-width:32.688rem;
+   max-height:45.313rem;
+   width:100%;
+   height: 97%;
 }
    display:flex;
    flex-direction: column;
@@ -502,7 +503,7 @@ ${theme.device.mobile}{
 `; 
 const UserTop = styled(UserContainer)`
  ${theme.device.mobile}{
-    height: 13rem;
+    height:auto;
 }
     height: 18.438rem;
     >input{
@@ -511,19 +512,29 @@ const UserTop = styled(UserContainer)`
    }
 `; 
 const UserPhotoBox = styled(UserTop)`
+${theme.device.middle}{
+   max-width:20rem;
+}
 ${theme.device.mobile}{
     height: 6.7rem;
 }
+
     height: 7.375rem;
     position:relative; 
 
 `; 
 const Camera = styled.img`
+${theme.device.middle}{
+   right:30%;
+}
 ${theme.device.mobile}{
     width: 40px;
    height: 40px;
-   bottom:2px;
-   right:135px;
+}
+${theme.device.mobileM}{
+    width: 38px;
+   height: 38px;
+   right:32%;
 }
    width: 45px;
    height: 45px;
@@ -535,10 +546,21 @@ ${theme.device.mobile}{
    
 `;
 const UserPhoto = styled(UserPhotoBox)`
+${theme.device.middle}{
+   min-width:7.375rem;
+}
+
 ${theme.device.mobile}{
+    min-width: 6.6rem;
     height: 6.6rem;
     width: 6.6rem;
 }
+${theme.device.mobileM}{
+   min-width: 6rem;
+   width: 6rem;
+   height: 6rem;
+}
+
    height: 7.375rem;
    width: 7.375rem;
    border-radius: 100%;
@@ -557,10 +579,14 @@ const UserPic = styled.img`
 `;
 const UserNmBox = styled(UserTop)`
 ${theme.device.mobile}{
-    padding: 2rem 1.5rem;
-    height:9rem;
+    padding: 1.2rem 1.5rem;
+    height:6rem;
     position:static;
-    gap:0.5rem;
+    gap:0.2rem;
+}
+${theme.device.mobileM}{
+    padding: 0.8rem 1.5rem;
+    max-height:5rem;
 }
     width: 100%;
     height:11.5rem;
@@ -580,6 +606,10 @@ const UserNm = styled.div`
 const UserIcon = styled.img`
 ${theme.device.mobile}{
    margin-left: 0;
+}
+${theme.device.mobileM}{
+   width:18px;
+   height:18px;
 }
    margin-right: 1rem;
    margin-left:${props => props.primary ? '1rem' : '' };
@@ -628,7 +658,6 @@ ${theme.device.mobile}{
     padding: 2rem 1.5rem;
     height:9rem;
     position:static;
-    align-items:space-between;
     gap:0.5rem;
 }
     width: 100%;
@@ -680,6 +709,9 @@ const VegAnswer = styled.div`
   ${theme.device.mobile}{
    gap:0.5rem;
   }
+  ${theme.device.mobileM}{
+  gap:0;
+  }
   display:flex;
   flex-direction: column;
   width:100%;
@@ -702,7 +734,7 @@ const VegIconBox = styled.div`
     justify-content: center;
     padding: 0 0.5rem;
   }
-
+ 
   display:flex;
   flex-direction: column;
   width:100%;
@@ -713,6 +745,10 @@ const VegIconBox = styled.div`
   padding: 0 2rem;
 `;
 const VegImgBox = styled.div`
+ ${theme.device.mobile}{
+    width:97%;
+  }
+
   width:90%;
   display:flex;
   justify-content: space-between;
@@ -730,6 +766,12 @@ const VegImgBox = styled.div`
 `;
 
 const VegImg = styled.img`
+ ${theme.device.mobileM}{
+   min-width:45px;
+   min-height:45px;
+   height:20%;
+   width:20%;
+  }
   height:50px;
   width:50px;
   margin-bottom:0.6rem;     
@@ -757,7 +799,12 @@ const ButtonBox = styled.div`
     ${theme.device.mobile}{
     width:6rem;
     margin-bottom:1rem;
-}
+} 
+${theme.device.mobileM}{
+    font-size:14px;
+    width:5.5rem;
+    height:2rem;
+  }
        width: 7.375rem;
        height: 2.063rem;
        border: none;

@@ -52,6 +52,7 @@ ${theme.device.change}{
 ${theme.device.mobile}{
   justify-content: flex-start;
   min-width:100%;
+  min-height:auto;
 }
  width:100%;
  max-width:100%;
@@ -61,11 +62,12 @@ ${theme.device.mobile}{
 `;
 
 const Box = styled(Container)`
-${theme.device.mobile}{
-  padding: 0 1rem;
+${theme.device.change}{
+ padding: 0 1rem;
 }
- width: calc(100% - 4.188rem);
+ width: calc(100%-19.125rem);
  flex-direction: column;
+ margin-bottom: 4.188rem;
 `;
 const Top = styled.div`
 ${theme.device.change}{
@@ -83,7 +85,7 @@ ${theme.device.mobile}{
  margin-left: 7.313rem;
  :after{
   ${theme.device.mobile}{
-    height:0.6rem;
+    height:0.5rem;
 }
   ${theme.device.change}{
     max-height:0.85rem;
@@ -97,7 +99,7 @@ ${theme.device.mobile}{
 `;
 const Line= styled.div`
 ${theme.device.mobile}{
- height: 1rem;
+ height: 0.8rem;
 }
  width: calc(100% - 7.313rem);
  height: 100%;
