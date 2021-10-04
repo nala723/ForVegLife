@@ -89,7 +89,8 @@ const Temp = styled.div`
   margin-top: 5vh;
   width: 100vw;
   height: calc(100vh - 3.45rem);
-  max-height: calc(100vh - 3.45rem);
+  max-height: 100%;
+  max-width: 100%;
   position: absolute;
   display: flex;
   justify-content: center;
