@@ -23,6 +23,14 @@
 ![image](https://user-images.githubusercontent.com/49549052/135205526-d2d16f88-9c43-450e-8d52-715959a8affa.png)
 
 
+### 프론트앤드 flow chart
+![스크린샷, 2021-10-04 10-05-48](https://user-images.githubusercontent.com/49549052/135780239-8e79563b-ec47-4511-afe1-c9aadc4c264a.png)
+![스크린샷, 2021-10-04 10-06-30](https://user-images.githubusercontent.com/49549052/135780275-50d2be56-ae54-4771-8b25-609923d0cef8.png)
+
+### 백앤드 flow chart
+![image](https://user-images.githubusercontent.com/49549052/135780364-06e9ec67-0698-456b-bb82-cf1ba1ba2e89.png)
+
+
 링크 : <https://forveglife.ml/>
 
 팀원 소개
