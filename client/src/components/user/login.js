@@ -58,7 +58,7 @@ export default function Login(props) {
     const email = res.profileObj.email;
     const nickName = res.profileObj.name;
     const profileblob = res.profileObj.imageUrl;
-    console.log(res)
+    console.log(res);
     axios
       .post(`${process.env.REACT_APP_SERVER_URL}/google/signin`, {
         email,
@@ -78,6 +78,7 @@ export default function Login(props) {
         dispatch(getgoogleToken({ googleToken: accessToken }));
 
         history.push("/mypage");
+        props.exit();
       });
     // axios 요청
     // 중복 되는 것이 있을때는 에러를 리턴

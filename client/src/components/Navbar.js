@@ -215,7 +215,7 @@ const Navbar = () => {
         <Switch>
           <Route exact path="/">
             <MapPage>
-              {menuBar && !modal ? (
+              {menuBar && !modal && !button ? (
                 <Menubar
                   logOut={logout}
                   register={Register}
@@ -234,7 +234,7 @@ const Navbar = () => {
           </Route>
           <Route path="/resturant/:placeId">
             <MapPage>
-              {menuBar && !modal ? (
+              {menuBar && !modal && !button ? (
                 <Menubar
                   logOut={logout}
                   register={Register}
@@ -252,7 +252,7 @@ const Navbar = () => {
             </MapPage>
           </Route>
           <Route path="/mypage">
-            {menuBar && !modal ? (
+            {menuBar && !modal && !button ? (
               <Menubar logOut={logout} register={Register} login={userSignin} />
             ) : (
               ""
@@ -260,7 +260,7 @@ const Navbar = () => {
             <Mypage />
           </Route>
           <Route path="/tutorial">
-            {menuBar && !modal ? (
+            {menuBar && !modal && !button ? (
               <Menubar logOut={logout} register={Register} login={userSignin} />
             ) : (
               ""
@@ -268,7 +268,7 @@ const Navbar = () => {
             <Tutorial />
           </Route>
           <Route path="/content">
-            {menuBar && !modal ? (
+            {menuBar && !modal && !button ? (
               <Menubar logOut={logout} register={Register} login={userSignin} />
             ) : (
               ""
