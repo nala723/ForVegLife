@@ -345,6 +345,7 @@ ${theme.device.mobile}{
   font-size: 22px;
   justify-content:center;
   padding-bottom:0;
+  padding-top: 0.9rem;
   height:4.5rem;
 }
     display:flex;
@@ -367,7 +368,6 @@ ${theme.device.change}{
 const SearchContainer = styled.div`
 ${theme.device.mobile}{
   height:4rem;
-  /* padding-bottom:0; */
   margin-bottom: 1rem;
 }
     width:100%;
@@ -441,8 +441,7 @@ box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
   ${theme.device.mobile}{
       background-position: 8% 50%, 96% 50%;
       background-size: 114px 22px, 18px 18px;
-      width: 18rem;
-      animation: ${transform('3rem','2.5rem','18rem')} 0.8s ease-in-out;
+      animation: ${transform('3rem','2.5rem','20rem')} 0.8s ease-in-out;
       ::placeholder{
         color: ${theme.colors.mapgrey};
        }
@@ -454,7 +453,6 @@ box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
   }
   &.autocomplete-input{
     ${theme.device.mobile}{
-      width: 18rem;
       background-position: 8% 50%, 96% 50%;
       background-size:114px 22px, 18px 18px;
     }
@@ -468,10 +466,10 @@ box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
 `;
 
 const DropDownContainer = styled.ul` 
-  ${theme.device.mobile}{
-      width: 17.5rem;
+   ${theme.device.mobile}{
+      width: 19.5rem;
       top:38px;
-      right:0.13rem;
+      right:0.2rem;
     }
 background-color: #ffffff;
 display: block;

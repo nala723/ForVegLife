@@ -19,8 +19,7 @@ import Tutorial from "../pages/Tutorial";
 import Content from "../pages/Content";
 import { Buffer } from "buffer";
 import axios from "axios";
-import { Icon } from "@iconify/react";
-import Menubar from "./Menu";
+import { Icon } from '@iconify/react';
 
 const Navbar = () => {
   const loginState = useSelector((state) => state.userReducer);
@@ -30,7 +29,6 @@ const Navbar = () => {
   const [modal, setModal] = useState("");
   const [click, setClick] = useState(false);
   const [button, setButton] = useState(true);
-  const [menuBar, setMenubar] = useState(false);
   const { accessToken, profileblob, isLogin } = loginState;
   const { googleToken } = googleState;
 
@@ -40,22 +38,22 @@ const Navbar = () => {
   } else {
     token = accessToken;
   }
-
-  const handleClick = () => setClick(!click); //후에 햄버거 아이콘에 붙임
+  
+  const handleClick = () => setClick(!click);//후에 햄버거 아이콘에 붙임
   // const closeMobileMenu = () => setClick(false); //마찬가지로 닫는 버튼
 
-  const showButton = () => {
-    if (window.innerWidth <= 960) {
-      setButton(false);
-    } else {
-      setButton(true);
-    }
-  };
-  useEffect(() => {
-    showButton();
-    logout();
-  }, []); //SIGN-UP 버튼이 모바일 사이즈에선 사라진다
-  window.addEventListener("resize", showButton);
+    const showButton = () => {
+        if(window.innerWidth <= 960) {
+            setButton(false);
+        } else {
+            setButton(true);
+        }
+    };
+    useEffect(() => {
+       showButton();
+    }, []) //SIGN-UP 버튼이 모바일 사이즈에선 사라진다
+
+    window.addEventListener('resize', showButton); 
 
   useEffect(() => {
     if (isLogin) {
@@ -99,12 +97,15 @@ const Navbar = () => {
           );
           dispatch(getgoogleToken({ googleToken: "" }));
           history.push("/");
+          
         } else {
           history.push("/notfound");
         }
         //  setIsLoding(false)
       })
-      .catch((err) => {});
+      .catch((err) => {
+       
+      });
   };
 
   let profileIMG;
@@ -129,85 +130,60 @@ const Navbar = () => {
         {isLogin ? (
           <Header>
             <Logo to="/">
-              {button ? (
-                <img src="/image/logo.svg" />
-              ) : (
-                <img src="/image/logo-sm.svg" />
-              )}
+              {button ? <img src="/image/logo.svg" /> : <img src="/image/logo-sm.svg" />}
             </Logo>
             <ButtonBox primary>
-              {button && (
+            {button && 
                 <Link to="/content">
                   <ContentPage>Content</ContentPage>
                 </Link>
-              )}
-              {button && (
-                <Link to="/">
-                  <StyledLogin onClick={() => logout()}>Logout</StyledLogin>
-                </Link>
-              )}
+                }
+               {button && 
+                  <Link to="/">
+                      <StyledLogin onClick={() => logout()}>Logout</StyledLogin>
+                  </Link>
+               }
               <Route exact path="/">
-                {button && (
-                  <Link to="/mypage">
-                    <StyledMypage>Mypage</StyledMypage>
-                  </Link>
-                )}
+              {button && 
+                <Link to="/mypage">
+                  <StyledMypage>Mypage</StyledMypage>
+                </Link>
+                }
               </Route>
-
-              <Route exact path="/restaurant/:placeId">
-                {button && (
-                  <Link to="/mypage">
-                    <StyledMypage>Mypage</StyledMypage>
-                  </Link>
-                )}
+              
+              <Route exact path="/resturant/:placeId">
+              {button && 
+                <Link to="/mypage">
+                  <StyledMypage>Mypage</StyledMypage>
+                </Link>
+                }
               </Route>
               <Route path="/mypage">
-                {button && (
-                  <Link to="/">
-                    <StyledMypage>map</StyledMypage>
-                  </Link>
-                )}
+              {button && 
+                <Link to="/">
+                  <StyledMypage>map</StyledMypage>
+                </Link>}
               </Route>
               <ImageBox>
                 <Image src={profileIMG} />
               </ImageBox>
-              {!button && (
-                <StyledBar
-                  icon="system-uicons:menu-hamburger"
-                  color="#7c6d6d"
-                  height="60"
-                  onClick={() => setMenubar(!menuBar)}
-                />
-              )}
+              {!button && <StyledBar icon="system-uicons:menu-hamburger" color="#7c6d6d" height="60" />}
             </ButtonBox>
           </Header>
         ) : (
           <Header>
             <Logo to="/">
-              {button ? (
-                <img src="/image/logo.svg" />
-              ) : (
-                <img src="/image/logo-sm.svg" />
-              )}
+            {button ? <img src="/image/logo.svg" /> : <img src="/image/logo-sm.svg" />}
             </Logo>
             <ButtonBox>
-              {button && (
-                <Link to="/content">
-                  <ContentPage>Content</ContentPage>
-                </Link>
-              )}
+              {button &&
+                  <Link to="/content">
+                      <ContentPage>Content</ContentPage>
+                   </Link>
+                }
               <StyledLogin onClick={userSignin}>Login</StyledLogin>
-              {button && (
-                <StyledRegister onClick={Register}>Register</StyledRegister>
-              )}
-              {!button && (
-                <StyledBar
-                  icon="system-uicons:menu-hamburger"
-                  color="#7c6d6d"
-                  height="60"
-                  onClick={() => setMenubar(!menuBar)}
-                />
-              )}
+              {button && <StyledRegister onClick={Register}>Register</StyledRegister>}
+              {!button && <StyledBar icon="system-uicons:menu-hamburger" color="#7c6d6d" height="60" />}
             </ButtonBox>
           </Header>
         )}
@@ -215,15 +191,6 @@ const Navbar = () => {
         <Switch>
           <Route exact path="/">
             <MapPage>
-              {menuBar && !modal ? (
-                <Menubar
-                  logOut={logout}
-                  register={Register}
-                  login={userSignin}
-                />
-              ) : (
-                ""
-              )}
               {!isLogin && modal === "signin" ? (
                 <Login exit={userLoginExit} />
               ) : null}
@@ -232,17 +199,8 @@ const Navbar = () => {
               ) : null}
             </MapPage>
           </Route>
-          <Route path="/resturant/:placeId">
+          <Route path="/restaurant/:placeId">
             <MapPage>
-              {menuBar && !modal ? (
-                <Menubar
-                  logOut={logout}
-                  register={Register}
-                  login={userSignin}
-                />
-              ) : (
-                ""
-              )}
               {!isLogin && modal === "signin" ? (
                 <Login exit={userLoginExit} />
               ) : null}
@@ -252,27 +210,12 @@ const Navbar = () => {
             </MapPage>
           </Route>
           <Route path="/mypage">
-            {menuBar && !modal ? (
-              <Menubar logOut={logout} register={Register} login={userSignin} />
-            ) : (
-              ""
-            )}
             <Mypage />
           </Route>
           <Route path="/tutorial">
-            {menuBar && !modal ? (
-              <Menubar logOut={logout} register={Register} login={userSignin} />
-            ) : (
-              ""
-            )}
             <Tutorial />
           </Route>
           <Route path="/content">
-            {menuBar && !modal ? (
-              <Menubar logOut={logout} register={Register} login={userSignin} />
-            ) : (
-              ""
-            )}
             <Content />
           </Route>
           <Route path="*">
@@ -285,9 +228,9 @@ const Navbar = () => {
 };
 
 const Header = styled.header`
-  ${theme.device.mobile} {
-    padding: 1.688rem 0.8rem;
-  }
+ ${theme.device.mobile}{
+   padding:0 0.8rem;
+ }
   align-items: center;
   background-color: none;
   width: 100vw;
@@ -296,18 +239,18 @@ const Header = styled.header`
   display: flex;
   padding: 1.688rem;
   justify-content: space-between;
-  border-bottom: 0.1rem solid #dedede;
+  border-bottom: 0.1rem solid #DEDEDE;
 `;
 
 const ImageBox = styled.div`
-  ${theme.device.mobile} {
-    margin-right: 0rem;
-    width: 2rem;
-    height: 2rem;
-  }
-  ${theme.device.change} {
-    margin-right: 0.3rem;
-  }
+${theme.device.mobile}{
+   margin-right:0rem;
+   width: 2rem;
+  height: 2rem;
+ }
+ ${theme.device.change}{
+   margin-right:0.3rem;
+ }
   margin-left: 0.5rem;
   width: 2.3rem;
   height: 2.3rem;
@@ -322,28 +265,29 @@ const Image = styled.img`
   background-color: white;
 `;
 const Logo = styled(Link)`
-  ${theme.device.tablet} {
-    width: 200px;
-  }
+${theme.device.tablet}{
+   width:200px;
+ }
   display: flex;
   cursor: pointer;
 `;
 
 const ButtonBox = styled.div`
-  ${theme.device.change} {
-    width: 11rem;
-    gap: 0.5rem;
-    justify-content: flex-end;
-  }
+ ${theme.device.change}{
+   width:11rem;
+   gap:0.5rem;
+   justify-content: flex-end;
+ } 
   display: flex;
   width: ${(props) => (props.primary ? "27rem" : "23.563rem")};
   height: inherit;
   justify-content: center;
   align-items: center;
   gap: 1rem;
+  
 `;
 const ContentPage = styled.button`
-  display: flex;
+  display:flex;
   width: 6rem;
   font-size: ${theme.fonts.size.base};
   font-family: ${theme.fonts.button};
@@ -351,22 +295,23 @@ const ContentPage = styled.button`
   justify-content: center;
   align-items: center;
   height: 2.063rem;
-  border: none;
-  background-color: white;
-  color: #aa938c;
+  border:none;
+  background-color:white;
+  color: #AA938C;
   cursor: pointer;
   :hover {
     color: ${theme.colors.mapgrey};
   }
+
 `;
 
 const StyledLogin = styled.button`
-  ${theme.device.change} {
-    width: 6.5rem;
-  }
-  ${theme.device.mobile} {
-    width: 4.5rem;
-  }
+ ${theme.device.change}{
+   width:6.5rem;
+}
+${theme.device.mobile}{
+   width:4.5rem;
+ }
   display: flex;
   width: 7.375rem;
   font-size: ${theme.fonts.size.base};
@@ -398,11 +343,13 @@ const StyledRegister = styled(StyledLogin)`
 const StyledMypage = styled(StyledRegister)``;
 
 const StyledBar = styled(Icon)`
-  width: 50px;
 
-  ${theme.device.mobile} {
-    width: 40px;
-  }
-`;
+   width:50px;
+ 
+ ${theme.device.mobile}{
+   width:40px;
+ }
+  
+ `;
 
 export default Navbar;

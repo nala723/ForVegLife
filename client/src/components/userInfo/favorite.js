@@ -507,6 +507,7 @@ const Title = styled.div`
 ${theme.device.mobile}{
   font-size: 22px;
   justify-content:center;
+  padding-top: 0.9rem;
   padding-bottom:0;
   height:4.5rem;
 }
@@ -613,8 +614,8 @@ ${theme.device.mobile}{
     ${theme.device.mobile}{
       background-position: 96% 50%;
       background-size:18px 18px;
-      width: 18rem;
-      animation: ${transform('3rem','2.5rem','18rem')} 0.8s ease-in-out;
+      width: 20rem;
+      animation: ${transform('3rem','2.5rem','20rem')} 0.8s ease-in-out;
       ::placeholder{
         color: ${theme.colors.mapgrey};
        }
@@ -626,7 +627,7 @@ ${theme.device.mobile}{
   }
   &.autocomplete-input {
     ${theme.device.mobile}{
-      width: 18rem;
+      width: 20rem;
       background-size: 18px 18px;
       background-position: 96% 50%;
     }
@@ -641,9 +642,9 @@ ${theme.device.mobile}{
 
 const DropDownContainer = styled.ul`
     ${theme.device.mobile}{
-      width: 17.5rem;
+      width: 19.5rem;
       top:38px;
-      right:0.13rem;
+      right:0.2rem;
     }
   background-color: #ffffff;
   display: block;
