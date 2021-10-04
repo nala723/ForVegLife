@@ -196,7 +196,7 @@ const Navbar = () => {
                   <ContentPage>Content</ContentPage>
                 </Link>
               )}
-              <StyledLogin onClick={userSignin}>Login</StyledLogin>
+              {button && <StyledLogin onClick={userSignin}>Login</StyledLogin>}
               {button && (
                 <StyledRegister onClick={Register}>Register</StyledRegister>
               )}

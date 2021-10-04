@@ -125,11 +125,15 @@ const SearchForm = styled.form`
     right: 5vw;
     width: 12.25rem;
   }
-  @media only screen and (min-width: 425px) {
-    left: 40%;
-    top: 3rem;
+  @media only screen and (min-width: 425px) and (max-width: 960px) {
+    left: 20%;
     width: 17.25rem;
-    transform: translate(-50%, 0%);
+    transform: translate(-100%, 0%);
+  }
+  @media only screen and (min-width: 960px) {
+    left: 40%;
+    width: 17.25rem;
+    transform: translate(-100%, 0%);
   }
   position: absolute;
   display: flex;

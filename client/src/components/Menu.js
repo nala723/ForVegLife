@@ -54,10 +54,10 @@ export default function Menubar({ logOut, register, login }) {
           <StyledRegister to="/">Map</StyledRegister>
           <MypageConatiner>
             <StyledRegister to="/mypage">Mypage</StyledRegister>
-            <Mypages> 내가 준 별점 보기 </Mypages>
-            <Mypages>나의 즐겨찾기</Mypages>
-            <Mypages> 나의 정보 수정</Mypages>
-            <Mypages> 회원 탈퇴하기</Mypages>
+            <Mypages to="/mypage"> 내가 준 별점 보기 </Mypages>
+            <Mypages to="/mypage/star">나의 즐겨찾기</Mypages>
+            <Mypages to="/mypage/updateinfo"> 나의 정보 수정</Mypages>
+            <Mypages to="/mypage/signout"> 회원 탈퇴하기</Mypages>
           </MypageConatiner>
           <StyledRegister to="/content">content</StyledRegister>
         </MenuBar>
@@ -178,7 +178,7 @@ const MenuBar = styled.div`
 const StyledRegister = styled(Link)`
   color: ${theme.colors.green};
 `;
-const Mypages = styled.div`
+const Mypages = styled(Link)`
   color: ${theme.colors.grey};
   font-size: ${theme.fonts.size.sm};
 `;
