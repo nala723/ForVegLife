@@ -68,8 +68,6 @@ export default function UpdateInfo() {
             if(res.headers.accessToken){
                 if(googleToken){
                         dispatch(getgoogleToken({accessToken: res.headers.accessToken}));
-                        // handleBack()
-                        // return;
                     }
                 else {
                     dispatch(newAccessToken({accessToken: res.headers.accessToken}));
@@ -115,11 +113,6 @@ export default function UpdateInfo() {
         e.preventDefault();
         let reader = new FileReader();
         let file = e.target.files[0];  
-         console.log('이미지업로드',file)
-        // if(file.size>4000000){
-        //     setImageSizeError(true)
-        // }else{
-        //     setImageSizeError(false)
             reader.onloadend = () => {
                 setCurrentInput({
                     ...currentInput,
@@ -128,16 +121,12 @@ export default function UpdateInfo() {
                 })
             }
             reader.readAsDataURL(file);
-         
-          
-        // }
     }
 
    // open모달 위한 상태변경함수
     const handleClick = () => {
         setIsOpen(!isOpen)
         if((isOpen===true) && changed){
-            console.log('마이페이지업뎃 안되냐')
             setCurrentInput({
                 ...currentInput,
                  inputPassword:'',
@@ -251,7 +240,6 @@ export default function UpdateInfo() {
         img.src = blobURL;
         img.onerror = function () {
             URL.revokeObjectURL(this.src);
-            console.log("Cannot load image");
         };
         img.onload = await function () {
             URL.revokeObjectURL(this.src);
@@ -268,10 +256,6 @@ export default function UpdateInfo() {
                 formData.append("profile",imgforaxios);
                 formData.append("password",currentInput.inputPassword);
                 formData.append("vegType",currentInput.inputVegtype);
-                for(let key of formData.entries()){ /* 데이터 체크 ,*/
-                    console.log(`${key}`,'왜안ㄴ와')
-                   }
-                   console.log(currentInput)
                     axios
                     .patch(process.env.REACT_APP_SERVER_URL + `/mypage/user-info`,formData,{
                            headers: {
@@ -383,14 +367,14 @@ export default function UpdateInfo() {
                        <UserNm > 
                             <UserIcon src="/image/userIcon.svg"/>
                             <UserContent>
-                                <p>username</p>  
+                                <p className="shorten">username</p>  
                               <h1> {nickName || 'Kimusername'} </h1>
                            </UserContent>
                         </UserNm >
                        <UserNm >
                            <UserIcon src="/image/email.svg"/>
                            <UserContent>
-                               <p>e-mail</p>
+                               <p className="shorten">e-mail</p>
                              <h1> {email || `hahihuheho@gmail.com`}</h1> 
                            </UserContent>
                        </UserNm >
@@ -402,7 +386,7 @@ export default function UpdateInfo() {
                     <UserNm primary> 
                             <UserIcon src="/image/lock.svg" primary/>
                             <UserContent >
-                                <p>new PW</p> 
+                                <p className="password">new PW</p> 
                               <PwContainer placeholder="새 비밀번호를 입력해주세요"  onChange={handleInputValue('inputPassword')}
                                 onKeyPress={handleMoveTopPW} ref={refPassword} onBlur={checkValidPW} value={currentInput.inputPassword}/>
                            </UserContent>
@@ -410,7 +394,7 @@ export default function UpdateInfo() {
                        <UserNm >
                            <UserIcon src="/image/lock.svg" primary/>
                            <UserContent>
-                               <p>new PW</p>
+                               <p className="password">new PW</p>
                              <PwContainer placeholder="새 비밀번호를 재입력해주세요" onChange={handleInputValue('inputPasswordCheck')}
                              onKeyPress={handleMoveTopPWCheck} ref={refPasswordCheck} onBlur={handleCompleteInput} value={currentInput.inputPasswordCheck}/>
                            </UserContent>
@@ -449,6 +433,17 @@ export default function UpdateInfo() {
 }    
 
  const Container = styled.div`
+ ${theme.device.change}{
+    width: calc(100% - 0.5rem);
+     min-height:100vh;
+     margin-bottom:0;
+     margin-left: 0.5rem;
+     padding-right: 0;
+ }
+ ${theme.device.mobile}{
+ margin-top: 0.2rem;
+  
+}
     width: calc(100% - 7.313rem);
     height:100%;
     display: flex;
@@ -458,33 +453,58 @@ export default function UpdateInfo() {
     padding-right: 3.5rem;
 `;
 const Title = styled.div`
+ ${theme.device.change}{
+  padding-top: 1.4rem;
+  /* padding-bottom:7rem; */
+}
+${theme.device.mobile}{
+  font-size: 22px;
+  padding-bottom:0;
+  padding-top: 0.9rem;
+  height:4.5rem;
+}
     display:flex;
     width:100%;
     padding-top: 2.4rem;
-    padding-bottom:3rem;
+    padding-bottom:8rem;
     font-size: var(--font-size-xl);
     font-style: var(--font-mypage);
     color: var(--color-darkgrey);
+    height:2rem;
 `; 
 const Bottom = styled.div`
+${theme.device.change}{
+  margin: 0;
+}
+${theme.device.mobile}{
+   align-items: flex-start;
+   padding-top:1rem;
+}
     display:flex;
-    height: 100%;
+    height: auto;
     margin-right: 3.5rem;
     justify-content: center;
     align-items: center;
 
 `; 
 const UserContainer = styled.div`
+${theme.device.tablet}{
+   max-width:32.688rem;
+   max-height:45.313rem;
+   width:100%;
+   height: 97%;
+}
    display:flex;
    flex-direction: column;
     width:32.688rem;
     height: 45.313rem;
-    /* border: 1px solid yellowgreen; */
     align-items: center;
     
 `; 
 const UserTop = styled(UserContainer)`
-     
+ ${theme.device.mobile}{
+    height:auto;
+}
     height: 18.438rem;
     >input{
        display:none;
@@ -492,11 +512,30 @@ const UserTop = styled(UserContainer)`
    }
 `; 
 const UserPhotoBox = styled(UserTop)`
+${theme.device.middle}{
+   max-width:20rem;
+}
+${theme.device.mobile}{
+    height: 6.7rem;
+}
+
     height: 7.375rem;
     position:relative; 
 
 `; 
-const Camera = styled.img` //처리
+const Camera = styled.img`
+${theme.device.middle}{
+   right:30%;
+}
+${theme.device.mobile}{
+    width: 40px;
+   height: 40px;
+}
+${theme.device.mobileM}{
+    width: 38px;
+   height: 38px;
+   right:32%;
+}
    width: 45px;
    height: 45px;
    position: absolute; 
@@ -507,6 +546,21 @@ const Camera = styled.img` //처리
    
 `;
 const UserPhoto = styled(UserPhotoBox)`
+${theme.device.middle}{
+   min-width:7.375rem;
+}
+
+${theme.device.mobile}{
+    min-width: 6.6rem;
+    height: 6.6rem;
+    width: 6.6rem;
+}
+${theme.device.mobileM}{
+   min-width: 6rem;
+   width: 6rem;
+   height: 6rem;
+}
+
    height: 7.375rem;
    width: 7.375rem;
    border-radius: 100%;
@@ -524,6 +578,16 @@ const UserPic = styled.img`
     background-color:  ${({theme})=>theme.colors.mypagecard}; 
 `;
 const UserNmBox = styled(UserTop)`
+${theme.device.mobile}{
+    padding: 1.2rem 1.5rem;
+    height:6rem;
+    position:static;
+    gap:0.2rem;
+}
+${theme.device.mobileM}{
+    padding: 0.8rem 1.5rem;
+    max-height:5rem;
+}
     width: 100%;
     height:11.5rem;
     padding: 2.3rem 3rem;
@@ -540,6 +604,13 @@ const UserNm = styled.div`
 
 `; 
 const UserIcon = styled.img`
+${theme.device.mobile}{
+   margin-left: 0;
+}
+${theme.device.mobileM}{
+   width:18px;
+   height:18px;
+}
    margin-right: 1rem;
    margin-left:${props => props.primary ? '1rem' : '' };
   
@@ -553,6 +624,13 @@ const UserContent = styled(UserNm)`
        font-weight: ${({theme})=>theme.fonts.weight.bold};
     }
    >p{  
+    ${theme.device.mobile}{
+        display:flex;
+        align-items:flex-end;
+        &.password,&.shorten{
+            display:none;
+        }
+      }
        font-size:14px;
         color: ${({theme})=>theme.colors.mapgrey}; 
         font-family: var(--font-button);
@@ -563,17 +641,25 @@ const UserContent = styled(UserNm)`
 
 
 const UserBottom = styled.div`
-    display:flex;
+${theme.device.mobile}{
+    height: 20rem;
+}
+   display:flex;
    flex-direction: column;
    width:inherit;
     height: 100%;
-    /* border: 1px solid yellowgreen; */
     align-items: center;
     background-color:  ${({theme})=>theme.colors.mypagecard}; 
     border-radius:1rem;
 `; 
 
 const UserBotBox = styled(UserTop)`
+${theme.device.mobile}{
+    padding: 2rem 1.5rem;
+    height:9rem;
+    position:static;
+    gap:0.5rem;
+}
     width: 100%;
     height:11.5rem;
     padding: 2.3rem 2rem;
@@ -594,7 +680,11 @@ const UserBotBox = styled(UserTop)`
 const PwContainer = styled.input.attrs(props=>({
     type:'password',
 
-}))` // input으로 변경
+}))` 
+ ${theme.device.mobile}{
+    width:100%;
+ }
+
   width:13rem;
   height:2.875rem;
   background-color:white;
@@ -616,10 +706,22 @@ const PwContainer = styled.input.attrs(props=>({
 `;
 
 const VegAnswer = styled.div`
+  ${theme.device.mobile}{
+   gap:0.5rem;
+  }
+  ${theme.device.mobileM}{
+  gap:0;
+  }
   display:flex;
   flex-direction: column;
   width:100%;
    >p{
+    ${theme.device.mobile}{
+     font-size: 12px;
+     margin-left:1.5rem;
+     margin-top: 0.8rem;
+    
+  }
        color:  ${({theme})=>theme.colors.green};
        margin-left:2.5rem;
        margin-top:1rem;
@@ -627,6 +729,12 @@ const VegAnswer = styled.div`
 
 `;
 const VegIconBox = styled.div`
+  ${theme.device.mobile}{
+    height:6rem;
+    justify-content: center;
+    padding: 0 0.5rem;
+  }
+ 
   display:flex;
   flex-direction: column;
   width:100%;
@@ -635,24 +743,35 @@ const VegIconBox = styled.div`
   align-items:center;
   gap: 1rem;
   padding: 0 2rem;
-
-       
 `;
 const VegImgBox = styled.div`
+ ${theme.device.mobile}{
+    width:97%;
+  }
+
   width:90%;
   display:flex;
   justify-content: space-between;
   
   >div{
       >div{  
+        ${theme.device.mobile}{
+           font-size:10px;   
+        }
            text-align:center;
-            color: ${({theme})=>theme.colors.mapgrey}; //고치기 색..
+            color: ${({theme})=>theme.colors.mapgrey}; 
         }
   }
    
 `;
 
 const VegImg = styled.img`
+ ${theme.device.mobileM}{
+   min-width:45px;
+   min-height:45px;
+   height:20%;
+   width:20%;
+  }
   height:50px;
   width:50px;
   margin-bottom:0.6rem;     
@@ -677,6 +796,15 @@ const ButtonBox = styled.div`
   justify-content: center;
   align-items:center;
    >button{
+    ${theme.device.mobile}{
+    width:6rem;
+    margin-bottom:1rem;
+} 
+${theme.device.mobileM}{
+    font-size:14px;
+    width:5.5rem;
+    height:2rem;
+  }
        width: 7.375rem;
        height: 2.063rem;
        border: none;

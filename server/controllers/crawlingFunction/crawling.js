@@ -11,7 +11,7 @@ exports.crawling = async (placeUrl, placeData) => {
    //const driver = await new webdriver.Builder().forBrowser('chrome').build();
   const driver = new webdriver.Builder()
     .forBrowser("chrome")
-    .setChromeOptions(new chrome.Options().addArguments("--headless", "--no-sandbox", "--single-process", "--disable-dev-shm-usage"))
+    .setChromeOptions(new chrome.Options().addArguments("--headless", "--no-sandbox", "--single-process"))
     .build();
   await driver.manage().setTimeouts({
     implicit: 30000,

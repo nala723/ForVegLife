@@ -11,7 +11,7 @@ export default function TutoModal(props) {
           <ModalSection
             className={`${isOpen ? "active" : ""}`}
           >
-            <ModalTitle>
+            <ModalTitle >
               <img src="/image/logo.svg" />
               <div></div>
             </ModalTitle>
@@ -19,7 +19,7 @@ export default function TutoModal(props) {
               <button className="tuto" onClick={()=>handleClick(false)}>튜토리얼 보기</button> 
               <button onClick={()=>handleClose()}>튜토리얼 생략</button>
             </OkBtn>
-            <Content>{children}</Content>
+            <Content >{children}</Content>
           </ModalSection>
         </Background>
       </>
@@ -63,12 +63,30 @@ const ButtonBox = styled.div`
   }
 `;
 
+const Contentshow = (middle,bt)=> keyframes`
+0% { 
+bottom: ${bt-15}%;
+opacity: 0;
+}
+${middle}% {
+  bottom: ${bt-15}%;
+opacity: 0;
+}
+100%  {
+  bottom: ${bt}%;
+ opacity: 1;
+}
+`;
+
+
 const Modalshow = keyframes`
  0% { 
-  transform: scale(0.0);
+ transform:  translateY(-30%);
+ opacity: 0;
  }
  100%  {
-  transform: scale(1.0);
+  transform: translateY(0%);
+  opacity: 1;
  }
 
 `;
@@ -87,12 +105,14 @@ const Background = styled.div`
   justify-content: center;
   visibility: hidden;
   opacity: 0;
+  transition: all 0.5s  ease;
 
   &.active {
     background-color: rgba(0, 0, 0, 0.7);
     visibility: visible;
     opacity: 1;
     z-index:500;
+    transition: all 0.5s  ease;
   }
 `;
 
@@ -103,18 +123,16 @@ const ModalSection = styled.div`
   height: 21.688rem;
   border-radius: 0.3rem;
   box-shadow: 0 0 2.5rem rgba(0, 0, 0, 0.3);
-  transform: translate(-50%, -50%);
   max-width: 29.813rem;
-  transform: scale(0);
-  animation: ${Modalshow} 0.3s ease-out;
+  animation: ${Modalshow} 0.8s ease-in-out;
   font-family: ${theme.fonts.family.mypage};
   &.active {
-    transform: scale(1);
-    animation: ${Modalshow} 0.3s ease-out;
+    animation: ${Modalshow} 0.8s ease-in-out;
     z-index:999;
   }
 `;
 const ModalTitle = styled.div`
+ position: absolute;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -124,6 +142,9 @@ const ModalTitle = styled.div`
   font-size: 20px;
   color: ${theme.colors.green};
   font-weight: ${theme.fonts.weight.bold};
+  animation: ${Contentshow(10,73)} 1.3s ease-in-out;
+  right:19%;
+  bottom: 73%;
   > div {
     width: 18.5rem;
     border-bottom: 1px solid ${theme.colors.lightgrey};
@@ -131,14 +152,21 @@ const ModalTitle = styled.div`
   }
 `;
 const Content = styled.div`
+ position: absolute;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  /* justify-content: center;
+  align-items: center; */
   font-size: ${theme.fonts.size.base};
   color: ${theme.colors.mapgrey};
   line-height: 2rem;
   font-weight: 600;
+  right:12%;
+  bottom: 36%;
+  text-align:center;
+ animation: ${Contentshow(30,36)} 1.3s ease-in-out;
+ transition-delay: 1s;
+
 `;
 const OkBtn = styled(ButtonBox)`
   position: absolute;
@@ -146,4 +174,6 @@ const OkBtn = styled(ButtonBox)`
   display:flex;
   gap:4rem;
   bottom: 10%;
+  animation: ${Contentshow(60,10)} 1.3s ease-in-out; 
+
 `;

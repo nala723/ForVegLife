@@ -12,6 +12,7 @@ module.exports = async (req, res) => {
     
     let sendArr = [];
     let obj = {};
+    let placeList;
 
    try {
         const authorization = req.headers['authorization'];
@@ -28,8 +29,30 @@ module.exports = async (req, res) => {
            
            const type = userData.vegtype;
             
-
-            const placeList = await vegCategory.findAll({
+           if(type !== 'vegetarian'){
+                placeList = await vegCategory.findAll({
+                                attributes : ['category'],
+                                include : [{
+                                    model : place,
+                                    required: true,
+                                    attributes : ['id', 'title', 'picture_url', 'address'],
+                                    include : [{
+                                        model : review,
+                                        required : true,
+                                        attributes : ['stars', 'review'],
+                                        where : {
+                                            stars: {
+                                                [Op.gte]: 4
+                                            }
+                                        }
+                                    }]
+                                }],
+                                where : {
+                                    category : type
+                                }
+                            })
+           }else{
+            placeList = await vegCategory.findAll({
                 attributes : ['category'],
                 include : [{
                     model : place,
@@ -45,11 +68,9 @@ module.exports = async (req, res) => {
                             }
                         }
                     }]
-                }],
-                where : {
-                    category : type
-                }
+                }]
             })
+           }
 
             let firstIndex = getRandomIntInclusive(0, placeList.length-4);
 
@@ -66,8 +87,7 @@ module.exports = async (req, res) => {
 
             res.status(200).send(sendArr);
        }
-
-        
+ 
     } catch (error) {
         res.status(500).send(error);
     }
