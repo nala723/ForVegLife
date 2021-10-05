@@ -60,7 +60,7 @@ export default function Login(props) {
     const email = res.profileObj.email;
     const nickName = res.profileObj.name;
     const profileblob = res.profileObj.imageUrl;
-    console.log(res);
+
     axios
       .post(`${process.env.REACT_APP_SERVER_URL}/google/signin`, {
         email,

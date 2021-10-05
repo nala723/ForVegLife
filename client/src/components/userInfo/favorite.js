@@ -108,7 +108,7 @@ export default function Favorite() {
         setLoading(false);
       })
       .catch((err) => {
-        console.log(err);
+    
       });
   };
 
