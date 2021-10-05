@@ -14,27 +14,25 @@ dotenv.config();
 
 
 export default function Star() {
-    const dispatch = useDispatch();
-    const history = useHistory();
-    const reviewState = useSelector((state)=> state.myPlaceReducer);
-    const userState = useSelector((state)=> state.userReducer);
-    const googleState = useSelector((state)=> state.googleReducer);
-    const {googleToken} = googleState;
-    // const placeId = reviewState.placeId;// 다시
-    const accessToken = userState.accessToken;
-    const dummyReivews = dummydatas.reviews;
-    const dummyStars = dummyReivews.filter((el,idx) => idx < 5 ).map(el => el.img);
-  
-    const [hasText, setHasText] = useState(false);
-    const [inputValue, setInputValue] = useState(''); 
-   const [options, setOptions] = useState(dummyStars) //서버접속시 검색창의 별점 클릭시 조회, id로 필터링- 트리거
-   const [reivews, setReivews] = useState(reviewState.myReviews); 
-    const [selected, setSelected] = useState(-1);
-    const [isActive, setIsActive] = useState(false);
-    const [loading, setLoading] = useState(true);
-    let ReviewState = (reviewState.myReviews).length > 0 ? reviewState.myReviews: []
+ const dispatch = useDispatch();
+ const history = useHistory();
+ const reviewState = useSelector((state)=> state.myPlaceReducer);
+ const userState = useSelector((state)=> state.userReducer);
+ const googleState = useSelector((state)=> state.googleReducer);
+ const {googleToken} = googleState;
+ const accessToken = userState.accessToken;
+ const dummyReivews = dummydatas.reviews;
+ const dummyStars = dummyReivews.filter((el,idx) => idx < 5 ).map(el => el.img);
+ const [hasText, setHasText] = useState(false);
+ const [inputValue, setInputValue] = useState(''); 
+ const [options, setOptions] = useState(dummyStars) 
+ const [reivews, setReivews] = useState(reviewState.myReviews); 
+ const [selected, setSelected] = useState(-1);
+ const [isActive, setIsActive] = useState(false);
+ const [loading, setLoading] = useState(true);
+ let ReviewState = (reviewState.myReviews).length > 0 ? reviewState.myReviews: []
      
-     //최초렌더링시- 
+  //최초렌더링시- 
   useEffect(()=> {
     getReviewList()
   },[])
@@ -70,8 +68,7 @@ useEffect(() => {
   }
 }, ['https://developers.kakao.com/sdk/js/kakao.min.js'])
 
-  // 유저가 즐찾한 것 목록 받아오기  
-  
+  // 유저가 즐찾한 것 목록 받아오기 
   const getReviewList= () => {
     setLoading(true)
       axios
@@ -92,7 +89,7 @@ useEffect(() => {
             } 
              if(res.status === 200){ 
                    dispatch(
-                       getmyreview(  // 상태전달 
+                       getmyreview( 
                                res.data.review_star
                          )
                        )
@@ -110,7 +107,7 @@ useEffect(() => {
 
   // 모두 조회 버튼
   const handleAllview = () => {
-    setReivews(ReviewState)  // 실제 
+    setReivews(ReviewState)  
     setInputValue('');        
     setOptions(dummyStars);
   }
@@ -175,18 +172,13 @@ useEffect(() => {
 
 
   // sns 공유 핸들러
- 
   const shareKakao = (el) => {
     if (window.Kakao) {
       const Kakao = window.Kakao;
-      // 중복 initialization 방지
       if (!Kakao.isInitialized()) {
-        // 두번째 step 에서 가져온 javascript key 를 이용하여 initialize
         Kakao.init(process.env.REACT_APP_JAVASCRIPT_KEY);
-        console.log(Kakao.isInitialized());
       }
 
-      console.log("카카오되라",el);
       Kakao.Link.sendDefault({
         objectType: 'location',
         address: `${el.title}`,
@@ -219,13 +211,13 @@ useEffect(() => {
   };
 
   const shareTwitter = (el) => {
-    let sendText = el.title; // 전달할 텍스트
-    let sendUrl = `https://forveglife.ml/restaurant/${el.placeId}`; // 전달할 URL
+    let sendText = el.title;
+    let sendUrl = `https://forveglife.ml/restaurant/${el.placeId}`; 
     window.open("https://twitter.com/intent/tweet?text=" + sendText + "&url=" + sendUrl);
   }
 
   const shareFacebook = (el) => {
-    let sendUrl = `https://forveglife.ml/restaurant/${el.placeId}`; // 전달할 URL
+    let sendUrl = `https://forveglife.ml/restaurant/${el.placeId}`;
     window.open("http://www.facebook.com/sharer/sharer.php?u=" + sendUrl);
   }
   
@@ -251,7 +243,7 @@ useEffect(() => {
              onChange={handleInputChange}
              onClick={handleClick}
              value={inputValue}
-             url= {`${options.length !== dummyStars.length ? options[0] : null}`} // 찝찝한방식
+             url= {`${options.length !== dummyStars.length ? options[0] : null}`}
             />
              {hasText ? (
                 <DropDownContainer>
@@ -352,9 +344,8 @@ ${theme.device.mobile}{
     width:100%;
     padding-top: 2.4rem;
     padding-bottom:3rem;
-    font-size: var(--font-size-xl);
-    font-style: var(--font-mypage);
-    color: var(--color-darkgrey);
+    font-size: ${theme.fonts.size.xl};
+    color: ${theme.colors.darkgrey};
 `; 
 const Bottom = styled.div`
 ${theme.device.change}{
@@ -429,8 +420,8 @@ margin-top: 2.5rem;
 text-indent: 0.5rem;
 width:10rem;
 height:2.563rem;
-color: ${({theme})=>theme.colors.darkgrey}; 
-border: 1.5px solid var(--color-grey);
+color: ${theme.colors.darkgrey};
+border: 1.5px solid ${theme.colors.grey};
 border-radius: 0.5rem;
 background-image: url(${props => props.url || null}),
 url("/image/search.svg");
@@ -446,7 +437,7 @@ box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
         color: ${theme.colors.mapgrey};
        }
     }
-      border:2px solid var(--color-lightgreen);
+      border:2px solid ${theme.colors.lightgreen};
       outline:none;
       width:20rem;
       animation: ${transform} 0.8s ease-in-out;
@@ -460,7 +451,7 @@ box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
     animation:none;
   }
   :hover{
-     border:2px solid var(--color-lightgreen);
+     border:2px solid ${theme.colors.lightgreen};
       outline:none;
   }
 `;
@@ -483,7 +474,7 @@ margin-block-end: 0;
 margin-inline-start: 0px;
 margin-inline-end: 0px;
 padding-inline-start: 0px;
-color: ${({theme})=>theme.colors.darkgrey}; 
+color: ${theme.colors.darkgrey};
 top: 80px;
 padding: 0.5rem 0;
 border: none;
@@ -523,7 +514,7 @@ ${theme.device.change}{
 const Card = styled.div`
    height: 14.313rem;
    display:flex;
-   background-color: var(--color-mypagecard);
+   background-color: ${theme.colors.mypagecard};
    border-radius: 0.5rem;
    flex-direction: column;
    align-items:center;
@@ -543,7 +534,6 @@ const CardContent = styled(Card)`
     flex:5;
     >h4{
     color: #5B220A;
-    font-size: var(--font-size-base);
     font-weight: 500;
     }
     >img{
@@ -574,9 +564,8 @@ const CardSns = styled(CardContent)`
    width:96%;
    margin-bottom:5px;
    flex:1.2;
-   /* background-color: white; */
-   color: var(--color-brown);
-   font-size: var(--font-size-sm);
+   color: ${theme.colors.brown};
+   font-size: ${theme.fonts.size.sm};
    flex-direction: row;
    gap:2rem;
    cursor: pointer;
@@ -592,14 +581,14 @@ const CardSns = styled(CardContent)`
 `;
 const GotoCard = styled(Card)`
     justify-content: flex-start;
-    font-size: var(--font-size-lg);
-    color: var(--color-darkgrey);
+    font-size: ${theme.fonts.size.lg};
+    color: ${theme.colors.darkgrey};
     cursor: pointer;
     padding-top:2.2rem;
     gap:1.6rem;
     flex:5;
      >p{
-       color: var(--color-brown);
+       color: ${theme.colors.brown};
        font-weight:900;
      }
      >div{

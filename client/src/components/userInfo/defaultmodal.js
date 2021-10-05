@@ -41,18 +41,18 @@ const ButtonBox = styled.div`
     height: 2.063rem;
     border: none;
     border-radius: 0.6rem;
-    background-color: ${({ theme }) => theme.colors.green};
+    background-color:${theme.colors.green}; 
     color: white;
-    font-size: ${({ theme }) => theme.fonts.base};
-    font-family: var(--font-logo);
-    transition: all 0.3s ease-in-out;
-    :hover {
-      transition: all 0.3s ease-in-out;
-      background-color: white;
-      color: ${({ theme }) => theme.colors.green};
-      border: 1px solid ${({ theme }) => theme.colors.green};
+    font-size: ${theme.fonts.base};
+    font-family: ${theme.fonts.logo};
+    transition: all 0.3s ease-in-out;  
+    :hover{
+      transition: all 0.3s ease-in-out;   
+      background-color:white;
+      color: ${theme.colors.green}; 
+      border: 1px solid ${theme.colors.green}; 
       cursor: pointer;
-    }
+   }
   }
 `;
 

@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import {Buffer} from 'buffer';
 import { TraceSpinner } from "react-spinners-kit";
 import { useHistory } from "react-router-dom";
+import theme from "../../styles/theme";
 
 export default function UserSideBar() {
   const userState = useSelector((state)=> state)
@@ -99,8 +100,8 @@ const Sidebar = styled.div`
  display: flex;
  flex-direction: column;
  margin: 4.188rem 0 4.188rem  2.375rem;
- background-color: var(--color-mypagecard);
- border: 2.5px solid var(--color-lightgreen);
+ background-color: ${theme.colors.mypagecard};
+ border: 2.5px solid ${theme.colors.lightgreen};
  border-radius: 0.6rem;
  align-items: center;
  position: sticky;
@@ -115,7 +116,7 @@ const Container =styled.div`
 `;
 const Top =styled.div`
   height: 15rem;
-  border-bottom: 2px solid var(--color-grey);
+  border-bottom: 2px solid ${theme.colors.grey};
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -142,16 +143,15 @@ const TextBox = styled.div`
     display: flex;
     flex-direction: column;
     text-align: center;
-    color: var(--color-darkgrey);
-    font-style: var(--font-mypage);
-    font-weight: var(--font-weight-bold)
+    color: ${theme.colors.darkgrey};
+    font-weight:${theme.fonts.weight.bold};
 `;
 
 const UserName = styled.p`
     width: inherit;
     height: 100%;
     word-break:break-all;
-    font-size: var(--font-size-lg);
+    font-size: ${theme.fonts.size.lg};
    
 `;
 const UserEmail = styled.p`
@@ -183,8 +183,8 @@ const BottomBox = styled.div`
 const Title = styled.ul`
      width: 100%;
      height: 100%;
-     font-size: var(--font-size-lg);
-     font-weight: var(--font-weight-bold);
+     font-size: ${theme.fonts.size.lg};
+     font-weight:${theme.fonts.weight.bold};
      display: flex;
      flex-direction: column;
      color: #5B220A;
@@ -197,13 +197,12 @@ const Title = styled.ul`
 const Content = styled.li`
      width: 100%;
      height:20px;
-     font-size: var(--font-size-base);
+     font-size: ${theme.fonts.size.base};
      font-weight: 500;
-     color: var(--color-brown);
+     color:  ${theme.colors.brown};
      letter-spacing: 0;
-     /* flex:1; */
      :hover{
-        color:  var(--color-grey);
+      color: ${theme.colors.grey};
      }
 `;
 
