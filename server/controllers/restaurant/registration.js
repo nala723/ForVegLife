@@ -32,6 +32,7 @@ module.exports = async (req, res) => {
             longitude: longitude,
             latitude: latitude,
             address: address,
+            picture_url: "https://t1.daumcdn.net/localimg/localimages/07/2017/pc/bg_nodata.png",
           });
           for (let i = 0; i < category.length; i++) {
             models.vegCategory.create({
@@ -47,7 +48,7 @@ module.exports = async (req, res) => {
               place_id: placeData.id,
             });
           }
-          crawling(placeUrl, placeData);
+          // crawling(placeUrl, placeData);
           res.send({
             placeId: placeData.id,
             message: "successfully registered",
