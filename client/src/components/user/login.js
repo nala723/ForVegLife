@@ -15,6 +15,7 @@ export default function Login(props) {
   let googleState = useSelector((state) => state.googleReducer);
   const history = useHistory();
   const size = useRef();
+  const errorHandling = document.querySelector("#errorHandling");
   useEffect(() => {
     gsap.to(size.current, { scale: 1, duration: 0.5, ease: "back" });
   });
@@ -51,14 +52,15 @@ export default function Login(props) {
         props.exit();
       })
       .catch((err) => {
-        return err;
+        errorHandling.innerHTML =
+          "<div style='color:red'>이메일이나 비밀번호가 잘못 되었습니다</div>";
       });
   };
   const responseGoogle = (res) => {
     const email = res.profileObj.email;
     const nickName = res.profileObj.name;
     const profileblob = res.profileObj.imageUrl;
-    console.log(res);
+
     axios
       .post(`${process.env.REACT_APP_SERVER_URL}/google/signin`, {
         email,
@@ -108,7 +110,7 @@ export default function Login(props) {
             onChange={handleChange}
           />
           <LoginButton type="submit">로그인</LoginButton>
-          <Message>아직 회원이 아니신가요? 회원가입</Message>
+          <Message id="errorHandling">아직 회원이 아니신가요? 회원가입</Message>
         </InputBox>
         <StyledGoogle
           clientId={process.env.REACT_APP_GOOGLE_OAUTH_ID}

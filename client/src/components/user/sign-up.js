@@ -77,6 +77,9 @@ export default function SignUp(props) {
             profileblob: res.data.profileblob,
           })
         );
+      })
+      .catch((err) => {
+    
       });
   };
   const handleChange = (e) => {
@@ -92,16 +95,23 @@ export default function SignUp(props) {
       isVerify === true &&
       user.nickName !== undefined
     ) {
-      onCreate(user);
-      setUser({
-        email: "",
-        verifyEmail: "",
-        password: "",
-        rePassword: "",
-        nickName: "",
-      });
-      setIsVerify(false);
-      props.exit();
+      let code = onCreate(user);
+      if (code === "409") {
+        setMessage("이미 등록되어 있는 이메일입니다");
+      }
+      if (code === "500") {
+        setMessage("서버 오류 입니다");
+      } else {
+        setUser({
+          email: "",
+          verifyEmail: "",
+          password: "",
+          rePassword: "",
+          nickName: "",
+        });
+        setIsVerify(false);
+        props.exit();
+      }
     } else {
       setMessage("비번이나 이메일 인증을 확인해주세요");
     }
@@ -147,7 +157,13 @@ export default function SignUp(props) {
               </EmailButton>
             </Align>
             <Message>
-              {isSend && !isVerify ? "이메일 인증 코드가 발송되었습니다." : ""}
+              {isSend && !isVerify ? (
+                <div style={{ color: `${theme.colors.green}` }}>
+                  이메일 인증 코드가 발송되었습니다.
+                </div>
+              ) : (
+                ""
+              )}
             </Message>
           </EmailIcon>
           <EmailIcon>
@@ -166,11 +182,15 @@ export default function SignUp(props) {
               </VerifyButton>
             </Align>
             <Message>
-              {isVerify
-                ? "인증 되었습니다"
-                : isSend && user.verifyEmail
-                ? "인증 되지 않았습니다"
-                : ""}
+              {isVerify ? (
+                <div style={{ color: `${theme.colors.green}` }}>
+                  인증되었습니다
+                </div>
+              ) : isSend && user.verifyEmail ? (
+                "인증 되지 않았습니다"
+              ) : (
+                ""
+              )}
             </Message>
           </EmailIcon>
           <Repassword>
@@ -181,7 +201,13 @@ export default function SignUp(props) {
               placeholder="password"
               onChange={handleChange}
             />
-            <Message>{chkPW(user.password)}</Message>
+            <Message>
+              {chkPW(user.password) === "통과" ? (
+                <div style={{ color: `${theme.colors.green}` }}>통과</div>
+              ) : (
+                chkPW(user.password)
+              )}
+            </Message>
           </Repassword>
           <Repassword>
             <RepasswordInput
@@ -192,11 +218,17 @@ export default function SignUp(props) {
               onChange={handleChange}
             />
             <Message>
-              {user.repassword !== "" && user.password
-                ? user.password === user.rePassword
-                  ? "비밀번호가 일치합니다"
-                  : "비밀번호가 일치 하지 않습니다"
-                : ""}
+              {user.repassword !== "" && user.password ? (
+                user.password === user.rePassword ? (
+                  <div style={{ color: `${theme.colors.green}` }}>
+                    비밀번호가 일치합니다.
+                  </div>
+                ) : (
+                  "비밀번호가 일치 하지 않습니다"
+                )
+              ) : (
+                ""
+              )}
             </Message>
           </Repassword>
           <Message>{message}</Message>
