@@ -171,9 +171,8 @@ ${theme.device.mobile}{
     width:100%;
     padding-top: 2.4rem;
     padding-bottom:8rem;
-    font-size: var(--font-size-xl);
-    font-style: var(--font-mypage);
-    color: var(--color-darkgrey);
+    font-size: ${theme.fonts.size.xl};
+    color: ${theme.colors.darkgrey};
 `; 
 const Bottom = styled.div`
 ${theme.device.change}{
@@ -235,7 +234,6 @@ ${theme.device.mobile}{
  }
     height: 50px;
     gap:0;
-    font-family: var(--font-mypage);
     color: ${({theme})=>theme.colors.darkgrey};
     font-weight: 500;
 `; 
@@ -267,8 +265,7 @@ ${theme.device.mobileM}{
    display:flex;
    flex-direction:column;
    align-items: center; 
-   color: ${({theme})=>theme.colors.darkgrey};
-   font-family: var(--font-mypage);
+   color: ${theme.colors.darkgrey};
     & p.checkq{
        margin-bottom: 1rem;
        font-weight: 500;
@@ -377,16 +374,16 @@ ${theme.device.mobileM}{
        height: 2.063rem;
        border: none;
        border-radius:0.6rem;
-       background-color:${({theme})=>theme.colors.green}; 
+       background-color:${theme.colors.green};  
        color: white;
-       font-size: ${({theme})=>theme.fonts.base};
-       font-family: var(--font-logo);
+       font-size: ${theme.fonts.base};
+       font-family: ${theme.fonts.logo};
        transition: all 0.3s ease-in-out;  
        :hover{
         transition: all 0.3s ease-in-out;   
         background-color:white;
-        color: ${({theme})=>theme.colors.green}; 
-        border: 1px solid ${({theme})=>theme.colors.green}; 
+        color: ${theme.colors.green}; 
+        border: 1px solid ${theme.colors.green};  
         cursor: pointer;
        }
    }

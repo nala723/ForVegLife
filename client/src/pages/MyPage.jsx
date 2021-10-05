@@ -93,7 +93,7 @@ ${theme.device.mobile}{
    content:"";
    display:block;
    height:0.938rem;
-   background: var(--color-lightgreen);
+   background: ${theme.colors.lightgreen};
    border-radius: 1rem;
  }
 `;

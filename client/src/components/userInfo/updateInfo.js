@@ -79,21 +79,19 @@ export default function UpdateInfo() {
                  }
                 else{
                    dispatch(userInfo({nickName :res.data.nickname,vegType :res.data.vegType,profileblob:res.data.profileblob, email:res.data.email}))
-                 // 상태전달 
                 }
              }
              else{
                   history.push('/notfound');
              }
              setLoading(false) 
-             console.log(res)
          })
          .catch(err => {
                 console.log(err)
         })
     }
     
-    // // 프로필 이미지 설정
+    //프로필 이미지 설정
    
     let profileIMG;
     if (profileblob === null || Object.keys(profileblob).length === 0) {
@@ -143,13 +141,11 @@ export default function UpdateInfo() {
    // 카메라아이콘 커스텀
     const handlePhotoClick = (e) => {
         e.preventDefault();
-        console.log('포토클릭',currentInput)
         photoInput.current.click();
     }
     // 인풋창
     const handleInputValue = useCallback((key) => (e) => {
         setCurrentInput({ ...currentInput, [key]:e.target.value})
-        console.log('인풋잘되나',inValidEditMSG)
     },[currentInput])
 
 
@@ -209,9 +205,9 @@ export default function UpdateInfo() {
         return 
     }
 
-    //회원정보 수정 - 추후 퀄리티 업
+    //회원정보 수정
 
-    const onSubmitHandler = async (e) => { //현재 안먹힘
+    const onSubmitHandler = async (e) => { 
         e.preventDefault();
         if(googleToken){
             handleBack(e)
@@ -234,7 +230,7 @@ export default function UpdateInfo() {
 
         let imgforaxios;
         
-        const file = currentInput.imgFile;  //이미지 선택안했을시 분기
+        const file = currentInput.imgFile; 
         const blobURL = URL.createObjectURL(file);
         const img = new Image();
         img.src = blobURL;
@@ -270,11 +266,8 @@ export default function UpdateInfo() {
                                 }
                             if(res.status === 200){
                                 dispatch(userUpdateInfo({vegType: currentInput.inputVegtype,profileblob: currentInput.imgFile}))
-                                    
-                                   // 그다음은 얻은 상태정보들을 전달
-                                    // 모달 오픈 위한 콜
-                                     setIsChanged(true);
-                                     handleClick();
+                                 setIsChanged(true);
+                                 handleClick();
                              }
                              else{
                                  history.push('/notfound');
@@ -318,7 +311,6 @@ export default function UpdateInfo() {
             veggieIcon.filter(icon=>
             icon.name=== name)
             [0].name
-            console.log('아이콘선택',iconname)
         setCurrentInput({
             ...currentInput,
             inputVegtype: iconname}); 
@@ -329,11 +321,10 @@ export default function UpdateInfo() {
     
    // 구글유저 아웃     
      const handleBack = () => {
-        // e.preventDefault()
           if(googleToken){
           setIsOpen(!isOpen)
            if(isOpen === true){
-           history.push('/mypage'); // 후에 마이페이지로 수정 
+           history.push('/mypage'); 
          }
          
       } 
@@ -455,7 +446,6 @@ export default function UpdateInfo() {
 const Title = styled.div`
  ${theme.device.change}{
   padding-top: 1.4rem;
-  /* padding-bottom:7rem; */
 }
 ${theme.device.mobile}{
   font-size: 22px;
@@ -467,9 +457,8 @@ ${theme.device.mobile}{
     width:100%;
     padding-top: 2.4rem;
     padding-bottom:8rem;
-    font-size: var(--font-size-xl);
-    font-style: var(--font-mypage);
-    color: var(--color-darkgrey);
+    font-size: ${theme.fonts.size.xl};
+    color: ${theme.colors.darkgrey};
     height:2rem;
 `; 
 const Bottom = styled.div`
@@ -632,8 +621,8 @@ const UserContent = styled(UserNm)`
         }
       }
        font-size:14px;
-        color: ${({theme})=>theme.colors.mapgrey}; 
-        font-family: var(--font-button);
+        color: ${theme.colors.mapgrey}; 
+        font-family: ${theme.fonts.button}; 
         font-weight: 600;
     }
 
@@ -649,7 +638,7 @@ ${theme.device.mobile}{
    width:inherit;
     height: 100%;
     align-items: center;
-    background-color:  ${({theme})=>theme.colors.mypagecard}; 
+    background-color:  ${theme.colors.mypagecard}; 
     border-radius:1rem;
 `; 
 
@@ -657,6 +646,7 @@ const UserBotBox = styled(UserTop)`
 ${theme.device.mobile}{
     padding: 2rem 1.5rem;
     height:9rem;
+    max-height:9rem;
     position:static;
     gap:0.5rem;
 }
@@ -700,7 +690,6 @@ const PwContainer = styled.input.attrs(props=>({
       font-size:${({theme})=>theme.fonts.size.sm}; 
   }
   :focus {
-     /* outline:2px solid #d50000; input박스 클릭시 나오는 테두리 색 변경*/
       outline:none;
   }
 `;
@@ -809,17 +798,17 @@ ${theme.device.mobileM}{
        height: 2.063rem;
        border: none;
        border-radius:0.6rem;
-       background-color:${({theme})=>theme.colors.green}; 
+       background-color:${theme.colors.green}; 
        color: white;
-       font-size: ${({theme})=>theme.fonts.base};
-       font-family: var(--font-logo);
+       font-size: ${theme.fonts.base};
+       font-family: ${theme.fonts.logo};
        transition: all 0.3s ease-in-out;  
        :hover{
-        transition: all 0.3s ease-in-out;   
-        background-color:white;
-        color: ${({theme})=>theme.colors.green}; 
-        border: 1px solid ${({theme})=>theme.colors.green}; 
-        cursor: pointer;
+         transition: all 0.3s ease-in-out;   
+         background-color:white;
+         color: ${theme.colors.green}; 
+         border: 1px solid ${theme.colors.green}; 
+         cursor: pointer;
        }
    }
 `;

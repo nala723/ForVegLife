@@ -9,7 +9,6 @@ import {
   getgoogleToken,
 } from "../../actions";
 import axios from "axios";
-import { dummydatas } from "./dummydatas";
 import theme from "../../styles/theme";
 import { keyframes } from "styled-components";
 import { TraceSpinner } from "react-spinners-kit";
@@ -22,31 +21,21 @@ export default function Favorite() {
   const myfavState = useSelector((state) => state.myPlaceReducer);
   const userState = useSelector((state) => state.userReducer);
   const googleState = useSelector((state) => state.googleReducer);
-  const { googleToken } = googleState;
-  // const placeId = myfavState.placeId;
-  const accessToken = userState.accessToken;
-  const dummyplace = dummydatas.favorites; //더미용
-  const dummyAdress = dummyplace.map((el) => el.address);
-  let PlaceState =
-    myfavState.myFavPlaces.length !== 0 ? myfavState.myFavPlaces : [];
-  let PlaceAdress =
-    PlaceState !== undefined ? PlaceState.map((el) => el.address) : [];
   const [hasText, setHasText] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const [options, setOptions] = useState(PlaceAdress); // 즐찾 없는 유저도 있을수 있으므로 초기값
-  const [places, setPlaces] = useState(PlaceState);
+  const [places, setPlaces] = useState(myfavState.myFavPlaces);
+  const [options, setOptions] = useState(places.map(el => el.address)); 
   const [selected, setSelected] = useState(-1);
   const [isActive, setIsActive] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [recommend, setRecommend] = useState(dummydatas.favorites.slice(0,4)); // 추후수정
-  const { nickName } = userState;
+  const [recommend, setRecommend] = useState([]);
+  const { nickName,accessToken } = userState;
+  const { googleToken } = googleState;
  
   //최초렌더링시-
   useEffect(() => {
     getRecommendation()
-    // getFavList();
   }, []);
-  console.log(myfavState, myfavState.myFavPlaces, "되라"); //아무것도 저장 안했을시 처리
 
   // 검색창 텍스트 유무확인
   useEffect(() => {
@@ -77,7 +66,6 @@ export default function Favorite() {
   }, ["https://developers.kakao.com/sdk/js/kakao.min.js"]);
 
   // 추천 식당 받기
-
   const getRecommendation = () => {
     setLoading(true);
     axios
@@ -99,7 +87,7 @@ export default function Favorite() {
         if (res.status === 200) {
           if (res.data) {
             let recommendAr = res.data;
-            setRecommend(recommendAr); //--상태값 알아서 변경되는지 확인
+            setRecommend(recommendAr); 
             getFavList();
           }
         } else {
@@ -113,7 +101,6 @@ export default function Favorite() {
   };
 
   // 유저가 즐찾한 것 목록 받아오기
-
   const getFavList = () => {
     setLoading(true);
     axios
@@ -133,8 +120,10 @@ export default function Favorite() {
           }
         }
         if (res.status === 200) {
-            dispatch(getmyfavorite(res.data.place));
-            setPlaces(res.data.place);
+            let places = res.data.place
+            dispatch(getmyfavorite(places));
+            setPlaces(places);
+            setOptions(places.map(el => el.address))
         } else {
           history.push("/notfound");
         }
@@ -170,11 +159,9 @@ export default function Favorite() {
           }
         }
         if (res.status === 200) {
-          //갖고 있는 상태의 장소의 이름과 일치하는 것- 의 placeId
           let id = places.filter((el) => el.place_id === place_id)[0];
-          dispatch(deletemyfavorite(id)); // 추후 보고 수정 객체형으로?
-          getFavList(); // 다시 렌더링 호출
-          window.location.href = window.location.href;
+          dispatch(deletemyfavorite(id));
+          getFavList();
         } else {
           history.push("/notfound");
         }
@@ -187,11 +174,8 @@ export default function Favorite() {
 
   // 모두 조회 버튼
   const handleAllview = () => {
-    setLoading(true);
-    setPlaces(PlaceState); // 실제구현
-    //  setPlaces(dummyplace);  //임시 더미
+    getFavList();
     setInputValue("");
-    setLoading(false);
   };
 
   // 다른 곳 클릭시 검색창 없어지게
@@ -214,34 +198,24 @@ export default function Favorite() {
 
     // dropdown을 위한 기능
     const filterRegex = new RegExp(value, "i");
-
+    
     let resultOptions;
-    if (PlaceAdress) {
-      resultOptions = PlaceAdress.filter((option) => option.match(filterRegex));
-    } // 실제구현
-
-    // const resultOptions = dummyAdress.filter((option) =>
-    //   option.match(filterRegex)
-    // );                                     // 임시더미
+    let PlaceAdress = myfavState.myFavPlaces.map(el => el.address)
+    resultOptions = PlaceAdress.filter((option) => option.match(filterRegex));
+    
     setOptions(resultOptions);
-  };
+
+  }
 
   const handleDropDownClick = (clickedOption) => {
     setInputValue(clickedOption);
+    
     let resultOptions;
-
-    // 실제구현
-    if (PlaceAdress) {
-      resultOptions = PlaceAdress.filter((option) => option === clickedOption);
-    }
-
-    // 임시더미 *
-    // resultOptions  = dummyAdress.filter(
-    //   (option) => option === clickedOption
-    // );
+    let PlaceAdress = myfavState.myFavPlaces.map(el => el.address)
+    resultOptions = PlaceAdress.filter((option) => option === clickedOption);
+    
     setOptions(resultOptions);
-    const dum = PlaceState.filter((dum) => dum.address === clickedOption); // 검색하고 선택한 결과 조회
-    // const dum = dummyplace.filter(dum=> dum.address === clickedOption)  //  임시더미 *
+    const dum = myfavState.myFavPlaces.filter((dum) => dum.address === clickedOption); // 검색하고 선택한 결과 조회
     setPlaces(dum);
     setIsActive(true);
   };
@@ -283,13 +257,11 @@ export default function Favorite() {
   };
 
   // sns 공유 핸들러
-
   const shareKakao = (el) => {
     if (window.Kakao) {
       const Kakao = window.Kakao;
-      // 중복 initialization 방지
+
       if (!Kakao.isInitialized()) {
-        // 두번째 step 에서 가져온 javascript key 를 이용하여 initialize
         Kakao.init(process.env.REACT_APP_JAVASCRIPT_KEY);
         console.log(Kakao.isInitialized());
       }
@@ -299,7 +271,6 @@ export default function Favorite() {
       }else if(el.placeId){
         placeId = el.placeId
       }
-      console.log("카카오되라",el);
       Kakao.Link.sendDefault({
         objectType: 'location',
         address: `${el.title}`,
@@ -338,8 +309,8 @@ export default function Favorite() {
     }else if(el.placeId){
       placeId = el.placeId
     }
-    let sendText = el.title; // 전달할 텍스트
-    let sendUrl = `https://forveglife.ml/restaurant/${placeId}`; // 전달할 URL
+    let sendText = el.title;
+    let sendUrl = `https://forveglife.ml/restaurant/${placeId}`; 
     window.open(
       "https://twitter.com/intent/tweet?text=" + sendText + "&url=" + sendUrl
     );
@@ -352,11 +323,9 @@ export default function Favorite() {
     }else if(el.placeId){
       placeId = el.placeId
     }
-    let sendUrl = `https://forveglife.ml/restaurant/${placeId}`; // 전달할 URL
+    let sendUrl = `https://forveglife.ml/restaurant/${placeId}`;
     window.open("http://www.facebook.com/sharer/sharer.php?u=" + sendUrl);
   };
-
-  // 아직 아무장소도 등록하지 않았을 때, 핫플레이스(추천) 몇개 배치해둘 수도 있겠음.
 
   if (loading) {
     return (
@@ -515,8 +484,8 @@ ${theme.device.mobile}{
   width: 100%;
   padding-top: 2.4rem;
   padding-bottom: 3rem;
-  font-size: var(--font-size-xl);
-  color: var(--color-darkgrey);
+  font-size: ${theme.fonts.size.xl};
+  color: ${theme.colors.darkgrey};
 `;
 const Bottom = styled.div`
 ${theme.device.change}{
@@ -603,8 +572,8 @@ ${theme.device.mobile}{
   text-indent: 0.5rem;
   width: 10rem;
   height: 2.563rem;
-  color: ${({ theme }) => theme.colors.darkgrey};
-  border: 1.5px solid var(--color-grey);
+  color: ${theme.colors.darkgrey};
+  border: 1.5px solid ${theme.colors.grey};
   border-radius: 0.5rem;
   background-image: url("/image/search.svg");
   background-repeat: no-repeat;
@@ -620,7 +589,7 @@ ${theme.device.mobile}{
         color: ${theme.colors.mapgrey};
        }
     }
-    border: 2px solid var(--color-lightgreen);
+    border: 2px solid ${theme.colors.lightgreen};
     outline: none;
     width: 32.063rem;
     animation: ${transform('10rem','9rem','32.063rem')} 0.8s ease-in-out;
@@ -635,7 +604,7 @@ ${theme.device.mobile}{
     animation: none;
   }
   :hover {
-    border: 2px solid var(--color-lightgreen);
+    border: 2px solid ${theme.colors.lightgreen};
     outline: none;
   }
 `;
@@ -658,7 +627,7 @@ const DropDownContainer = styled.ul`
   margin-inline-start: 0px;
   margin-inline-end: 0px;
   padding-inline-start: 0px;
-  color: ${({ theme }) => theme.colors.darkgrey};
+  color: ${theme.colors.darkgrey};
   top: 80px;
   padding: 0.5rem 0;
   border: none;
@@ -696,7 +665,7 @@ ${theme.device.change}{
 `;
 const Card = styled.div`
   display: flex;
-  background-color: var(--color-mypagecard);
+  background-color: ${theme.colors.mypagecard};
   border-radius: 0.5rem;
   flex-direction: column;
   align-items: center;
@@ -785,12 +754,12 @@ ${theme.device.mobile}{
   flex: 3;
   > h4 {
     color: #5b220a;
-    font-size: var(--font-size-base);
+    font-size: ${theme.fonts.size.base};
     font-weight: 500;
   }
   > p {
-    color: var(--color-mapgrey);
-    font-size: var(--font-size-sm);
+    color: ${theme.colors.mapgrey};
+    font-size: ${theme.fonts.size.sm};
   }
   :hover {
     box-shadow: none;
@@ -815,8 +784,8 @@ ${theme.device.mobile}{
   width: 96%;
   margin-bottom: 5px;
   flex: 1.2;
-  color: var(--color-brown);
-  font-size: var(--font-size-sm);
+  color: ${theme.colors.brown};
+  font-size: ${theme.fonts.size.sm};
   flex-direction: row;
   gap: 2rem;
   cursor: pointer;
@@ -833,8 +802,8 @@ ${theme.device.mobile}{
 const GotoCard = styled(Card)`
   justify-content: center;
   gap: 5px;
-  font-size: var(--font-size-lg);
-  color: var(--color-darkgrey);
+  font-size: ${theme.fonts.size.lg};
+  color: ${theme.colors.darkgrey};
   cursor: pointer;
 `;
 
