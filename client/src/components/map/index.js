@@ -131,7 +131,6 @@ export default function MapIndex({ data, latlng }) {
 
     window.setTimeout(handleTime, 1000);
   }, []);
- 
   const handleOpenTuto = (boolean) => {
     setIsOpen(!isOpen)
     if ( tutorial) {

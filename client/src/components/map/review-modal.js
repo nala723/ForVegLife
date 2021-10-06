@@ -71,7 +71,7 @@ export default function ReviewModal(props) {
     <Temp>
       <ReviewModalForm ref={size} onSubmit={handleSubmit}>
         <Exit onClick={() => props.exit()}>
-          <FontAwesomeIcon color={"green"} icon={faTimes} />
+          <FontAwesomeIcon color="#7CB700" icon={faTimes} />
         </Exit>
         <ReviewTitle>
           <Message>후기작성</Message>
@@ -96,7 +96,7 @@ function DrawStar({ star }) {
   if (star === 1) {
     return <FontAwesomeIcon color="#7CB700" icon={fullStar}></FontAwesomeIcon>;
   }
-  return <FontAwesomeIcon icon={EmptyStar}></FontAwesomeIcon>;
+  return <FontAwesomeIcon color="#7CB700" icon={EmptyStar}></FontAwesomeIcon>;
 }
 const Temp = styled.div`
   background-color: rgba(0, 0, 0, 0.4);
@@ -115,57 +115,101 @@ const Exit = styled.div`
   top: 1rem;
   right: 1rem;
   font-size: 1rem;
+  cursor: pointer;
 `;
 const ReviewTitle = styled.div`
-  width: 80%;
+ ${theme.device.mobile} {
+   font-size:${theme.fonts.size.lg};
+  }
+   width: 76%;
+   margin-top:1.4rem;
   color: ${theme.colors.brown};
-  font-size: 1.6rem;
+  font-size:22px;
   text-align: center;
-  border-bottom: 0.1rem solid black;
+  font-weight: 700;
+  border-bottom: 0.15rem solid ${theme.colors.lightgrey};
+  :focus {
+      outline:none;
+  }
 `;
+
 const Message = styled.div`
   display: flex;
   justify-content: center;
-  margin: 1rem;
+  margin: 0.5rem;
 `;
 const ReviewStar = styled.div`
-  width: 80%;
+ ${theme.device.mobile} {
+  font-size: 1.8rem;
+  gap:0.6rem;
+  }
+  ${theme.device.mobileM} {
+  font-size: 1.7rem;
+  gap:0.3rem;
+  }
+ 
+  width: 76%;
   display: flex;
   justify-content: center;
   font-size: 2rem;
+  gap:0.5rem;
   color: ${theme.colors.green};
+  cursor: pointer;
 `;
 const ReviewModalForm = styled.form`
   ${theme.device.mobile} {
-    width: 21rem;
-    height: 18rem;
-  }
-  ${theme.device.mobileS} {
-    width: 15rem;
-    height: 15rem;
+    max-width: 25rem;
+    max-height: 17.625rem;
+    gap:0.7rem;
+    width:90vw;
   }
   position: absolute;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-around;
-  width: 27vw;
-  height: 21vw;
+  gap:1rem;
+  width: 27.563rem;
+  height: 19.625rem;
   background-color: white;
-  border-radius: 1rem;
+  border-radius: 10px;
   transform: scale(0);
 `;
 
 const ReviewContent = styled.textarea`
+  ${theme.device.mobile} {
+    height: 6.8rem;
+  }
   width: 80%;
-  height: 6rem;
+  height:7.25rem;
   resize: none;
+  border: 0.15rem solid #C7B7B0;
+  border-radius: 6px;
   color: ${theme.colors.mapgrey};
 `;
 const ReviewSubmit = styled.input`
-  background-color: #76be00;
-  color: white;
-  width: 20%;
+  ${theme.device.mobile} {
+  max-width: 6.5rem;
   height: 2rem;
+  font-size:13px;
+  }
+  ${theme.device.mobileM} {
+   width:6rem;
+  }
+  background-color: ${theme.colors.green}; 
+  color: white;
+  width: 7.188rem;
+  height: 2.1rem;
+  border-radius:6px;
   border: none;
+  cursor: pointer;
+  font-size:15px;
+  font-family: ${theme.fonts.logo};
+  transition: all 0.3s ease-in-out; 
+       :hover{
+         transition: all 0.3s ease-in-out;   
+         background-color:white;
+         color: ${theme.colors.green}; 
+         border: 1px solid ${theme.colors.green}; 
+         cursor: pointer;
+       }
 `;

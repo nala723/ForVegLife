@@ -51,10 +51,9 @@ export default function Tutorial() {
               </ IconBox >
           </TopBox>
           <MiddleBox>
-              <MarkerTwo data-tip data-for='4' className={Order===4 && 'active'} src="/image/marker.svg" onClick={(e)=>handleStep(e)}/>
+              <MarkerTwo data-tip data-for='4' className={Order===4 && 'active'} src="/image/selectMarker.svg" onClick={(e)=>handleStep(e)}/>
               <Marker data-tip data-for='1' className={Order===1 && 'active'} src="/image/marker.svg" onClick={(e)=>handleStep(e)}/>
               <SubmitMdr data-tip data-for='6' className={Order===6 && 'active'} src="/image/장소등록모달.svg" onClick={(e)=>handleStep(e)}/>
-              <ReviewMd src="/image/후기모달.svg" />
           </MiddleBox>
           <BarBox >
               <Sidebar data-tip data-for='2' className={Order===2 && 'active'} src="/image/sidebar.svg" onClick={(e)=>handleStep(e)}/> 
@@ -284,18 +283,14 @@ const Marker = styled.img`
  `;
 
 const MarkerTwo = styled(Marker)`
+   bottom:23.6rem;
+   left:46.6rem;
 `;
 
-const ReviewMd = styled.img`
- position: absolute;
-opacity: 0;
-
-
-`;
 
 const SubmitMdr = styled.img`
 opacity: 0;
-transform: translate(0%,25%);
+transform: translate(0%,15%);
 &.active{
       opacity:1;
       cursor:pointer;
@@ -314,7 +309,7 @@ justify-content: space-between;
 
 const Sidebar = styled.img`
 position: relative;
-top:-490px; 
+top:-580px; 
 opacity: 0;
 &.active{
       opacity:1;

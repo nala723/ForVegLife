@@ -75,6 +75,7 @@ export default function PlaceInfo({ user }) {
 
 const Title = styled.div`
   margin: 0 1rem 1rem 0;
+  font-weight: 700;
   color: ${theme.colors.mapgrey};
 `;
 const Temp = styled.div`

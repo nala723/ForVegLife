@@ -67,8 +67,6 @@ export default function SignOut() {
              else{
                   history.push('/notfound');
              }
-            //  setIsLoding(false) 
-        console.log(res,userwithDraw,email)
 
          })
          .catch(err => {

@@ -76,15 +76,15 @@ export default function MenuInfo({ place, menu, price, like, src, setFav }) {
         <Name style>{place}</Name>
         {user.isLogin ? (
           favirote ? (
-            <FontAwesomeIcon
+            <FullHeart
               onClick={onDisLike}
               icon={fullHeart}
-            ></FontAwesomeIcon>
+            ></FullHeart>
           ) : (
-            <FontAwesomeIcon
+            <EmptyHt
               onClick={onLike}
               icon={EmptyHeart}
-            ></FontAwesomeIcon>
+            ></EmptyHt>
           )
         ) : (
           ""
@@ -111,7 +111,7 @@ const Temp = styled.div`
   flex-direction: column;
   width: 80%;
   margin: 1rem;
-  border-bottom: 0.1rem solid rgba(187, 187, 187, 0.5); ;
+  border-bottom: 0.1rem solid rgba(187, 187, 187, 0.5);
 `;
 const Placename = styled.div`
   display: flex;
@@ -141,8 +141,18 @@ const MenuPrice = styled.div`
   display: flex;
   justify-content: space-between;
   margin: 0.2rem;
-  font-weight: 100;
-  color: ${theme.colors.mapgrey};
+  font-weight: 400;
+  color: #999090;
 `;
 const Menu = styled.div``;
 const Price = styled.div``;
+
+const FullHeart = styled(FontAwesomeIcon)`
+  color: ${theme.colors.green};
+  cursor: pointer;
+`;
+
+const EmptyHt = styled(FontAwesomeIcon)`
+ color: ${theme.colors.brown};
+ cursor: pointer;
+`;

@@ -37,10 +37,18 @@ const ButtonBox = styled.div`
   justify-content: center;
   align-items: center;
   > button {
+    ${theme.device.mobile}{
+    width:6rem;
+  } 
+    ${theme.device.mobileM}{
+      font-size:14px;
+      width:5.5rem;
+      height:2rem;
+  }
     width: 7.375rem;
     height: 2.063rem;
     border: none;
-    border-radius: 0.6rem;
+    border-radius: 6px;
     background-color:${theme.colors.green}; 
     color: white;
     font-size: ${theme.fonts.base};
@@ -90,43 +98,64 @@ const Background = styled.div`
 `;
 
 const ModalSection = styled.div`
+ ${theme.device.middle}{
+   max-width:27.563rem;
+   max-height: 18.5rem;
+   width:90vw;
+ }
   position: relative;
   background-color: white;
   width: 27.563rem;
   height: 18.5rem;
-  border-radius: 0.3rem;
+  border-radius: 10px;
   box-shadow: 0 0 2.5rem rgba(0, 0, 0, 0.3);
   transform: translate(-50%, -50%);
   max-width: 500px;
   transform: scale(0);
-  /* transition: all 0.3s ease-in-out; */
   animation: ${Modalshow} 0.3s ease-out;
   font-family: ${theme.fonts.family.mypage};
   &.active {
     transform: scale(1);
-    /* transition: all 0.3s ease-in-out; */
     animation: ${Modalshow} 0.3s ease-out;
     z-index:999;
   }
 `;
 const ModalTitle = styled.div`
+  ${theme.device.mobile}{
+      max-height: 8rem;
+     }
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   gap: 0.3rem;
   padding-top: 1.25rem;
-  /* transform: translate(10%, 50%); */
   font-size: 20px;
   color: ${theme.colors.green};
   font-weight: ${theme.fonts.weight.bold};
+  >img{
+    ${theme.device.mobile}{
+      width:11rem;
+     }
+    ${theme.device.mobileM}{
+      width:10rem;
+    }
+  }
   > div {
+    ${theme.device.mobile}{
+      max-width: 18.5rem;
+      width:75%;
+    } 
     width: 18.5rem;
     border-bottom: 1px solid ${theme.colors.lightgrey};
     margin-bottom: 2.5rem;
   }
 `;
 const Content = styled.div`
+${theme.device.mobileM}{
+  padding: 0 1rem;
+  padding-top: 1.6rem;
+ }
   display: flex;
   justify-content: center;
   align-items: center;

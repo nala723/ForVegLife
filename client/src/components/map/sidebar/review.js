@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar as fullStar, faTimes } from "@fortawesome/free-solid-svg-icons";
-import { faStar as EmptyStar } from "@fortawesome/free-regular-svg-icons";
+import { faStar as fullStar} from "@fortawesome/free-solid-svg-icons";
+import { faStar as EmptyStar,faTrashAlt } from "@fortawesome/free-regular-svg-icons";
 import theme from "../../../styles/theme";
 import { useSelector } from "react-redux";
 import axios from "axios";
@@ -73,16 +73,15 @@ export default function Review({ review, inReview, setDelete }) {
                       </ReviewAt>
                     </Review_1>
                     <Review_2>
-                      <ReviewNickname>{x.nickName}</ReviewNickname>
                       <ReviewContent>{x.content}</ReviewContent>
+                      <DeleteReview onClick={() => DelReview(x.reviewId)}>
+                        <StyledDelete
+                          color="#999090"
+                          icon={faTrashAlt}
+                        ></StyledDelete>
+                      </DeleteReview>
                     </Review_2>
                   </ReviewData>
-                  <DeleteReview onClick={() => DelReview(x.reviewId)}>
-                    <FontAwesomeIcon
-                      color="#7CB700"
-                      icon={faTimes}
-                    ></FontAwesomeIcon>
-                  </DeleteReview>
                 </ReviewContainer>
               );
             })
@@ -102,7 +101,7 @@ function DrawStar({ star }) {
   if (star === 1) {
     return <FontAwesomeIcon color="#7CB700" icon={fullStar}></FontAwesomeIcon>;
   }
-  return <FontAwesomeIcon icon={EmptyStar}></FontAwesomeIcon>;
+  return <FontAwesomeIcon color='#BBBBBB' icon={EmptyStar}></FontAwesomeIcon>;
 }
 const Temp = styled.div`
   display: flex;
@@ -118,12 +117,19 @@ const ReviewContainer = styled.div`
 const Title = styled.div`
   margin: 0 1rem 1rem 0;
   font-size: 1rem;
+  font-weight: 700;
   color: ${theme.colors.mapgrey};
 `;
 const GoReview = styled.div`
   align-self: flex-end;
   margin: 0 0 1rem 0;
+  background-color: #F7F9BA;
+  font-size:14px;
   color: ${theme.colors.logoText};
+  cursor: pointer;
+   :hover{
+    color: ${theme.colors.grey};
+   }
 `;
 const Avearge = styled.div`
   display: flex;
@@ -134,54 +140,63 @@ const Avearge = styled.div`
 const Score = styled.div`
   margin: 0 1rem 1rem 0;
   font-size: 1.2rem;
+  font-weight:500;
+  color:${theme.colors.mapgrey};
 `;
 const ReviewForm = styled.div`
   display: flex;
   flex-direction: column;
 `;
 const ReviewData = styled.div`
-  width: 80%;
+  width: 1000%;
   margin: 1rem 0 0 0;
 `;
 const Review_1 = styled.div`
   display: flex;
+  width:100%;
   justify-content: space-between;
   margin-bottom: 1rem;
+  font-weight:700;
 `;
 const Review_2 = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  margin-bottom: 1rem;
+  margin-bottom: 0.6rem;
   height: 3.2rem;
+  gap:1rem;
+  font-weight:500;
 `;
 const DeleteReview = styled.div`
-  width: 20%;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  cursor:pointer;
+`;
+const StyledDelete = styled(FontAwesomeIcon)`
+  :hover{
+    color: ${theme.colors.grey};
+   }
 `;
 const ReviewStar = styled.div`
   font-size: 0.7rem;
   color: ${theme.colors.mapgrey};
 `;
-const ReviewAt = styled.div``;
-const ReviewNickname = styled.div`
-  width: 30%;
-  font-size: 0.8rem;
-  color: ${theme.colors.darkgrey};
+const ReviewAt = styled.div`
+ color:${theme.colors.grey};
+ font-size:12px;
 `;
+
 const ReviewContent = styled.div`
-  width: 70%;
-  font-size: 0.6rem;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  color: ${theme.colors.mapgrey};
+  color: #999090;
+  font-size: 12px;
 `;
 const More = styled.div`
   text-align: right;
-  font-size: 0.4rem;
+  font-size: 12px;
   color: ${theme.colors.grey};
-  margin: 1rem 1rem 1rem;
+  margin: 1rem 0.5rem;
+  cursor:pointer;
+   :hover{
+     color: ${theme.colors.mapgrey};
+   }
 `;
