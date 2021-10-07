@@ -1,8 +1,13 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import styled, { css, keyframes } from "styled-components";
 import theme from "../../styles/theme";
+import gsap from "gsap";
 
 export default function DefaultModal(props) {
+  const size = useRef();
+  useEffect(() => {
+    gsap.to(size.current, { scale: 1, duration: 0.5, ease: "back" });
+  });
   if (props.isOpen) {
     const { isOpen, handleClick, header, children } = props;
     return (
@@ -11,6 +16,7 @@ export default function DefaultModal(props) {
           <ModalSection
             className={`${isOpen ? "active" : ""}`}
             onClick={handleClick}
+            ref={size}
           >
             <ModalTitle>
               <img src="/image/logo.svg" />
@@ -27,8 +33,6 @@ export default function DefaultModal(props) {
     );
   }
 }
-// 애니메이션이 안먹힘 슬라이드같은거 줘야겠다
-
 /* 버튼 */
 const ButtonBox = styled.div`
   height: 100%;
@@ -62,16 +66,6 @@ const ButtonBox = styled.div`
       cursor: pointer;
    }
   }
-`;
-
-const Modalshow = keyframes`
- 0% { 
-  transform: scale(0.0);
- }
- 100%  {
-  transform: scale(1.0);
- }
-
 `;
 
 /* 모달 */
@@ -112,11 +106,8 @@ const ModalSection = styled.div`
   transform: translate(-50%, -50%);
   max-width: 500px;
   transform: scale(0);
-  animation: ${Modalshow} 0.3s ease-out;
   font-family: ${theme.fonts.family.mypage};
   &.active {
-    transform: scale(1);
-    animation: ${Modalshow} 0.3s ease-out;
     z-index:999;
   }
 `;

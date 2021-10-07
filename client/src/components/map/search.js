@@ -150,18 +150,23 @@ const InputStyle = styled.div`
   position: relative;
 `;
 const Category = styled.div`
+  @media only screen and (min-width: 425px) and (max-width: 1280px) {
+    flex-direction: column;
+  }
   @media only screen and (min-width: 425px) {
     top: 3rem;
     right: 3rem;
-  }
-  @media only screen and (min-width: 425px) and (max-width: 1280px) {
-    flex-direction: column;
   }
   ${theme.device.mobile} {
     bottom: 3rem;
     top: 85vh;
     left: 0;
     right: 0;
+    gap: 1.2rem;
+    flex-direction: row;
+  }
+  ${theme.device.mobileS} {
+    gap: 0.8rem;
   }
   position: absolute;
   display: flex;
@@ -175,8 +180,8 @@ const Category = styled.div`
 
 const Type = styled.img`
   ${theme.device.mobile} {
-    width: 2.5rem;
-    height: 2.5rem;
+    width:3rem;
+    height: 3rem;
   }
   width: 3.5rem;
   height: 3.5rem;

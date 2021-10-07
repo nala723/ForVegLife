@@ -127,7 +127,7 @@ const ReviewTitle = styled.div`
   font-size:22px;
   text-align: center;
   font-weight: 700;
-  border-bottom: 0.15rem solid ${theme.colors.lightgrey};
+  border-bottom: 1px solid ${theme.colors.lightgrey};
   :focus {
       outline:none;
   }
@@ -185,6 +185,7 @@ const ReviewContent = styled.textarea`
   border: 0.15rem solid #C7B7B0;
   border-radius: 6px;
   color: ${theme.colors.mapgrey};
+  outline: none;
 `;
 const ReviewSubmit = styled.input`
   ${theme.device.mobile} {

@@ -414,7 +414,7 @@ export default function UpdateInfo() {
                          {(isOpen && changed) ? <DefaultModal isOpen={isOpen} handleClick={handleClick} header="회원정보 수정이 완료되었습니다.">
                      앞으로도 계속 forVegLife 안에서 건강한 life 누리세요</DefaultModal> : null}
                      {(googleToken && isOpen) ? <DefaultModal isOpen={isOpen} handleClick={handleBack} header="경고">
-                     소셜 로그인 유저는 회원정보수정을 할 수 없습니다</DefaultModal> : null}
+                     소셜 로그인 유저는 정보 수정을 할 수 없습니다</DefaultModal> : null}
                  </UserBottom>
            </UserContainer>
        </Bottom>
